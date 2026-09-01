@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 3,
+  "command": "pnpm test",
+  "scope": "All Turborepo workspace unit suites, including axe state tests",
+  "status": "passed",
+  "generatedAt": "2026-09-01T06:43:48.098Z",
+  "sourceRevision": "workspace:3e7d2c8a7aa6bd38cda9",
+  "gitCommit": null,
+  "runId": "local:79067",
+  "artifactDigest": "sha256:706464f89069eeb6860392bc91cfb9ba7d348a1acb0fa2d2251eb9f38c129a2b"
+}

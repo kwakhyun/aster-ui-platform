@@ -1,0 +1,28 @@
+{
+  "component": "TreatmentCard",
+  "package": "@aster-ui/react",
+  "version": "3.1.0-beta.2",
+  "platforms": ["Web"],
+  "crossPlatformTokenArtifacts": ["CSS", "Swift", "Compose"],
+  "forwardsRef": "HTMLElement",
+  "extendsArticleAttributes": true,
+  "props": [
+    { "name": "title", "type": "string", "required": true, "default": null },
+    { "name": "category", "type": "string", "required": true, "default": null },
+    { "name": "imageUrl", "type": "string", "required": true, "default": null },
+    { "name": "imageAlt", "type": "string", "required": true, "default": null },
+    { "name": "imageProps", "type": "Omit<ImgHTMLAttributes<HTMLImageElement>, \"alt\" | \"src\">", "required": false, "default": null },
+    { "name": "price", "type": "number", "required": true, "default": null },
+    { "name": "currency", "type": "TreatmentCardCurrency", "required": false, "default": "\"KRW\"" },
+    { "name": "locale", "type": "string", "required": false, "default": "\"ko-KR\"" },
+    { "name": "downtime", "type": "string", "required": true, "default": null },
+    { "name": "sessions", "type": "string", "required": true, "default": null },
+    { "name": "results", "type": "string", "required": false, "default": null },
+    { "name": "headingLevel", "type": "TreatmentCardHeadingLevel", "required": false, "default": "\"h3\"" },
+    { "name": "variant", "type": "TreatmentCardVariant", "required": false, "default": "\"default\"" },
+    { "name": "disabled", "type": "boolean", "required": false, "default": "false" },
+    { "name": "saved", "type": "boolean", "required": false, "default": "false" },
+    { "name": "onSavedChange", "type": "( saved: boolean, event: Parameters<MouseEventHandler<HTMLButtonElement>>[0], ) => void", "required": false, "default": null },
+    { "name": "onSelect", "type": "MouseEventHandler<HTMLButtonElement>", "required": false, "default": null }
+  ]
+}

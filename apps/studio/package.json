@@ -1,0 +1,32 @@
+{
+  "name": "@aster-ui/studio",
+  "version": "3.1.0-beta.2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build && node scripts/prepare-sites-build.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:sites": "node --test tests/sites-worker.test.mjs",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
+  },
+  "dependencies": {
+    "@aster-ui/figma-bridge": "workspace:*",
+    "@aster-ui/react": "workspace:*",
+    "@aster-ui/tokens": "workspace:*",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@phosphor-icons/react": "2.1.10",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@vitejs/plugin-react": "5.0.4",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "6.4.2"
+  }
+}

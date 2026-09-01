@@ -1,0 +1,191 @@
+import type { FigmaSyncReview } from "@aster-ui/figma-bridge";
+import {
+  CaretRight,
+  CheckCircle,
+  Info,
+  WarningCircle,
+} from "@phosphor-icons/react";
+import { apiProperties } from "../data/catalog";
+import { handleHorizontalTabKeyDown } from "../lib/tabs";
+import type { InspectorTab, QualityEvidence } from "../types";
+import { EvidenceProvenance } from "./EvidenceProvenance";
+
+interface InspectorProps {
+  readonly tab: InspectorTab;
+  readonly review: FigmaSyncReview;
+  readonly qualityEvidence: QualityEvidence;
+  readonly onTabChange: (tab: InspectorTab) => void;
+  readonly onOpenDiff: () => void;
+  readonly onViewVisualTests: () => void;
+}
+
+const tabs: readonly { id: InspectorTab; label: string }[] = [
+  { id: "api", label: "API" },
+  { id: "tokens", label: "Tokens" },
+  { id: "quality", label: "Quality" },
+] as const;
+
+export function Inspector({
+  tab,
+  review,
+  qualityEvidence,
+  onTabChange,
+  onOpenDiff,
+  onViewVisualTests,
+}: InspectorProps) {
+  const apiEvidence = qualityEvidence.checks.find((check) => check.id === "api");
+  const passedCount = qualityEvidence.checks.filter((check) => check.status === "passed").length;
+
+  return (
+    <aside className="inspector" aria-label="컴포넌트 검사기">
+      <div className="inspector__tabs" role="tablist" aria-label="검사기 보기">
+        {tabs.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            role="tab"
+            id={`inspector-tab-${item.id}`}
+            aria-controls="inspector-panel"
+            className={tab === item.id ? "is-active" : ""}
+            aria-selected={tab === item.id}
+            tabIndex={tab === item.id ? 0 : -1}
+            onKeyDown={handleHorizontalTabKeyDown}
+            onClick={() => onTabChange(item.id)}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      <div
+        id="inspector-panel"
+        className="inspector__content"
+        role="tabpanel"
+        aria-labelledby={`inspector-tab-${tab}`}
+        tabIndex={0}
+      >
+        {tab === "tokens" ? (
+          <section className="inspector-section token-changes" aria-labelledby="token-heading">
+            <div className="inspector-section__heading">
+              <h2 id="token-heading">Semantic token changes</h2>
+              <span>
+                {review.sourceTheme.charAt(0).toUpperCase()}{review.sourceTheme.slice(1)} · {review.validation.changeCount}
+              </span>
+            </div>
+            <div className="token-changes__labels" aria-hidden="true">
+              <span />
+              <span>Before</span>
+              <span>After</span>
+            </div>
+            <div className="token-changes__list">
+              {review.changes.map((change, index) => (
+                <button type="button" key={change.id} onClick={onOpenDiff}>
+                  <span className={`token-dot token-dot--${index + 1}`} aria-hidden="true" />
+                  <strong>{change.token}</strong>
+                  <CaretRight aria-hidden="true" />
+                  <span className="token-change__values">
+                    <span>
+                      <span className={`token-swatch token-swatch--${index + 1}`} aria-hidden="true" />
+                      <code>{change.before}</code>
+                    </span>
+                    <span aria-hidden="true">→</span>
+                    <span>
+                      <span className={`token-swatch token-swatch--${index + 1}`} aria-hidden="true" />
+                      <code>{change.after}</code>
+                    </span>
+                  </span>
+                </button>
+              ))}
+            </div>
+            <QualitySummary evidence={qualityEvidence} onViewVisualTests={onViewVisualTests} />
+          </section>
+        ) : null}
+
+        {tab === "api" ? (
+          <section className="inspector-section api-inspector" aria-labelledby="api-inspector-heading">
+            <div className="inspector-section__heading">
+              <h2 id="api-inspector-heading">API contract</h2>
+              <Info aria-label="공개 API 계약" />
+            </div>
+            <dl>
+              {apiProperties.map((property) => (
+                <div key={property.name}>
+                  <dt>{property.name}</dt>
+                  <dd>
+                    <code>{property.type}</code>
+                    <span>{property.required ? "Required" : property.defaultValue}</span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <EvidenceBlock evidence={apiEvidence} />
+          </section>
+        ) : null}
+
+        {tab === "quality" ? (
+          <section className="inspector-section inspector-quality" aria-labelledby="inspector-quality-heading">
+            <div className="inspector-section__heading">
+              <h2 id="inspector-quality-heading">Quality evidence</h2>
+              <span>{passedCount}/{qualityEvidence.checks.length}</span>
+            </div>
+            <EvidenceProvenance evidence={qualityEvidence} compact />
+            <EvidenceList evidence={qualityEvidence} onViewVisualTests={onViewVisualTests} />
+            <EvidenceBlock evidence={apiEvidence} />
+          </section>
+        ) : null}
+      </div>
+    </aside>
+  );
+}
+
+interface QualitySummaryProps {
+  readonly evidence: QualityEvidence;
+  readonly onViewVisualTests: () => void;
+}
+
+function QualitySummary({ evidence, onViewVisualTests }: QualitySummaryProps) {
+  return (
+    <div className="quality-summary">
+      <h3>Quality evidence</h3>
+      <EvidenceProvenance evidence={evidence} compact />
+      <EvidenceList evidence={evidence} onViewVisualTests={onViewVisualTests} />
+      <EvidenceBlock evidence={evidence.checks.find((check) => check.id === "api")} />
+    </div>
+  );
+}
+
+function EvidenceList({ evidence, onViewVisualTests }: QualitySummaryProps) {
+  return (
+    <ul>
+      {evidence.checks.map((check) => (
+        <li key={check.id} data-status={check.status}>
+          {check.status === "passed"
+            ? <CheckCircle size={20} weight="fill" aria-hidden="true" />
+            : <WarningCircle size={20} weight="fill" aria-hidden="true" />}
+          <div>
+            <strong>{check.label}</strong>
+            <span>{check.detail}</span>
+          </div>
+          {check.id === "visual" ? (
+            <button type="button" onClick={onViewVisualTests}>View</button>
+          ) : null}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+interface EvidenceBlockProps {
+  readonly evidence: QualityEvidence["checks"][number] | undefined;
+}
+
+function EvidenceBlock({ evidence }: EvidenceBlockProps) {
+  const passed = evidence?.status === "passed";
+  return (
+    <div className="compatibility-block" data-status={passed ? "passed" : "attention"}>
+      <span>API compatibility</span>
+      <strong>{passed ? "Checked" : "Attention"}</strong>
+      <p>{evidence?.detail ?? "Compatibility evidence is unavailable."}</p>
+    </div>
+  );
+}

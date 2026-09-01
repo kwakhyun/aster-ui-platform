@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "consumer": "Aster UI Studio",
+  "sourceRoots": ["src"],
+  "package": "@aster-ui/react",
+  "eligibleComponents": ["Button", "TreatmentCard"],
+  "deprecatedComponents": ["LegacyClinicCard", "PrimaryButton"]
+}

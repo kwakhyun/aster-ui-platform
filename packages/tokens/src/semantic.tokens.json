@@ -1,0 +1,35 @@
+{
+  "semantic": {
+    "color": {
+      "$type": "color",
+      "background": {
+        "canvas": { "$value": "{color.neutral.0}" },
+        "subtle": { "$value": "{color.neutral.50}" },
+        "inverse": { "$value": "{color.neutral.950}" }
+      },
+      "text": {
+        "primary": { "$value": "{color.neutral.950}" },
+        "secondary": { "$value": "{color.neutral.600}" },
+        "inverse": { "$value": "{color.neutral.0}" },
+        "accent": { "$value": "{color.coral.700}" }
+      },
+      "action": {
+        "primary": { "$value": "{color.coral.700}" },
+        "primaryHover": { "$value": "{color.coral.700}" },
+        "primarySubtle": { "$value": "{color.coral.50}" }
+      },
+      "border": {
+        "default": { "$value": "{color.neutral.200}" },
+        "strong": { "$value": "{color.neutral.400}" }
+      },
+      "focus": {
+        "ring": { "$value": "{color.blue.500}" },
+        "surface": { "$value": "{color.blue.100}" }
+      },
+      "status": {
+        "success": { "$value": "{color.green.600}" },
+        "successSurface": { "$value": "{color.green.50}" }
+      }
+    }
+  }
+}

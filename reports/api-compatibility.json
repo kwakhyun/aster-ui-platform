@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 3,
+  "baselineVersion": "3.1.0-beta.2",
+  "currentVersion": "3.1.0-beta.2",
+  "checkedProps": 17,
+  "additions": [],
+  "breakingChanges": [],
+  "status": "passed",
+  "command": "pnpm api:check",
+  "generatedAt": "2026-09-01T06:43:52.931Z",
+  "sourceRevision": "workspace:3e7d2c8a7aa6bd38cda9",
+  "gitCommit": null,
+  "runId": "local:79321",
+  "artifactDigest": "sha256:78f1401f2bf7bcb363b4779b075ef350790a6d8315d138190c131ac1efc351e9"
+}

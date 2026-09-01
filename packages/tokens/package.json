@@ -1,0 +1,26 @@
+{
+  "name": "@aster-ui/tokens",
+  "version": "3.1.0-beta.2",
+  "type": "module",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./css": "./dist/css/tokens.css",
+    "./json": "./dist/json/tokens.json",
+    "./json/coral": "./dist/json/coral.tokens.json",
+    "./json/ocean": "./dist/json/ocean.tokens.json"
+  },
+  "scripts": {
+    "build": "node scripts/generate-contract.mjs && node scripts/build.mjs && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "clean": "node scripts/clean.mjs"
+  },
+  "dependencies": {
+    "style-dictionary": "5.5.2"
+  }
+}

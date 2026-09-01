@@ -1,0 +1,384 @@
+@import "@aster-ui/tokens/css";
+
+.aster-button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0 16px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.aster-button:focus-visible {
+  outline: 3px solid var(--semantic-color-focus-surface);
+  outline-offset: 2px;
+}
+
+.aster-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.aster-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.52;
+}
+
+.aster-button--primary {
+  background: var(--semantic-color-action-primary);
+  color: var(--semantic-color-text-inverse);
+}
+
+.aster-button--primary:hover:not(:disabled) {
+  background: var(--semantic-color-action-primary-hover);
+}
+
+.aster-button--secondary {
+  border-color: var(--semantic-color-border-default);
+  background: var(--semantic-color-background-canvas);
+  color: var(--semantic-color-text-primary);
+}
+
+.aster-button--secondary:hover:not(:disabled),
+.aster-button--quiet:hover:not(:disabled) {
+  background: var(--semantic-color-background-subtle);
+}
+
+.aster-button--quiet {
+  background: transparent;
+  color: var(--semantic-color-text-secondary);
+}
+
+.aster-button--sm {
+  min-height: 34px;
+  padding-inline: 12px;
+  font-size: 13px;
+}
+
+.aster-button__icon {
+  display: inline-flex;
+}
+
+.aster-treatment-card {
+  display: grid;
+  grid-template-columns: clamp(180px, 28.5%, 204px) 1fr;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--semantic-color-border-default);
+  border-radius: 14px;
+  background: var(--semantic-color-background-canvas);
+  color: var(--semantic-color-text-primary);
+  box-shadow: 0 10px 28px rgb(17 18 20 / 5%);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease,
+    opacity 160ms ease;
+}
+
+.aster-treatment-card:hover:not([aria-disabled="true"]) {
+  border-color: #c8c9cd;
+  box-shadow: 0 16px 38px rgb(17 18 20 / 10%);
+  transform: translateY(-1px);
+}
+
+.aster-treatment-card:focus-within {
+  border-color: var(--semantic-color-focus-ring);
+  box-shadow:
+    0 0 0 3px var(--semantic-color-focus-surface),
+    0 10px 28px rgb(17 18 20 / 6%);
+}
+
+.aster-treatment-card[aria-disabled="true"] {
+  filter: grayscale(0.9);
+  opacity: 0.45;
+}
+
+.aster-treatment-card__media {
+  min-height: 286px;
+  overflow: hidden;
+  background: #f8eee9;
+}
+
+.aster-treatment-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 34%;
+}
+
+.aster-treatment-card__content {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 54px 39px 10px;
+}
+
+.aster-treatment-card__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.aster-treatment-card__heading h3 {
+  margin: 0;
+  font-size: clamp(24px, 2vw, 32px);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.aster-treatment-card__heading p {
+  margin: 10px 0 0;
+  color: var(--semantic-color-text-secondary);
+  font-size: 16px;
+}
+
+.aster-treatment-card__save,
+.aster-treatment-card__action {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: var(--semantic-color-text-primary);
+  cursor: pointer;
+}
+
+span.aster-treatment-card__save,
+span.aster-treatment-card__action {
+  cursor: default;
+}
+
+.aster-treatment-card__save {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+.aster-treatment-card__save:hover:not(:disabled) {
+  background: var(--semantic-color-background-subtle);
+}
+
+.aster-treatment-card__save:focus-visible,
+.aster-treatment-card__action:focus-visible {
+  outline: 3px solid var(--semantic-color-focus-surface);
+  outline-offset: 2px;
+}
+
+.aster-treatment-card__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 16px;
+  border-top: 1px solid var(--semantic-color-border-default);
+  padding-top: 24px;
+}
+
+.aster-treatment-card__facts > div {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  border-right: 1px solid var(--semantic-color-border-default);
+  padding-right: 18px;
+}
+
+.aster-treatment-card__facts > div + div {
+  padding-left: 18px;
+}
+
+.aster-treatment-card__facts > div:last-child {
+  border-right: 0;
+}
+
+.aster-treatment-card__facts svg {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  color: #687080;
+}
+
+.aster-treatment-card__facts span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 13px;
+  font-weight: 550;
+  white-space: nowrap;
+}
+
+.aster-treatment-card__facts small {
+  color: var(--semantic-color-text-secondary);
+  font-size: 11px;
+  font-weight: 450;
+}
+
+.aster-treatment-card__result--icon-only {
+  justify-content: center;
+}
+
+.aster-treatment-card__footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: auto;
+  padding-top: 27px;
+}
+
+.aster-treatment-card__footer p {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+}
+
+.aster-treatment-card__footer span {
+  color: var(--semantic-color-text-secondary);
+  font-size: 16px;
+}
+
+.aster-treatment-card__footer strong {
+  color: var(--semantic-color-text-accent);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.aster-treatment-card__action {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--semantic-color-border-default);
+  border-radius: 50%;
+  background: var(--semantic-color-background-canvas);
+}
+
+.aster-treatment-card__action:hover:not(:disabled) {
+  border-color: var(--semantic-color-border-strong);
+  background: var(--semantic-color-background-subtle);
+}
+
+.aster-treatment-card--compact {
+  grid-template-columns: 36% 1fr;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgb(17 18 20 / 4%);
+}
+
+.aster-treatment-card--compact .aster-treatment-card__media {
+  min-height: 128px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__content {
+  padding: 10px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__heading {
+  gap: 4px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__heading h3 {
+  font-size: 9px;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__heading p {
+  margin-top: 3px;
+  font-size: 7px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__save {
+  width: 20px;
+  height: 20px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__facts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 10px;
+  padding-top: 9px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__facts > div {
+  gap: 4px;
+  padding-right: 6px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__facts > div + div {
+  padding-left: 6px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__facts svg {
+  width: 10px;
+  height: 10px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__facts span {
+  gap: 0;
+  font-size: 7px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__facts small,
+.aster-treatment-card--compact .aster-treatment-card__result {
+  display: none;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__footer {
+  padding-top: 10px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__footer span {
+  font-size: 8px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__footer strong {
+  font-size: 9px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__action {
+  width: 22px;
+  height: 22px;
+}
+
+.aster-treatment-card--compact .aster-treatment-card__action svg {
+  width: 10px;
+  height: 10px;
+}
+
+@media (max-width: 720px) {
+  .aster-treatment-card:not(.aster-treatment-card--compact) {
+    grid-template-columns: 1fr;
+  }
+
+  .aster-treatment-card:not(.aster-treatment-card--compact) .aster-treatment-card__media {
+    max-height: 280px;
+  }
+
+  .aster-treatment-card__facts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .aster-treatment-card__result {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aster-button,
+  .aster-treatment-card {
+    transition: none;
+  }
+}

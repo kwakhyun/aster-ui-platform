@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 3,
+  "command": "pnpm perf:check",
+  "budgets": {
+    "javascriptGzipBytes": 190000,
+    "cssGzipBytes": 35000,
+    "largestImageBytes": 60000,
+    "fontBytes": 120000
+  },
+  "actual": {
+    "javascriptGzipBytes": 89876,
+    "cssGzipBytes": 9665,
+    "largestImageBytes": 33812,
+    "fontBytes": 48256
+  },
+  "images": [
+    {
+      "file": "assets/laser-toning-portrait-800.webp",
+      "bytes": 33812
+    },
+    {
+      "file": "assets/laser-toning-portrait-400.webp",
+      "bytes": 10684
+    }
+  ],
+  "failures": [],
+  "status": "passed",
+  "generatedAt": "2026-09-01T06:43:53.373Z",
+  "sourceRevision": "workspace:3e7d2c8a7aa6bd38cda9",
+  "gitCommit": null,
+  "runId": "local:79376",
+  "artifactDigest": "sha256:5458e6e30a8439ed2834a91aee980581d18ad4834e010c01f433fa7d3f976fb9"
+}

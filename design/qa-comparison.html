@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aster UI design QA comparison</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #e8e8ea; color: #111214; font-family: Arial, sans-serif; }
+      main { display: grid; grid-template-columns: repeat(2, 1440px); gap: 16px; padding: 16px; }
+      figure { margin: 0; overflow: hidden; border: 1px solid #c9cace; border-radius: 8px; background: #fff; box-shadow: 0 8px 28px rgb(17 18 20 / 8%); }
+      figcaption { height: 48px; display: flex; align-items: center; border-bottom: 1px solid #dedfe2; padding: 0 16px; font-size: 15px; font-weight: 700; }
+      img { display: block; width: 1440px; height: 1024px; object-fit: contain; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <figure>
+        <figcaption>Approved target</figcaption>
+        <img src="./aster-ui-final-target.png" alt="Approved Aster UI target" />
+      </figure>
+      <figure>
+        <figcaption>Production implementation</figcaption>
+        <img src="./implementation-desktop-final.png" alt="Implemented Aster UI Studio" />
+      </figure>
+    </main>
+  </body>
+</html>

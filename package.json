@@ -1,0 +1,71 @@
+{
+  "name": "aster-ui-platform",
+  "version": "3.1.0-beta.2",
+  "private": true,
+  "description": "A production-minded cross-platform design-system operations portfolio project.",
+  "packageManager": "pnpm@10.29.2",
+  "engines": {
+    "node": ">=22"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "scripts": {
+    "dev": "turbo run dev --filter=@aster-ui/studio",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "eslint .",
+    "test": "turbo run test",
+    "test:unit": "vitest run",
+    "test:coverage": "turbo run test:coverage",
+    "test:sites": "pnpm --filter=@aster-ui/studio test:sites",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && node scripts/record-unit-evidence.mjs && pnpm build && pnpm tokens:contract:check && pnpm native:check && pnpm manifest:check && pnpm docs:check && pnpm adoption:check && pnpm api:check && pnpm release:check && pnpm perf:check && pnpm package:check && pnpm k8s:check && pnpm supply-chain:check && pnpm provenance:check",
+    "verify": "pnpm security:audit && pnpm check && pnpm test:coverage && pnpm test:sites && pnpm test:visual && pnpm evidence:generate && pnpm --filter=@aster-ui/studio build && pnpm evidence:check",
+    "clean": "turbo run clean",
+    "tokens:build": "pnpm --filter=@aster-ui/tokens build",
+    "tokens:contract:check": "node packages/tokens/scripts/generate-contract.mjs --check",
+    "native:check": "node scripts/verify-native-artifacts.mjs",
+    "package:check": "node scripts/check-package-contents.mjs",
+    "k8s:render": "node scripts/render-k8s-manifest.mjs",
+    "k8s:check": "node scripts/render-k8s-manifest.mjs --check --image example.invalid/aster-ui-studio@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "supply-chain:check": "node scripts/check-supply-chain.mjs",
+    "provenance:check": "node scripts/check-provenance.mjs",
+    "manifest:generate": "node scripts/generate-component-manifest.mjs",
+    "manifest:check": "node scripts/generate-component-manifest.mjs --check",
+    "docs:generate": "pnpm manifest:generate && node scripts/generate-component-docs.mjs",
+    "docs:check": "node scripts/generate-component-docs.mjs --check",
+    "adoption:scan": "node scripts/scan-adoption.mjs",
+    "adoption:check": "node scripts/check-adoption-scanner.mjs && node scripts/scan-adoption.mjs --check",
+    "api:check": "node scripts/check-api-compatibility.mjs",
+    "release:check": "node scripts/verify-release-contract.mjs",
+    "perf:check": "node scripts/check-performance-budget.mjs",
+    "security:audit": "pnpm audit --prod --audit-level high && node scripts/record-security-evidence.mjs",
+    "evidence:generate": "node scripts/generate-quality-evidence.mjs",
+    "evidence:check": "node scripts/generate-quality-evidence.mjs --check",
+    "test:visual": "node scripts/run-visual-tests.mjs",
+    "test:visual:update": "node scripts/run-visual-tests.mjs --update-snapshots",
+    "design:compare": "node scripts/capture-design-comparison.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "^1.62.1",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.6",
+    "@types/node": "26.4.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "@vitest/coverage-v8": "4.1.11",
+    "axe-core": "4.13.0",
+    "eslint": "10.9.1",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.11.0",
+    "jsdom": "30.0.1",
+    "turbo": "2.10.12",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.69.0",
+    "vitest": "4.1.11"
+  }
+}

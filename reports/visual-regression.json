@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 3,
+  "command": "pnpm test:visual",
+  "browser": "Installed Google Chrome",
+  "passed": 7,
+  "failed": 0,
+  "skipped": 0,
+  "snapshots": 6,
+  "accessibilityChecks": 4,
+  "status": "passed",
+  "generatedAt": "2026-09-01T06:44:09.989Z",
+  "sourceRevision": "workspace:3e7d2c8a7aa6bd38cda9",
+  "gitCommit": null,
+  "runId": "local:79679",
+  "artifactDigest": "sha256:514789fe9d9b1e1c320129c49de3c42c19d6b4091001fbfb461fb2a6bb67ed23"
+}

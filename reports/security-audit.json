@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 3,
+  "command": "pnpm audit --prod --audit-level high",
+  "scope": "Production dependency graph",
+  "knownVulnerabilities": 0,
+  "status": "passed",
+  "generatedAt": "2026-09-01T06:43:36.864Z",
+  "sourceRevision": "workspace:3e7d2c8a7aa6bd38cda9",
+  "gitCommit": null,
+  "runId": "local:78851",
+  "artifactDigest": "sha256:d4e37b70005c4618d41162f32b30e66771a2f45ff61fe3b0662dc271c38a2a2b"
+}

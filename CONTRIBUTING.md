@@ -1,0 +1,7 @@
+# Contributing
+
+1. 공개 API 변경 의도를 이슈 또는 ADR로 먼저 기록합니다.
+2. DTCG 토큰을 수정하고 생성 산출물을 직접 편집하지 않습니다.
+3. 컴포넌트 변경에는 키보드, ARIA, 상태, 반응형 테스트를 포함합니다.
+4. 변경 중에는 `pnpm check`, 제출 전에는 전체 순서를 보장하는 `pnpm verify`를 통과시킵니다.
+5. breaking change에는 migration 문서와 major 버전 근거가 필요합니다.
