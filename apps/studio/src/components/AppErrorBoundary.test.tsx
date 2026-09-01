@@ -21,8 +21,8 @@ describe("AppErrorBoundary", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: "Studio를 불러오지 못했습니다" }),
+      screen.getByRole("heading", { name: "Studio could not be loaded" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "다시 불러오기" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Reload Studio" })).toBeEnabled();
   });
 });

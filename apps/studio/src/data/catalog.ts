@@ -16,10 +16,11 @@ export const previewStates: readonly PreviewStateOption[] = [
 
 export const treatment = {
   title: "Laser toning",
-  category: "Brightening · Pigmentation",
+  category: "Brightening and pigmentation care",
   imageUrl: `${import.meta.env.BASE_URL}assets/laser-toning-portrait-800.webp`,
-  imageAlt: "레이저 토닝 시술 정보를 소개하는 성인 여성 모델",
+  imageAlt: "Portrait of an adult model for laser toning",
   price: 79_000,
+  locale: "en-US",
   downtime: "Minimal",
   sessions: "3–5",
 } as const;
@@ -80,11 +81,11 @@ export function getApiProperties(name: string) {
 }
 
 const usageByComponent: Readonly<Record<string, string>> = {
-  Alert: `<Alert tone="success" title="토큰 동기화 완료">\n  3개 변경을 검증했습니다.\n</Alert>`,
+  Alert: `<Alert tone="success" title="Tokens synced">\n  Validated 3 changes.\n</Alert>`,
   Badge: `<Badge tone="success">Ready</Badge>`,
   Button: `<Button tone="primary">Review changes</Button>`,
-  Tabs: `<Tabs\n  ariaLabel="시술 정보"\n  items={treatmentTabs}\n/>`,
-  TextField: `<TextField\n  label="클리닉 검색"\n  hint="병원명 또는 지역을 입력하세요."\n/>`,
+  Tabs: `<Tabs\n  ariaLabel="Treatment information"\n  items={treatmentTabs}\n/>`,
+  TextField: `<TextField\n  label="Search clinics"\n  hint="Enter a clinic name or location."\n/>`,
   TreatmentCard: treatmentCardExampleSource
     .replace(/^\/\/ example:start\s*\n/, "")
     .replace(/\n\/\/ example:end\s*$/, "")

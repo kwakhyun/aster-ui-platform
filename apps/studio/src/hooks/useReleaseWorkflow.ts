@@ -73,7 +73,7 @@ export function useReleaseWorkflow(
         contextKey,
         receipt: null,
         status: "failed",
-        errorMessage: "A current human review receipt is required.",
+        errorMessage: "Complete the current review before running a rehearsal.",
       });
       return null;
     }
@@ -103,7 +103,7 @@ export function useReleaseWorkflow(
         ...current,
         contextKey,
         status: "failed",
-        errorMessage: error instanceof Error ? error.message : "Release rehearsal failed.",
+        errorMessage: error instanceof Error ? error.message : "The release rehearsal failed.",
       });
       return null;
     }

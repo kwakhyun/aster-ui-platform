@@ -16,7 +16,7 @@ export function Toast({ message, tone = "info", onDismiss }: ToastProps) {
         <Info weight="fill" aria-hidden="true" />
       )}
       <span>{message}</span>
-      <button type="button" aria-label="알림 닫기" onClick={onDismiss}>
+      <button type="button" aria-label="Dismiss notification" onClick={onDismiss}>
         <X aria-hidden="true" />
       </button>
     </div>

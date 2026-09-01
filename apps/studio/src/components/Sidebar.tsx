@@ -71,24 +71,24 @@ export function Sidebar({
         <button
           type="button"
           className="sidebar-scrim"
-          aria-label="컴포넌트 탐색 닫기"
+          aria-label="Close component browser"
           onClick={onClose}
         />
       ) : null}
       <aside
         ref={sidebarRef}
         className={`sidebar${open ? " is-open" : ""}`}
-        aria-label="컴포넌트 탐색"
+        aria-label="Component browser"
         aria-hidden={overlayNavigation && !open ? "true" : undefined}
         inert={overlayNavigation && !open ? true : undefined}
       >
         <label className="sidebar__search">
           <MagnifyingGlass aria-hidden="true" />
-          <span className="sr-only">컴포넌트 검색</span>
+          <span className="sr-only">Search components</span>
           <input
             ref={searchRef}
             type="search"
-            aria-label="컴포넌트 검색"
+            aria-label="Search components"
             value={query}
             placeholder="Search components"
             onChange={(event) => setQuery(event.currentTarget.value)}
@@ -133,7 +133,7 @@ export function Sidebar({
             </section>
           ))}
           {groups.length === 0 ? (
-            <p className="sidebar__empty">일치하는 컴포넌트가 없습니다.</p>
+            <p className="sidebar__empty">No matching components found.</p>
           ) : null}
         </div>
 
@@ -141,17 +141,17 @@ export function Sidebar({
           <span>Package</span>
           <p>
             @aster-ui/react
-            <button type="button" aria-label="패키지 이름 복사" onClick={onCopyPackage}>
+            <button type="button" aria-label="Copy package name" onClick={onCopyPackage}>
               <CopySimple size={17} />
             </button>
           </p>
           <hr />
-          <span>Component target</span>
+          <span>Platform support</span>
           <p className="sidebar__compatibility">
             Web · evergreen browsers
             <i aria-hidden="true" />
           </p>
-          <small>Token outputs: Swift · Compose</small>
+          <small>Native token outputs: Swift and Compose</small>
         </div>
       </aside>
     </>

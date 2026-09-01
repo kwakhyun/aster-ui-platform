@@ -34,7 +34,7 @@ export function StateStrip({ selected, onSelect }: StateStripProps) {
             <button
               type="button"
               className="state-strip__selector"
-              aria-label={`${option.label} 상태 미리보기`}
+              aria-label={`Preview ${option.label.toLocaleLowerCase()} state`}
               aria-pressed={selected === option.id}
               onClick={() => onSelect(option.id)}
             />

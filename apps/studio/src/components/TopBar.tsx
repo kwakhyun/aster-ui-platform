@@ -12,7 +12,6 @@ interface TopBarProps {
   readonly sidebarOpen: boolean;
   readonly running: boolean;
   readonly rehearsed: boolean;
-  readonly version: string;
   readonly onToggleSidebar: () => void;
   readonly onNavigate: (tab: WorkspaceTab) => void;
   readonly onHelp: () => void;
@@ -20,10 +19,10 @@ interface TopBarProps {
 }
 
 const navigation: readonly { label: string; tab: WorkspaceTab }[] = [
-  { label: "Component lab", tab: "preview" },
+  { label: "Component Lab", tab: "preview" },
   { label: "Foundations", tab: "tokens" },
   { label: "Components", tab: "api" },
-  { label: "Patterns", tab: "quality" },
+  { label: "Quality", tab: "quality" },
 ] as const;
 
 export function TopBar({
@@ -31,7 +30,6 @@ export function TopBar({
   sidebarOpen,
   running,
   rehearsed,
-  version,
   onToggleSidebar,
   onNavigate,
   onHelp,
@@ -43,7 +41,7 @@ export function TopBar({
         <button
           type="button"
           className="topbar__menu"
-          aria-label={sidebarOpen ? "컴포넌트 탐색 닫기" : "컴포넌트 탐색 열기"}
+          aria-label={sidebarOpen ? "Close component browser" : "Open component browser"}
           aria-expanded={sidebarOpen}
           onClick={onToggleSidebar}
         >
@@ -53,7 +51,7 @@ export function TopBar({
         <span>Aster UI</span>
       </div>
 
-      <nav className="topbar__nav" aria-label="주요 섹션">
+      <nav className="topbar__nav" aria-label="Primary sections">
         {navigation.map((item) => (
           <button
             key={item.tab}
@@ -69,7 +67,7 @@ export function TopBar({
 
       <div className="topbar__actions">
         <time dateTime="2026-09-01">2026.09.01</time>
-        <button type="button" className="topbar__help" aria-label="도움말" onClick={onHelp}>
+        <button type="button" className="topbar__help" aria-label="Help" onClick={onHelp}>
           <Question size={20} />
         </button>
         <Button
@@ -81,8 +79,8 @@ export function TopBar({
           {running
             ? "Running rehearsal…"
             : rehearsed
-              ? `Rehearsed ${version}`
-              : `Rehearse ${version}`}
+              ? "Rehearsal complete"
+              : "Run rehearsal"}
         </Button>
       </div>
     </header>

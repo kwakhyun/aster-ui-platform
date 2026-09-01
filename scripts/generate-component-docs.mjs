@@ -7,8 +7,13 @@ const manifestPath = path.join(projectRoot, "packages/react/component-manifest.j
 const outputDirectory = path.join(projectRoot, "docs/generated");
 const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
 
+const evidenceLabels = {
+  unit: "단위 테스트",
+  apiCompatibility: "API 호환성",
+  browserAccessibility: "브라우저 접근성",
+};
 const evidenceRows = Object.entries(manifest.requiredEvidence)
-  .map(([name, command]) => `- ${name}: \`${command}\``)
+  .map(([name, command]) => `- ${evidenceLabels[name] ?? name}: \`${command}\``)
   .join("\n");
 
 function renderComponent(component) {
@@ -21,7 +26,7 @@ function renderComponent(component) {
     )
     .join("\n");
 
-  return `# ${component.name}\n\n> 이 문서는 \`packages/react/component-manifest.json\`에서 자동 생성됩니다. 직접 수정하지 마세요.\n\n${component.description}\n\n- 패키지: \`${manifest.package}\`\n- 버전: \`${manifest.version}\`\n- 상태: ${component.status}\n- 카테고리: ${component.category}\n- 컴포넌트 플랫폼: ${component.platforms.join(", ")}\n- 토큰 산출물: ${manifest.crossPlatformTokenArtifacts.join(", ")}\n- 표준 속성 계약: \`${component.extendsElementAttributes}\`\n- ref: \`${component.forwardsRef}\`\n\n## API\n\n| Prop | Type | Required | Default |\n| --- | --- | --- | --- |\n${rows || "| — | — | — | — |"}\n\n## 필수 검증 명령\n\n${evidenceRows}\n`;
+  return `# ${component.name}\n\n> \`packages/react/component-manifest.json\`에서 자동 생성된 문서입니다. 직접 수정하지 마세요.\n\n${component.description}\n\n- 패키지: \`${manifest.package}\`\n- 버전: \`${manifest.version}\`\n- 상태: ${component.status}\n- 분류: ${component.category}\n- 지원 플랫폼: ${component.platforms.join(", ")}\n- 토큰 산출물: ${manifest.crossPlatformTokenArtifacts.join(", ")}\n- HTML 속성 계약: \`${component.extendsElementAttributes}\`\n- ref 대상: \`${component.forwardsRef}\`\n\n## 공개 API\n\n| Prop | 타입 | 필수 | 기본값 |\n| --- | --- | --- | --- |\n${rows || "| — | — | — | — |"}\n\n## 필수 검증 명령\n\n${evidenceRows}\n`;
 }
 
 const documents = new Map(
@@ -35,7 +40,7 @@ const indexRows = manifest.components
   .join("\n");
 documents.set(
   path.join(outputDirectory, "index.md"),
-  `# @aster-ui/react component index\n\n> 이 문서는 컴포넌트 레지스트리에서 자동 생성됩니다.\n\n| Component | Category | Status | Public props |\n| --- | --- | --- | ---: |\n${indexRows}\n`,
+  `# @aster-ui/react 컴포넌트 목록\n\n> 컴포넌트 레지스트리에서 자동 생성된 문서입니다.\n\n| 컴포넌트 | 분류 | 상태 | 공개 prop 수 |\n| --- | --- | --- | ---: |\n${indexRows}\n`,
 );
 
 if (process.argv.includes("--check")) {

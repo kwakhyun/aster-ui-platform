@@ -87,7 +87,7 @@ describe("LocalReleaseRehearsalPublisher", () => {
         ...context,
         evidence: { ...context.evidence, sourceRevision: "stale" },
       },
-    })).rejects.toThrow("context is invalid");
+    })).rejects.toThrow("missing valid review or quality evidence");
     expect(window.localStorage.getItem(releaseStorageKey)).toBeNull();
   });
 });

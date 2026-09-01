@@ -40,8 +40,8 @@ export function Inspector({
   const apiProperties = getApiProperties(componentName);
 
   return (
-    <aside className="inspector" aria-label="컴포넌트 검사기">
-      <div className="inspector__tabs" role="tablist" aria-label="검사기 보기">
+    <aside className="inspector" aria-label="Component inspector">
+      <div className="inspector__tabs" role="tablist" aria-label="Inspector views">
         {tabs.map((item) => (
           <button
             key={item.id}
@@ -108,7 +108,7 @@ export function Inspector({
           <section className="inspector-section api-inspector" aria-labelledby="api-inspector-heading">
             <div className="inspector-section__heading">
               <h2 id="api-inspector-heading">{componentName} API</h2>
-              <Info aria-label="공개 API 계약" />
+              <Info aria-label="Public API contract" />
             </div>
             <dl>
               {apiProperties.map((property) => (
@@ -170,7 +170,7 @@ function EvidenceList({ evidence, onViewVisualTests }: QualitySummaryProps) {
             <span>{check.detail}</span>
           </div>
           {check.id === "visual" ? (
-            <button type="button" onClick={onViewVisualTests}>View</button>
+            <button type="button" onClick={onViewVisualTests}>View details</button>
           ) : null}
         </li>
       ))}
@@ -187,7 +187,7 @@ function EvidenceBlock({ evidence }: EvidenceBlockProps) {
   return (
     <div className="compatibility-block" data-status={passed ? "passed" : "attention"}>
       <span>API compatibility</span>
-      <strong>{passed ? "Checked" : "Attention"}</strong>
+      <strong>{passed ? "Compatible" : "Review needed"}</strong>
       <p>{evidence?.detail ?? "Compatibility evidence is unavailable."}</p>
     </div>
   );

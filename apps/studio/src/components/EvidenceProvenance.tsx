@@ -12,8 +12,8 @@ function shorten(value: string, visible = 18): string {
 export function EvidenceProvenance({ evidence, compact = false }: EvidenceProvenanceProps) {
   const generatedAt = new Date(evidence.generatedAt);
   const formattedTime = Number.isNaN(generatedAt.getTime())
-    ? "Invalid evidence timestamp"
-    : new Intl.DateTimeFormat("ko-KR", {
+    ? "Timestamp unavailable"
+    : new Intl.DateTimeFormat("en-US", {
       dateStyle: compact ? "short" : "medium",
       timeStyle: "short",
       timeZone: "Asia/Seoul",
@@ -31,7 +31,7 @@ export function EvidenceProvenance({ evidence, compact = false }: EvidenceProven
       </div>
       <div>
         <dt>Commit</dt>
-        <dd><code title={evidence.gitCommit ?? "No Git commit"}>{shorten(evidence.gitCommit ?? "working tree")}</code></dd>
+        <dd><code title={evidence.gitCommit ?? "No Git commit"}>{shorten(evidence.gitCommit ?? "uncommitted")}</code></dd>
       </div>
       <div>
         <dt>Run</dt>

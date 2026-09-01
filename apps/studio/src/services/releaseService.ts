@@ -151,7 +151,7 @@ export class LocalReleaseRehearsalPublisher implements ReleasePublisher {
 
   async publish({ signal, idempotencyKey, context }: ReleaseRequest): Promise<ReleaseReceipt> {
     if (!isReleaseContext(context) || idempotencyKey.trim().length === 0) {
-      throw new Error("The release rehearsal context is invalid.");
+      throw new Error("The release rehearsal is missing valid review or quality evidence.");
     }
     const existing = this.read(context);
     if (existing?.idempotencyKey === idempotencyKey) {
@@ -164,7 +164,7 @@ export class LocalReleaseRehearsalPublisher implements ReleasePublisher {
         "abort",
         () => {
           window.clearTimeout(timer);
-          reject(new DOMException("Release rehearsal was cancelled", "AbortError"));
+          reject(new DOMException("Release rehearsal was stopped", "AbortError"));
         },
         { once: true },
       );
@@ -193,7 +193,7 @@ export class LocalReleaseRehearsalPublisher implements ReleasePublisher {
     try {
       this.#storage.setItem(releaseStorageKey, JSON.stringify(receipt));
     } catch (error) {
-      throw new Error("The local rehearsal receipt could not be stored.", { cause: error });
+      throw new Error("The local rehearsal record could not be saved.", { cause: error });
     }
     return receipt;
   }

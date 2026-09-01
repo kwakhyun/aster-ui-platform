@@ -15,6 +15,11 @@ interface DiffDrawerProps {
   readonly onComplete: () => void;
 }
 
+const platformList = new Intl.ListFormat("en", {
+  style: "long",
+  type: "conjunction",
+});
+
 export function DiffDrawer({
   open,
   reviewed,
@@ -27,7 +32,7 @@ export function DiffDrawer({
 
   return (
     <div className="overlay" role="presentation">
-      <button type="button" className="overlay__scrim" aria-label="변경 검토 닫기" onClick={onClose} />
+      <button type="button" className="overlay__scrim" aria-label="Close change review" onClick={onClose} />
       <div
         ref={ref}
         className="diff-drawer"
@@ -39,20 +44,20 @@ export function DiffDrawer({
           <div>
             <span>
               <FigmaLogo weight="fill" aria-hidden="true" />
-              Figma sync review
+              Figma change review
             </span>
-            <h2 id="diff-drawer-title">Treatment Card / v12</h2>
+            <h2 id="diff-drawer-title">TreatmentCard · v12</h2>
           </div>
-          <button type="button" aria-label="닫기" onClick={onClose}>
+          <button type="button" aria-label="Close" onClick={onClose}>
             <X />
           </button>
         </header>
 
         <div className="diff-drawer__meta">
           <span>{review.validation.changeCount} token changes</span>
-          <span>{review.sourceTheme.charAt(0).toUpperCase()}{review.sourceTheme.slice(1)} source theme</span>
-          <span>CSS · Swift · Compose tokens</span>
-          <span>Alias contract valid</span>
+          <span>{review.sourceTheme.charAt(0).toUpperCase()}{review.sourceTheme.slice(1)} theme</span>
+          <span>CSS, Swift, and Compose</span>
+          <span>Aliases validated</span>
         </div>
 
         <div className="diff-drawer__changes">
@@ -78,7 +83,11 @@ export function DiffDrawer({
                   </dd>
                 </div>
               </dl>
-              <p>{change.impact.join(" · ")} artifacts will be regenerated.</p>
+              <p>
+                Affected outputs: {platformList.format(change.impact.map((platform) =>
+                  platform === "ios" ? "iOS" : platform.charAt(0).toUpperCase() + platform.slice(1)
+                ))}.
+              </p>
             </article>
           ))}
         </div>
@@ -86,15 +95,15 @@ export function DiffDrawer({
         <div className="diff-drawer__evidence">
           <CheckCircle weight="fill" aria-hidden="true" />
           <div>
-            <strong>Token alias validation passed</strong>
-            <span>All before and after aliases resolve against the checked W3C DTCG source contract.</span>
+            <strong>Token aliases validated</strong>
+            <span>Every old and new alias resolves to a token in the validated W3C DTCG source.</span>
           </div>
         </div>
 
         <footer>
           <Button tone="secondary" onClick={onClose}>Cancel</Button>
           <Button disabled={reviewed} onClick={onComplete}>
-            {reviewed ? "Review complete" : "Mark review complete"}
+            {reviewed ? "Review completed" : "Complete review"}
           </Button>
         </footer>
       </div>

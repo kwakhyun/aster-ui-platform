@@ -1,4 +1,4 @@
-# Aster UI AI workflow guardrails
+# Aster UI AI proposal guardrails
 
 When producing a design-system proposal in this repository:
 

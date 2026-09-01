@@ -69,7 +69,7 @@ export function App({
     checks: evidence.checks.map((check) => ({
       ...check,
       status: "attention",
-      detail: "This checked-in report does not match the source revision embedded in this build.",
+      detail: "The saved quality evidence does not match this build's source revision.",
     })),
   }, [evidence, evidenceCurrent]);
   const qualityReady = evidenceCurrent
@@ -102,9 +102,9 @@ export function App({
       const receipt = storeReviewReceipt(window.localStorage, figmaReview);
       setReviewReceipt(receipt);
       setDiffOpen(false);
-      showToast(`Figma changes reviewed by ${receipt.reviewer.label}.`, "success");
+      showToast(`Review completed by ${receipt.reviewer.label}.`, "success");
     } catch {
-      showToast("Figma review could not be recorded.");
+      showToast("The Figma review could not be saved.");
     }
   }, [showToast]);
 
@@ -121,21 +121,20 @@ export function App({
     const receipt = await release.publish();
     if (!receipt) return;
     setReleaseOpen(false);
-    showToast(`${receipt.version} local release rehearsal recorded. No registry was changed.`, "success");
+    showToast(`${receipt.version} release rehearsal saved locally. Nothing was published.`, "success");
   };
 
   return (
     <div className="app-shell" data-theme={theme}>
-      <a className="skip-link" href="#main-workspace">본문으로 건너뛰기</a>
+      <a className="skip-link" href="#main-workspace">Skip to main content</a>
       <TopBar
         activeTab={workspaceTab}
         sidebarOpen={sidebarOpen}
         running={release.status === "running"}
         rehearsed={release.status === "rehearsed"}
-        version={tokenVersion}
         onToggleSidebar={() => setSidebarOpen((open) => !open)}
         onNavigate={handleWorkspaceTab}
-        onHelp={() => showToast("Tip: press ⌘K or Ctrl+K to search components.")}
+        onHelp={() => showToast("Tip: Press ⌘K or Ctrl+K to search components.")}
         onPublish={() => setReleaseOpen(true)}
       />
 
@@ -163,7 +162,7 @@ export function App({
             </div>
             <p>
               <FigmaLogo weight="fill" aria-hidden="true" />
-              Figma variables <i /> {components.length} shipped web components
+              Figma variables <i /> {components.length} web components
             </p>
           </header>
 
@@ -188,8 +187,8 @@ export function App({
             onThemeChange={setTheme}
             onStateChange={setPreviewState}
             onSavedChange={setSaved}
-            onCardSelect={() => showToast("TreatmentCard selection event emitted.")}
-            onCopyUsage={(usage) => void handleCopy(usage, "API usage")}
+            onCardSelect={() => showToast("TreatmentCard emitted its selection event.")}
+            onCopyUsage={(usage) => void handleCopy(usage, "Usage example")}
           />
         </main>
 

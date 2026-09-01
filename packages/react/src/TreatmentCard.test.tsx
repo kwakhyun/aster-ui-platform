@@ -60,6 +60,8 @@ describe("TreatmentCard", () => {
     );
 
     expect(screen.getByText("$79,000")).toBeInTheDocument();
+    expect(screen.getByText("Downtime")).toBeInTheDocument();
+    expect(screen.getByText("From")).toBeInTheDocument();
     const image = screen.getByRole("img");
     expect(image).toHaveAttribute("loading", "lazy");
     expect(image).toHaveAttribute("decoding", "async");

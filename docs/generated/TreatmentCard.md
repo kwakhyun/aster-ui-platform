@@ -1,21 +1,21 @@
 # TreatmentCard
 
-> 이 문서는 `packages/react/component-manifest.json`에서 자동 생성됩니다. 직접 수정하지 마세요.
+> `packages/react/component-manifest.json`에서 자동 생성된 문서입니다. 직접 수정하지 마세요.
 
-의료미용 시술 정보를 접근 가능한 article 계약으로 제공하는 도메인 컴포넌트입니다.
+의료미용 시술 정보를 접근 가능한 HTML article 요소로 제공하는 도메인 컴포넌트입니다.
 
 - 패키지: `@aster-ui/react`
 - 버전: `3.1.0-beta.2`
 - 상태: beta
-- 카테고리: Treatment
-- 컴포넌트 플랫폼: Web
+- 분류: Treatment
+- 지원 플랫폼: Web
 - 토큰 산출물: CSS, Swift, Compose
-- 표준 속성 계약: `ComponentPropsWithoutRef<article>`
-- ref: `HTMLElement`
+- HTML 속성 계약: `ComponentPropsWithoutRef<article>`
+- ref 대상: `HTMLElement`
 
-## API
+## 공개 API
 
-| Prop | Type | Required | Default |
+| Prop | 타입 | 필수 | 기본값 |
 | --- | --- | --- | --- |
 | `title` | `string` | 예 | — |
 | `category` | `string` | 예 | — |
@@ -37,6 +37,6 @@
 
 ## 필수 검증 명령
 
-- unit: `pnpm --filter @aster-ui/react test`
-- apiCompatibility: `pnpm api:check`
-- browserAccessibility: `pnpm test:visual`
+- 단위 테스트: `pnpm --filter @aster-ui/react test`
+- API 호환성: `pnpm api:check`
+- 브라우저 접근성: `pnpm test:visual`

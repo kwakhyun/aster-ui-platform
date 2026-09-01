@@ -48,8 +48,8 @@ try {
     animations: "disabled",
   });
   await page.getByRole("tab", { name: "Preview", exact: true }).click();
-  await page.getByRole("button", { name: "Default 상태 미리보기" }).click();
-  const saveButton = page.getByRole("button", { name: "Laser toning 저장" });
+  await page.getByRole("button", { name: "Preview default state" }).click();
+  const saveButton = page.getByRole("button", { name: "Save Laser toning" });
   await saveButton.focus();
   await page.keyboard.press("Shift+Tab");
   await page.keyboard.press("Tab");

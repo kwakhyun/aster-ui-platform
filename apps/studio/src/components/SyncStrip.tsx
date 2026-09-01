@@ -26,17 +26,17 @@ export function SyncStrip({
   const reviewed = reviewReceipt !== null;
   const syncDate = new Date(syncedAt);
   const formattedSync = Number.isNaN(syncDate.getTime())
-    ? "Invalid sync time"
-    : new Intl.DateTimeFormat("ko-KR", {
+    ? "Sync time unavailable"
+    : new Intl.DateTimeFormat("en-US", {
       dateStyle: "short",
       timeStyle: "short",
       timeZone: "Asia/Seoul",
     }).format(syncDate);
   return (
-    <div className="sync-strip" aria-label="Figma 동기화 상태">
+    <div className="sync-strip" aria-label="Figma sync status">
       <span>
         <Sparkle size={17} weight="fill" aria-hidden="true" />
-        {changeCount} incoming changes from Figma
+        {changeCount} Figma changes ready for review
       </span>
       <i />
       <span className={reviewed ? "sync-strip__reviewed" : "sync-strip__warning"}>
@@ -46,14 +46,14 @@ export function SyncStrip({
           <Warning size={17} weight="fill" aria-hidden="true" />
         )}
         {reviewed
-          ? `Human review complete · ${reviewReceipt.reviewer.label}`
-          : "Human review required"}
+          ? `Review completed by ${reviewReceipt.reviewer.label}`
+          : "Review required"}
       </span>
       <i />
       <span>
         <ArrowsClockwise size={17} aria-hidden="true" />
         <time dateTime={syncedAt}>
-          {sourceTheme.charAt(0).toUpperCase()}{sourceTheme.slice(1)} fixture · {formattedSync} KST
+          {sourceTheme.charAt(0).toUpperCase()}{sourceTheme.slice(1)} test data · {formattedSync} KST
         </time>
       </span>
       <Button
@@ -63,7 +63,7 @@ export function SyncStrip({
         leadingIcon={<FigmaLogo size={16} />}
         onClick={onReview}
       >
-        Review diff
+        Review changes
       </Button>
     </div>
   );

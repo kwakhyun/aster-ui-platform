@@ -43,11 +43,11 @@ function evidenceFields(report) {
 const checks = [
   {
     id: "unit",
-    label: "Unit and accessibility states",
+    label: "Unit and accessibility tests",
     status: isPassingCurrentReport(unit) ? "passed" : "attention",
     detail: isPassingCurrentReport(unit)
-      ? "Workspace unit suites and the axe UI-state matrix exited successfully."
-      : "A passing unit report for this exact source revision is not present.",
+      ? "All workspace unit tests and axe UI-state checks passed."
+      : "No current passing unit-test report is available for this source revision.",
     command: "pnpm test",
     ...evidenceFields(unit),
   },
@@ -56,8 +56,8 @@ const checks = [
     label: "API compatibility",
     status: isPassingCurrentReport(api) ? "passed" : "attention",
     detail: isPassingCurrentReport(api)
-      ? `${api.checkedProps} baseline props checked; ${api.breakingChanges.length} breaking changes.`
-      : "The API comparison is missing, failing, or stale for this source revision.",
+      ? `${api.checkedProps} public API props checked; no breaking changes found.`
+      : "The API comparison is missing, failed, or out of date for this source revision.",
     command: "pnpm api:check",
     ...evidenceFields(api),
   },
@@ -66,8 +66,8 @@ const checks = [
     label: "Browser visual and accessibility",
     status: isPassingCurrentReport(visual) ? "passed" : "attention",
     detail: isPassingCurrentReport(visual)
-      ? `${visual.passed} browser cases passed with ${visual.snapshots} snapshot assertions and real-browser axe checks.`
-      : "A passing browser report for this exact source revision is not present.",
+      ? `${visual.passed} browser scenarios and ${visual.snapshots} visual snapshots passed, including axe checks in Chrome.`
+      : "No current passing browser report is available for this source revision.",
     command: "pnpm test:visual",
     ...evidenceFields(visual),
   },
@@ -76,8 +76,8 @@ const checks = [
     label: "Performance budget",
     status: isPassingCurrentReport(performance) ? "passed" : "attention",
     detail: isPassingCurrentReport(performance)
-      ? "Production JS, CSS, font, and responsive image budgets passed."
-      : "The performance report is missing, failing, or stale for this source revision.",
+      ? "Production JavaScript, CSS, font, and responsive image sizes are within budget."
+      : "The performance report is missing, failed, or out of date for this source revision.",
     command: "pnpm perf:check",
     ...evidenceFields(performance),
   },
@@ -86,8 +86,8 @@ const checks = [
     label: "Production dependency audit",
     status: isPassingCurrentReport(security) ? "passed" : "attention",
     detail: isPassingCurrentReport(security)
-      ? `${security.knownVulnerabilities} known production dependency vulnerabilities reported.`
-      : "A registry-backed dependency audit for this source revision is not present.",
+      ? "The production dependency audit found no known vulnerabilities."
+      : "No current registry-backed dependency audit is available for this source revision.",
     command: "pnpm audit --prod --audit-level high",
     ...evidenceFields(security),
   },

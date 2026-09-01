@@ -28,13 +28,13 @@ export class AppErrorBoundary extends Component<
         <main className="app-error" role="alert">
           <div className="app-error__panel">
             <p className="app-error__eyebrow">Aster UI</p>
-            <h1>Studio를 불러오지 못했습니다</h1>
+            <h1>Studio could not be loaded</h1>
             <p>
-              저장이 완료된 검토 및 리허설 기록은 다시 불러옵니다. 저장되지
-              않은 화면 상태는 초기화될 수 있습니다.
+              Saved review and rehearsal records will be restored. Unsaved screen
+              state may be reset.
             </p>
             <button type="button" onClick={() => window.location.reload()}>
-              다시 불러오기
+              Reload Studio
             </button>
           </div>
         </main>

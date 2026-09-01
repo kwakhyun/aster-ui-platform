@@ -1,5 +1,5 @@
-# Request: localizable TreatmentCard saved-state labels
+# 요청: TreatmentCard 저장 상태 문구 현지화
 
-TreatmentCard currently constructs Korean accessible labels for the save action inside the component. Propose a backward-compatible public API that lets consumers localize those labels while preserving the current Korean behavior by default.
+TreatmentCard는 `locale`에 따라 저장 동작의 한국어 또는 영어 접근성 문구를 컴포넌트 내부에서 선택합니다. 현재 한국어 기본 동작을 유지하면서 소비자가 다른 언어나 제품 문구에 맞는 저장 상태 문구를 제공할 수 있도록 하위 호환 공개 API를 제안하세요.
 
-The proposal must cover the uncontrolled label fallback, saved and unsaved states, disabled behavior, API documentation, unit tests, and accessibility verification. Do not implement or apply the change.
+제안에는 비제어 상태의 기본 문구, 저장 전후 상태, 비활성화 동작, API 문서, 단위 테스트, 접근성 검증을 포함해야 합니다. 변경을 구현하거나 적용하지 마세요.

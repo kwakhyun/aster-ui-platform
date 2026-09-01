@@ -69,22 +69,22 @@ test("matches the approved coral desktop composition", async ({ page }, testInfo
 });
 
 test("renders the ocean theme from the same semantic contract", async ({ page }, testInfo) => {
-  await page.getByRole("combobox", { name: "미리보기 테마" }).selectOption("ocean");
+  await page.getByRole("combobox", { name: "Preview theme" }).selectOption("ocean");
   await expect(page.locator(".app-shell")).toHaveAttribute("data-theme", "ocean");
   testInfo.annotations.push({ type: "snapshot", description: "ocean desktop" });
   await expect(page).toHaveScreenshot("studio-ocean-1440x1024.png", stableScreenshotOptions(page));
 });
 
 test("captures the Figma review and local rehearsal states", async ({ page }, testInfo) => {
-  await page.getByRole("button", { name: "Review diff" }).click();
-  await expect(page.getByRole("dialog", { name: "Treatment Card / v12" })).toBeVisible();
+  await page.getByRole("button", { name: "Review changes" }).click();
+  await expect(page.getByRole("dialog", { name: "TreatmentCard · v12" })).toBeVisible();
   testInfo.annotations.push({ type: "snapshot", description: "figma diff" });
   await expect(page).toHaveScreenshot("figma-diff-1440x1024.png", stableScreenshotOptions(page));
   await assertBrowserAxe(page, testInfo);
-  await page.getByRole("button", { name: "Mark review complete" }).click();
+  await page.getByRole("button", { name: "Complete review" }).click();
 
-  await page.getByRole("button", { name: "Rehearse 3.1.0-beta.2" }).click();
-  await expect(page.getByRole("dialog", { name: /Local release rehearsal/ })).toBeVisible();
+  await page.getByRole("button", { name: "Run rehearsal" }).click();
+  await expect(page.getByRole("dialog", { name: /Release rehearsal/ })).toBeVisible();
   testInfo.annotations.push({ type: "snapshot", description: "local rehearsal" });
   await expect(page).toHaveScreenshot("release-rehearsal-1440x1024.png", stableScreenshotOptions(page));
   await assertBrowserAxe(page, testInfo);
@@ -109,9 +109,9 @@ test("survives a 200 percent equivalent viewport and mobile flow", async ({ page
   await expect(page).toHaveScreenshot("zoom-equivalent-720x512.png", stableScreenshotOptions(page));
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole("button", { name: "컴포넌트 탐색 열기" }).click();
-  await expect(page.getByRole("complementary", { name: "컴포넌트 탐색" })).toHaveClass(/is-open/);
-  await page.getByRole("banner").getByRole("button", { name: "컴포넌트 탐색 닫기" }).click();
+  await page.getByRole("button", { name: "Open component browser" }).click();
+  await expect(page.getByRole("complementary", { name: "Component browser" })).toHaveClass(/is-open/);
+  await page.getByRole("banner").getByRole("button", { name: "Close component browser" }).click();
   test.info().annotations.push({ type: "snapshot", description: "mobile component lab" });
   await expect(page).toHaveScreenshot("studio-mobile-390x844.png", stableScreenshotOptions(page));
   await assertBrowserAxe(page, test.info());

@@ -80,7 +80,7 @@ export function Workspace({
   return (
     <div className="workspace">
       <div className="workspace__toolbar">
-        <div className="workspace__tabs" role="tablist" aria-label="컴포넌트 작업 보기">
+        <div className="workspace__tabs" role="tablist" aria-label="Component workspace views">
           {tabs.map((item) => (
             <button
               key={item.id}
@@ -103,7 +103,7 @@ export function Workspace({
           <label className="theme-selector">
             <span>Theme</span>
             <select
-              aria-label="미리보기 테마"
+              aria-label="Preview theme"
               value={theme}
               onChange={(event) => onThemeChange(event.currentTarget.value as StudioTheme)}
             >
@@ -114,7 +114,7 @@ export function Workspace({
           </label>
 
           {tab === "preview" ? (
-            <div className="workspace__platforms" role="tablist" aria-label="플랫폼 미리보기">
+            <div className="workspace__platforms" role="tablist" aria-label="Platform preview">
               {platforms.map((item) => (
                 <button
                   key={item.id}
@@ -176,25 +176,25 @@ export function Workspace({
           <section className="workspace-panel api-panel" aria-labelledby="api-heading">
             <div className="workspace-panel__heading">
               <div>
-                <span>Typed public contract</span>
+                <span>Typed public API</span>
                 <h2 id="api-heading">{component?.propsInterface ?? `${componentName}Props`}</h2>
               </div>
               <button
                 type="button"
-                aria-label="API 사용 예시 복사"
+                aria-label="Copy usage example"
                 onClick={() => onCopyUsage(componentUsage)}
               >
-                <CopySimple /> Copy usage
+                <CopySimple /> Copy example
               </button>
             </div>
             <div className="api-panel__grid">
-              <pre tabIndex={0} aria-label={`${componentName} 사용 예시`}><code>{componentUsage}</code></pre>
+              <pre tabIndex={0} aria-label={`${componentName} usage example`}><code>{componentUsage}</code></pre>
               <table>
                 <thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead>
                 <tbody>
                   {apiProperties.map((property) => (
                     <tr key={property.name}>
-                      <td>{property.name}{property.required ? <b aria-label="필수">*</b> : null}</td>
+                      <td>{property.name}{property.required ? <b aria-label="Required">*</b> : null}</td>
                       <td>{property.type}</td>
                       <td>{property.defaultValue}</td>
                     </tr>
@@ -209,10 +209,10 @@ export function Workspace({
           <section className="workspace-panel token-map" aria-labelledby="token-map-heading">
             <div className="workspace-panel__heading">
               <div>
-                <span>W3C DTCG references · {themeNames.length} themes</span>
+                <span>W3C DTCG aliases · {themeNames.length} themes</span>
                 <h2 id="token-map-heading">Resolved token map</h2>
               </div>
-              <span className="status-pill">{tokenArtifactPlatforms.length} token targets generated</span>
+              <span className="status-pill">{tokenArtifactPlatforms.length} output formats generated</span>
             </div>
             {["color.action.primary", "color.focus.ring", "color.text.accent"].map((token) => (
               <div className="token-map__row" key={token}>
@@ -229,11 +229,11 @@ export function Workspace({
           <section className="workspace-panel quality-panel" aria-labelledby="quality-heading">
             <div className="workspace-panel__heading">
               <div>
-                <span>Repository-generated evidence</span>
-                <h2 id="quality-heading">Release quality gates</h2>
+                <span>Generated from repository checks</span>
+                <h2 id="quality-heading">Release quality checks</h2>
               </div>
               <span className={passedCount === qualityEvidence.checks.length ? "status-pill" : "status-pill status-pill--attention"}>
-                {passedCount}/{qualityEvidence.checks.length} checks passed
+                {passedCount} of {qualityEvidence.checks.length} checks passed
               </span>
             </div>
             <EvidenceProvenance evidence={qualityEvidence} />
@@ -293,26 +293,26 @@ function ComponentPreview({
   }
 
   return (
-    <div className="component-showcase" aria-label={`${componentName} 미리보기`}>
+    <div className="component-showcase" aria-label={`${componentName} preview`}>
       {componentName === "Alert" ? (
-        <Alert tone="success" title="토큰 동기화 완료">3개 변경을 검증했습니다.</Alert>
+        <Alert tone="success" title="Tokens synced">Validated 3 changes.</Alert>
       ) : null}
       {componentName === "Badge" ? <Badge tone="success">Ready</Badge> : null}
       {componentName === "Button" ? <Button disabled={disabled}>Review changes</Button> : null}
       {componentName === "Tabs" ? (
         <Tabs
-          ariaLabel="시술 정보"
+          ariaLabel="Treatment information"
           items={[
-            { value: "overview", label: "개요", content: "레이저 토닝 시술 개요" },
-            { value: "aftercare", label: "사후 관리", content: "자외선 차단제를 사용하세요." },
+            { value: "overview", label: "Overview", content: "Laser toning overview" },
+            { value: "aftercare", label: "Aftercare", content: "Use sunscreen after treatment." },
           ]}
         />
       ) : null}
       {componentName === "TextField" ? (
         <TextField
-          label="클리닉 검색"
-          hint="병원명 또는 지역을 입력하세요."
-          placeholder="예: 강남구"
+          label="Search clinics"
+          hint="Enter a clinic name or location."
+          placeholder="e.g. Gangnam"
           disabled={disabled}
         />
       ) : null}

@@ -1,7 +1,7 @@
 {
   "name": "@aster-ui/react",
   "version": "3.1.0-beta.2",
-  "description": "Accessible React components and generated public API contracts for Aster UI.",
+  "description": "Accessible React components with generated public API contracts.",
   "license": "MIT",
   "repository": {
     "type": "git",

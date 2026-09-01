@@ -42,13 +42,13 @@ export function NativeArtifactPreview({ platform, theme }: NativeArtifactPreview
           <h2 id="native-artifact-title">{contract.title}</h2>
         </div>
         <span className="native-artifact__status">
-          <CheckCircle weight="fill" aria-hidden="true" /> Numeric parity verified
+          <CheckCircle weight="fill" aria-hidden="true" /> Numeric values verified
         </span>
       </header>
 
       <div className="native-artifact__path">
         <FileCode aria-hidden="true" />
-        <span>{contract.language} output</span>
+        <span>{contract.language} file</span>
         <code>{artifactPath}</code>
       </div>
 
@@ -61,8 +61,8 @@ export function NativeArtifactPreview({ platform, theme }: NativeArtifactPreview
       <p className="native-artifact__boundary">
         <Info weight="fill" aria-hidden="true" />
         <span>
-          <code>TreatmentCard</code> is a Web component. This view verifies the shared native token
-          output and does not imply a SwiftUI or Compose component implementation.
+          <code>TreatmentCard</code> is available only as a web component. This view verifies shared
+          native tokens; it does not represent a SwiftUI or Compose component implementation.
         </span>
       </p>
     </section>

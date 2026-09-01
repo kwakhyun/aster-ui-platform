@@ -10,10 +10,10 @@ describe("ClinicReviewQueue design-system consumer", () => {
   it("renders shared feedback, form, status, and action contracts", () => {
     render(<ClinicReviewQueue />);
 
-    expect(screen.getByRole("heading", { name: "클리닉 검수" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "클리닉 정보 검수" })).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("검수 기준이 업데이트됐습니다.");
     expect(screen.getByRole("textbox", { name: "클리닉 검색" })).toBeEnabled();
-    expect(screen.getByText("Review required")).toBeInTheDocument();
+    expect(screen.getByText("검토 필요")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "필터 적용" })).toBeEnabled();
   });
 

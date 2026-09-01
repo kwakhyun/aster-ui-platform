@@ -2,7 +2,7 @@
   "name": "aster-ui-platform",
   "version": "3.1.0-beta.2",
   "private": true,
-  "description": "A production-minded cross-platform design-system operations portfolio project.",
+  "description": "A production-ready portfolio project for cross-platform design-system operations.",
   "license": "MIT",
   "packageManager": "pnpm@10.29.2",
   "engines": {

@@ -21,7 +21,7 @@ export interface ReviewReceipt {
 
 export const localReviewIdentity: ReviewIdentity = {
   id: "local-portfolio-reviewer",
-  label: "Local portfolio reviewer",
+  label: "Local reviewer",
 };
 
 export function fingerprintReview(review: FigmaSyncReview): string {
@@ -105,7 +105,7 @@ export function storeReviewReceipt(
   try {
     storage.setItem(reviewStorageKey, JSON.stringify(receipt));
   } catch (error) {
-    throw new Error("The local review receipt could not be stored.", { cause: error });
+    throw new Error("The local review record could not be saved.", { cause: error });
   }
   return receipt;
 }

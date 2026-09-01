@@ -13,13 +13,13 @@ export function ClinicDiscovery() {
             label: "추천",
             content: (
               <TreatmentCard
-                title="Laser toning"
-                category="Brightening and pigmentation"
+                title="레이저 토닝"
+                category="미백과 색소 개선"
                 imageUrl={image}
                 imageAlt="레이저 토닝 시술 예시"
                 price={79_000}
-                downtime="Minimal"
-                sessions="3–5"
+                downtime="거의 없음"
+                sessions="3~5회"
               />
             ),
           },

@@ -12,10 +12,11 @@ export function TreatmentCardUsageExample() {
   return (
     <TreatmentCard
       title="Laser toning"
-      category="Brightening and pigmentation"
+      category="Brightening and pigmentation care"
       imageUrl="/laser-toning-800.webp"
-      imageAlt="레이저 토닝 시술 정보를 소개하는 성인 여성 모델"
+      imageAlt="Portrait of an adult model for laser toning"
       price={79_000}
+      locale="en-US"
       downtime="Minimal"
       sessions="3–5"
       headingLevel="h2"

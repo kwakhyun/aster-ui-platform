@@ -15,6 +15,17 @@ export type TreatmentCardVariant = "default" | "compact";
 export type TreatmentCardCurrency = "KRW" | "USD" | "JPY";
 export type TreatmentCardHeadingLevel = "h2" | "h3" | "h4";
 
+interface TreatmentCardLabels {
+  readonly downtime: string;
+  readonly sessions: string;
+  readonly results: string;
+  readonly priceFrom: string;
+  readonly treatmentInfo: string;
+  readonly save: (title: string) => string;
+  readonly unsave: (title: string) => string;
+  readonly details: (title: string) => string;
+}
+
 export interface TreatmentCardProps
   extends Omit<ComponentPropsWithoutRef<"article">, "children" | "onSelect" | "results" | "title"> {
   readonly title: string;
@@ -40,6 +51,32 @@ export interface TreatmentCardProps
 }
 
 const formatterCache = new Map<string, Intl.NumberFormat>();
+
+const koreanLabels: TreatmentCardLabels = {
+  downtime: "회복 기간",
+  sessions: "권장 횟수",
+  results: "기대 효과",
+  priceFrom: "최저",
+  treatmentInfo: "시술 정보",
+  save: (title) => `${title} 저장`,
+  unsave: (title) => `${title} 저장 취소`,
+  details: (title) => `${title} 상세 보기`,
+};
+
+const englishLabels: TreatmentCardLabels = {
+  downtime: "Downtime",
+  sessions: "Sessions",
+  results: "Results",
+  priceFrom: "From",
+  treatmentInfo: "Treatment details",
+  save: (title) => `Save ${title}`,
+  unsave: (title) => `Remove ${title} from saved treatments`,
+  details: (title) => `View details for ${title}`,
+};
+
+function getDefaultLabels(locale: string): TreatmentCardLabels {
+  return locale.toLocaleLowerCase().startsWith("ko") ? koreanLabels : englishLabels;
+}
 
 function formatCurrency(value: number, locale: string, currency: TreatmentCardCurrency): string {
   const cacheKey = `${locale}:${currency}`;
@@ -81,6 +118,7 @@ export const TreatmentCard = forwardRef<HTMLElement, TreatmentCardProps>(functio
 ) {
   const compact = variant === "compact";
   const Heading = headingLevel;
+  const resolvedLabels = getDefaultLabels(locale);
   const cardClassName = [
     "aster-treatment-card",
     compact ? "aster-treatment-card--compact" : "",
@@ -114,7 +152,7 @@ export const TreatmentCard = forwardRef<HTMLElement, TreatmentCardProps>(functio
             <button
               type="button"
               className="aster-treatment-card__save"
-              aria-label={saved ? `${title} 저장 취소` : `${title} 저장`}
+              aria-label={saved ? resolvedLabels.unsave(title) : resolvedLabels.save(title)}
               aria-pressed={saved}
               disabled={disabled}
               onClick={(event) => onSavedChange(!saved, event)}
@@ -124,18 +162,18 @@ export const TreatmentCard = forwardRef<HTMLElement, TreatmentCardProps>(functio
           ) : null}
         </div>
 
-        <div className="aster-treatment-card__facts" aria-label="시술 정보">
+        <div className="aster-treatment-card__facts" aria-label={resolvedLabels.treatmentInfo}>
           <div>
             <Clock aria-hidden="true" />
             <span>
-              <small>Downtime</small>
+              <small>{resolvedLabels.downtime}</small>
               {downtime}
             </span>
           </div>
           <div>
             <Clock aria-hidden="true" />
             <span>
-              <small>Sessions</small>
+              <small>{resolvedLabels.sessions}</small>
               {sessions}
             </span>
           </div>
@@ -146,7 +184,7 @@ export const TreatmentCard = forwardRef<HTMLElement, TreatmentCardProps>(functio
             <Sparkle aria-hidden="true" />
             {results ? (
               <span>
-                <small>Results</small>
+                <small>{resolvedLabels.results}</small>
                 {results}
               </span>
             ) : null}
@@ -155,14 +193,14 @@ export const TreatmentCard = forwardRef<HTMLElement, TreatmentCardProps>(functio
 
         <div className="aster-treatment-card__footer">
           <p>
-            <span>From</span>
+            <span>{resolvedLabels.priceFrom}</span>
             <strong>{formatCurrency(price, locale, currency)}</strong>
           </p>
           {onSelect ? (
             <button
               type="button"
               className="aster-treatment-card__action"
-              aria-label={`${title} 상세 보기`}
+              aria-label={resolvedLabels.details(title)}
               disabled={disabled}
               onClick={onSelect}
             >

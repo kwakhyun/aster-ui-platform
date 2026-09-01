@@ -53,7 +53,7 @@ export function ReleaseDialog({
       <button
         type="button"
         className="overlay__scrim"
-        aria-label="릴리스 창 닫기"
+        aria-label="Close release rehearsal"
         onClick={requestClose}
       />
       <div
@@ -68,27 +68,27 @@ export function ReleaseDialog({
           <div className="release-dialog__icon">
             <CloudArrowUp weight="bold" aria-hidden="true" />
           </div>
-          <button type="button" aria-label="닫기" onClick={requestClose}>
+          <button type="button" aria-label="Close" onClick={requestClose}>
             <X />
           </button>
         </header>
-        <h2 id="release-title">Local release rehearsal {tokenVersion}</h2>
+        <h2 id="release-title">Release rehearsal · {tokenVersion}</h2>
         <p id="release-description">
-          Validate the reviewed contract and record a local receipt. This demo does not publish to a package registry or change Figma.
+          Review the pending changes, verify the quality evidence, and save a local rehearsal record. This demo does not publish a package or modify Figma.
         </p>
 
         <dl className="release-dialog__summary">
           <div>
             <dt>Change type</dt>
-            <dd>Non-breaking prerelease</dd>
+            <dd>Backward-compatible prerelease</dd>
           </div>
           <div>
             <dt>Artifacts</dt>
-            <dd>React component · CSS tokens · Swift tokens · Compose tokens</dd>
+            <dd>React component, CSS tokens, Swift tokens, and Compose tokens</dd>
           </div>
           <div>
             <dt>Automation</dt>
-            <dd>release-please contract · changelog · docs</dd>
+            <dd>release-please checks, changelog generation, and documentation updates</dd>
           </div>
         </dl>
 
@@ -96,10 +96,10 @@ export function ReleaseDialog({
           <div className="release-dialog__warning" role="alert">
             <Warning weight="fill" aria-hidden="true" />
             <div>
-              <strong>Human review is required</strong>
-              <span>Review the Figma diff before running this local rehearsal.</span>
+              <strong>Review required</strong>
+              <span>Review the Figma changes before running this rehearsal.</span>
             </div>
-            <button type="button" onClick={onReview}>Review changes</button>
+            <button type="button" onClick={onReview}>Review Figma changes</button>
           </div>
         ) : (
           <div className="release-dialog__reviewed">
@@ -117,10 +117,10 @@ export function ReleaseDialog({
           <div className="release-dialog__warning" role="alert">
             <Warning weight="fill" aria-hidden="true" />
             <div>
-              <strong>Current quality evidence is required</strong>
-              <span>Run the full verification gate for this exact source revision first.</span>
+              <strong>Up-to-date quality evidence is required</strong>
+              <span>Run the full verification suite for this source revision first.</span>
             </div>
-            <button type="button" onClick={onInspectQuality}>Open quality</button>
+            <button type="button" onClick={onInspectQuality}>View quality checks</button>
           </div>
         ) : null}
 
@@ -133,26 +133,26 @@ export function ReleaseDialog({
           />
           <span>
             <ShieldCheck aria-hidden="true" />
-            I verified the component API, repository evidence, and token artifact impact.
+            I reviewed the component API, quality evidence, and affected token artifacts.
           </span>
         </label>
 
         {status === "failed" ? (
           <p className="release-dialog__error" role="alert">
-            {errorMessage ?? "The rehearsal failed."} No external artifact was published.
+            {errorMessage ?? "The rehearsal failed."} Nothing was published.
           </p>
         ) : null}
 
         <footer>
           <Button tone="secondary" onClick={requestClose}>
-            {running ? "Cancel rehearsal" : "Cancel"}
+            {running ? "Stop rehearsal" : "Cancel"}
           </Button>
           <Button
             leadingIcon={<CloudArrowUp weight="bold" />}
             disabled={!reviewed || !qualityReady || !confirmed || running}
             onClick={() => void onPublish()}
           >
-            {running ? "Running…" : status === "failed" ? "Retry rehearsal" : "Run rehearsal"}
+            {running ? "Running…" : status === "failed" ? "Retry rehearsal" : "Start rehearsal"}
           </Button>
         </footer>
       </div>

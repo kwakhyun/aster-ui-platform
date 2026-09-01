@@ -2,21 +2,25 @@
 
 ## 버전 계약
 
-`3.1.0-beta.2`는 root, Studio, 세 패키지, token constant, component manifest, release-please manifest, changelog, Kubernetes version metadata에서 동일해야 합니다. 실제 Kubernetes image는 별도 renderer가 `repository@sha256:<digest>` 형식만 허용합니다. `pnpm release:check`가 하나라도 다르면 실패합니다.
+`3.1.0-beta.2`는 루트, Studio, 패키지 3개, 토큰 상수, 컴포넌트 매니페스트, release-please 매니페스트, 변경 이력, Kubernetes 버전 메타데이터에서 동일해야 합니다. 실제 Kubernetes 이미지는 별도 렌더러가 `repository@sha256:<digest>` 형식만 허용합니다. `pnpm release:check`는 값이 하나라도 다르면 실패합니다.
 
 ## API 호환성
 
-- patch: DOM 의미와 사용자 동작을 유지하는 오류 수정
-- minor: optional prop, token, variant 추가
-- major: prop 제거, 필수 prop 추가, 타입이나 상호작용 의미 변경
-- prerelease: 실제 소비 앱 검증을 위한 beta 계약
+- 패치: DOM 의미와 사용자 동작을 유지하는 오류 수정
+- 마이너: 선택적 prop, 토큰, variant 추가
+- 메이저: prop 제거, 필수 prop 추가, 타입이나 상호작용 의미 변경
+- 프리릴리스: 실제 소비 앱 검증을 위한 베타 계약
 
-Deprecated API에는 대체 API, 이전 지침, 최소 한 번의 minor 유예 기간이 필요합니다. `packages/react/api-baseline.json`과 생성 manifest 비교는 제거, 타입 변경, 필수 전환, 기본값 변경을 차단합니다.
+지원 중단 예정 API에는 대체 API, 이전 지침, 최소 한 번의 마이너 버전 유예 기간이 필요합니다. `packages/react/api-baseline.json`과 생성 매니페스트 비교는 제거, 타입 변경, 필수 전환, 기본값 변경을 차단합니다.
 
 ## 로컬 리허설과 실제 배포
 
-Studio의 버튼은 실제 npm 배포가 아니라 로컬 릴리스 리허설입니다. receipt에는 schema version, `local-rehearsal` mode, idempotency key, beta channel, 실행 시각과 함께 검토자, Figma source version 및 theme, change fingerprint, 품질 source revision, run ID, artifact digest를 기록합니다. 현재 문맥과 정확히 일치하는 receipt만 새로고침 뒤 복구하며, UI와 toast가 외부 레지스트리를 변경하지 않았음을 명시합니다.
+Studio의 `Run rehearsal` 버튼은 실제 npm 배포가 아니라 로컬 릴리스 리허설을 실행합니다. 리허설 기록에는 스키마 버전, `local-rehearsal` 모드, 멱등성 키, 베타 채널, 실행 시각을 저장합니다. 검토자, Figma 소스 버전과 테마, 변경 지문, 품질 소스 리비전, 실행 ID, 산출물 해시도 함께 기록합니다.
 
-빌드에 삽입된 source revision과 품질 근거의 revision이 다르거나 다섯 품질 gate가 모두 통과하지 않으면 checkbox와 실행 버튼이 비활성화됩니다. 사용자는 Quality 화면에서 실패하거나 오래된 근거를 먼저 확인해야 합니다.
+현재 문맥과 정확히 일치하는 기록만 새로고침 뒤 복구하며, 화면 알림에는 외부 레지스트리를 변경하지 않았음을 명시합니다.
 
-release-please workflow는 SHA로 고정된 Action에서 `pnpm verify`를 통과한 뒤에만 release 제안을 실행하도록 구성했습니다. 이 순서는 품질 검사, 실제 브라우저 시각 및 접근성 검사, 프로덕션 의존성 감사를 먼저 수행하고, 근거 생성 후 Studio를 재빌드합니다. Studio의 로컬 근거는 최신 source 변경 commit을 기록하되 GitHub Actions 성공으로 표현하지 않습니다. 공개 원격 저장소가 연결되기 전에는 workflow 파일과 로컬 결과만 구현 근거로 사용합니다.
+빌드에 삽입된 소스 리비전과 품질 근거의 리비전이 다르거나 다섯 품질 검증 항목이 모두 통과하지 않으면 확인란과 실행 버튼이 비활성화됩니다. 사용자는 `Quality` 화면에서 실패했거나 오래된 근거를 먼저 확인해야 합니다.
+
+release-please 워크플로는 SHA로 고정된 Action에서 `pnpm verify`를 통과한 뒤에만 릴리스 제안을 실행하도록 구성했습니다. 먼저 품질 검사, 실제 브라우저 시각 및 접근성 검사, 프로덕션 의존성 감사를 수행하고 근거를 생성한 뒤 Studio를 다시 빌드합니다.
+
+Studio의 로컬 근거는 최신 소스 변경 커밋을 기록하되 GitHub Actions 성공으로 표현하지 않습니다. 공개 원격 저장소가 연결되기 전에는 워크플로 파일과 로컬 결과만 구현 근거로 사용합니다.
