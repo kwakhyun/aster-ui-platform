@@ -1,0 +1,74 @@
+{
+  "title": "Aster UI design-system proposal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "summary",
+    "component",
+    "semverImpact",
+    "apiChanges",
+    "implementationPlan",
+    "testCases",
+    "documentation",
+    "risks"
+  ],
+  "properties": {
+    "title": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "component": { "type": "string", "minLength": 1 },
+    "semverImpact": { "enum": ["patch", "minor", "major"] },
+    "apiChanges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["action", "prop", "type", "required", "rationale"],
+        "properties": {
+          "action": { "enum": ["add", "deprecate", "remove", "change"] },
+          "prop": { "type": "string", "minLength": 1 },
+          "type": { "type": "string", "minLength": 1 },
+          "required": { "type": "boolean" },
+          "rationale": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "implementationPlan": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "testCases": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "kind", "assertion"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["unit", "interaction", "accessibility", "browser", "visual"] },
+          "assertion": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "documentation": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "risks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["risk", "mitigation"],
+        "properties": {
+          "risk": { "type": "string", "minLength": 1 },
+          "mitigation": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

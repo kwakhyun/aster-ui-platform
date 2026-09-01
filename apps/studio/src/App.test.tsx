@@ -34,6 +34,24 @@ afterEach(() => {
 });
 
 describe("Aster UI component review flow", () => {
+  it("renders every sidebar entry from the shipped manifest instead of placeholder catalog data", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    for (const name of ["Alert", "Badge", "Button", "Tabs", "TextField", "TreatmentCard"]) {
+      expect(screen.getByRole("button", { name })).toBeInTheDocument();
+    }
+
+    await user.click(screen.getByRole("button", { name: "TextField" }));
+    expect(screen.getByRole("heading", { name: "TextField" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "클리닉 검색" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "TextField API" })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Tabs" }));
+    expect(screen.getByRole("tablist", { name: "시술 정보" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Tabs API" })).toBeInTheDocument();
+  });
+
   it("switches state, platform, workspace, and inspector views", async () => {
     const user = userEvent.setup();
     render(<App />);

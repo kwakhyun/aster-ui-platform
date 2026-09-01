@@ -3,6 +3,12 @@
   "version": "3.1.0-beta.2",
   "private": true,
   "description": "A production-minded cross-platform design-system operations portfolio project.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kwakhyun/aster-ui-platform.git"
+  },
+  "homepage": "https://kwakhyun.github.io/aster-ui-platform/",
   "packageManager": "pnpm@10.29.2",
   "engines": {
     "node": ">=22"
@@ -21,12 +27,19 @@
     "test:unit": "vitest run",
     "test:coverage": "turbo run test:coverage",
     "test:sites": "pnpm --filter=@aster-ui/studio test:sites",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && node scripts/record-unit-evidence.mjs && pnpm build && pnpm tokens:contract:check && pnpm native:check && pnpm manifest:check && pnpm docs:check && pnpm adoption:check && pnpm migration:check && pnpm api:check && pnpm release:check && pnpm perf:check && pnpm package:check && pnpm k8s:check && pnpm supply-chain:check && pnpm provenance:check",
-    "verify": "pnpm security:audit && pnpm check && pnpm test:coverage && pnpm test:sites && pnpm test:visual && pnpm evidence:generate && pnpm --filter=@aster-ui/studio build && pnpm evidence:check",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && node scripts/record-unit-evidence.mjs && pnpm build && pnpm tokens:contract:check && pnpm native:check && pnpm figma:check && pnpm ai:check && pnpm manifest:check && pnpm docs:check && pnpm adoption:check && pnpm migration:check && pnpm api:check && pnpm release:check && pnpm perf:check && pnpm package:check && pnpm k8s:check && pnpm supply-chain:check && pnpm provenance:check",
+    "verify": "pnpm security:audit && pnpm check && pnpm test:coverage && pnpm test:sites && pnpm test:visual && pnpm evidence:generate && pnpm --filter=@aster-ui/studio build && pnpm evidence:check && pnpm verification:generate && pnpm verification:check",
     "clean": "turbo run clean",
     "tokens:build": "pnpm --filter=@aster-ui/tokens build",
     "tokens:contract:check": "node packages/tokens/scripts/generate-contract.mjs --check",
     "native:check": "node scripts/verify-native-artifacts.mjs",
+    "figma:sync": "pnpm --filter=@aster-ui/tokens build && pnpm --filter=@aster-ui/figma-bridge build && node scripts/sync-figma-variables.mjs",
+    "figma:fixture": "pnpm --filter=@aster-ui/tokens build && pnpm --filter=@aster-ui/figma-bridge build && node scripts/sync-figma-variables.mjs --fixture",
+    "figma:check": "pnpm --filter=@aster-ui/tokens build && pnpm --filter=@aster-ui/figma-bridge build && node scripts/sync-figma-variables.mjs --check",
+    "ai:propose": "node scripts/generate-ai-proposal.mjs",
+    "ai:fixture": "node scripts/generate-ai-proposal.mjs --fixture",
+    "ai:check": "node scripts/generate-ai-proposal.mjs --check",
+    "ai:approve": "node scripts/approve-ai-proposal.mjs",
     "package:check": "node scripts/check-package-contents.mjs",
     "k8s:render": "node scripts/render-k8s-manifest.mjs",
     "k8s:check": "node scripts/render-k8s-manifest.mjs --check --image example.invalid/aster-ui-studio@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -45,9 +58,12 @@
     "security:audit": "pnpm audit --prod --audit-level high && node scripts/record-security-evidence.mjs",
     "evidence:generate": "node scripts/generate-quality-evidence.mjs",
     "evidence:check": "node scripts/generate-quality-evidence.mjs --check",
+    "verification:generate": "node scripts/generate-verification-report.mjs",
+    "verification:check": "node scripts/generate-verification-report.mjs --check",
     "test:visual": "node scripts/run-visual-tests.mjs",
     "test:visual:update": "node scripts/run-visual-tests.mjs --update-snapshots",
-    "design:compare": "node scripts/capture-design-comparison.mjs"
+    "design:compare": "node scripts/capture-design-comparison.mjs",
+    "portfolio:capture": "pnpm build && node scripts/capture-portfolio-screenshots.mjs && pnpm design:compare"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

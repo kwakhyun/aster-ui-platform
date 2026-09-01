@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { mockFigmaPayload, normalizeFigmaChanges } from "@aster-ui/figma-bridge";
+import { figmaRestFixturePayload, normalizeFigmaChanges } from "@aster-ui/figma-bridge";
 import {
   fingerprintReview,
   readStoredReviewReceipt,
@@ -7,7 +7,7 @@ import {
   storeReviewReceipt,
 } from "./reviewService";
 
-const review = normalizeFigmaChanges(mockFigmaPayload, "2026-09-01T00:00:00.000Z");
+const review = normalizeFigmaChanges(figmaRestFixturePayload, "2026-09-01T00:00:00.000Z");
 
 describe("reviewService", () => {
   beforeEach(() => window.localStorage.clear());

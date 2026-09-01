@@ -112,4 +112,25 @@ describe("foundation components", () => {
     fireEvent.keyDown(screen.getByRole("tab", { name: "준비" }), { key: "ArrowDown" });
     expect(screen.getByRole("tabpanel")).toHaveTextContent("준비됨");
   });
+
+  it("keeps every tab-to-panel relationship valid for consumer-defined values", () => {
+    render(
+      <Tabs
+        ariaLabel="공백이 포함된 값"
+        items={[
+          { value: "before care", label: "시술 전", content: "시술 전 안내" },
+          { value: "after/care", label: "시술 후", content: "시술 후 안내" },
+        ]}
+      />,
+    );
+
+    const tabs = screen.getAllByRole("tab");
+    for (const tab of tabs) {
+      const panelId = tab.getAttribute("aria-controls");
+      expect(panelId).toBeTruthy();
+      expect(document.getElementById(panelId as string)).toHaveAttribute("role", "tabpanel");
+      expect(tab.id).not.toMatch(/\s|\//);
+    }
+    expect(screen.getAllByRole("tabpanel", { hidden: true })).toHaveLength(2);
+  });
 });

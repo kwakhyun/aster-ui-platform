@@ -8,6 +8,7 @@ export default defineConfig(async () => {
   const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
   const sourceRevision = await getSourceRevision(projectRoot);
   return {
+    base: process.env.ASTER_BASE_PATH ?? "/",
     publicDir: "public-prod",
     define: {
       __ASTER_SOURCE_REVISION__: JSON.stringify(sourceRevision),

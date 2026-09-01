@@ -1,0 +1,119 @@
+{
+  "status": 200,
+  "error": false,
+  "meta": {
+    "variableCollections": {
+      "VariableCollectionId:1:1": {
+        "id": "VariableCollectionId:1:1",
+        "name": "Aster semantic tokens",
+        "key": "aster-semantic-tokens",
+        "modes": [{ "modeId": "1:0", "name": "Coral" }],
+        "defaultModeId": "1:0",
+        "remote": false,
+        "hiddenFromPublishing": false,
+        "variableIds": [
+          "VariableID:coral-300",
+          "VariableID:coral-500",
+          "VariableID:coral-700",
+          "VariableID:blue-500",
+          "VariableID:action-primary",
+          "VariableID:focus-ring",
+          "VariableID:text-accent"
+        ]
+      }
+    },
+    "variables": {
+      "VariableID:coral-300": {
+        "id": "VariableID:coral-300",
+        "name": "color/coral/300",
+        "key": "color-coral-300",
+        "variableCollectionId": "VariableCollectionId:1:1",
+        "resolvedType": "COLOR",
+        "valuesByMode": { "1:0": { "r": 1, "g": 0.667, "b": 0.631, "a": 1 } },
+        "remote": false,
+        "description": "Core coral 300",
+        "hiddenFromPublishing": false,
+        "scopes": ["ALL_SCOPES"],
+        "codeSyntax": { "WEB": "--color-coral-300" }
+      },
+      "VariableID:coral-500": {
+        "id": "VariableID:coral-500",
+        "name": "color/coral/500",
+        "key": "color-coral-500",
+        "variableCollectionId": "VariableCollectionId:1:1",
+        "resolvedType": "COLOR",
+        "valuesByMode": { "1:0": { "r": 1, "g": 0.384, "b": 0.341, "a": 1 } },
+        "remote": false,
+        "description": "Core coral 500",
+        "hiddenFromPublishing": false,
+        "scopes": ["ALL_SCOPES"],
+        "codeSyntax": { "WEB": "--color-coral-500" }
+      },
+      "VariableID:coral-700": {
+        "id": "VariableID:coral-700",
+        "name": "color/coral/700",
+        "key": "color-coral-700",
+        "variableCollectionId": "VariableCollectionId:1:1",
+        "resolvedType": "COLOR",
+        "valuesByMode": { "1:0": { "r": 0.745, "g": 0.2, "b": 0.176, "a": 1 } },
+        "remote": false,
+        "description": "Core coral 700",
+        "hiddenFromPublishing": false,
+        "scopes": ["ALL_SCOPES"],
+        "codeSyntax": { "WEB": "--color-coral-700" }
+      },
+      "VariableID:blue-500": {
+        "id": "VariableID:blue-500",
+        "name": "color/blue/500",
+        "key": "color-blue-500",
+        "variableCollectionId": "VariableCollectionId:1:1",
+        "resolvedType": "COLOR",
+        "valuesByMode": { "1:0": { "r": 0.145, "g": 0.388, "b": 0.922, "a": 1 } },
+        "remote": false,
+        "description": "Core blue 500",
+        "hiddenFromPublishing": false,
+        "scopes": ["ALL_SCOPES"],
+        "codeSyntax": { "WEB": "--color-blue-500" }
+      },
+      "VariableID:action-primary": {
+        "id": "VariableID:action-primary",
+        "name": "semantic/color/action/primary",
+        "key": "semantic-color-action-primary",
+        "variableCollectionId": "VariableCollectionId:1:1",
+        "resolvedType": "COLOR",
+        "valuesByMode": { "1:0": { "type": "VARIABLE_ALIAS", "id": "VariableID:coral-700" } },
+        "remote": false,
+        "description": "Primary action",
+        "hiddenFromPublishing": false,
+        "scopes": ["ALL_SCOPES"],
+        "codeSyntax": { "WEB": "--semantic-color-action-primary" }
+      },
+      "VariableID:focus-ring": {
+        "id": "VariableID:focus-ring",
+        "name": "semantic/color/focus/ring",
+        "key": "semantic-color-focus-ring",
+        "variableCollectionId": "VariableCollectionId:1:1",
+        "resolvedType": "COLOR",
+        "valuesByMode": { "1:0": { "type": "VARIABLE_ALIAS", "id": "VariableID:blue-500" } },
+        "remote": false,
+        "description": "Focus ring",
+        "hiddenFromPublishing": false,
+        "scopes": ["ALL_SCOPES"],
+        "codeSyntax": { "WEB": "--semantic-color-focus-ring" }
+      },
+      "VariableID:text-accent": {
+        "id": "VariableID:text-accent",
+        "name": "semantic/color/text/accent",
+        "key": "semantic-color-text-accent",
+        "variableCollectionId": "VariableCollectionId:1:1",
+        "resolvedType": "COLOR",
+        "valuesByMode": { "1:0": { "type": "VARIABLE_ALIAS", "id": "VariableID:coral-700" } },
+        "remote": false,
+        "description": "Accent text",
+        "hiddenFromPublishing": false,
+        "scopes": ["ALL_SCOPES"],
+        "codeSyntax": { "WEB": "--semantic-color-text-accent" }
+      }
+    }
+  }
+}

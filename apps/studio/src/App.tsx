@@ -2,7 +2,7 @@ import {
   Cube,
   FigmaLogo,
 } from "@phosphor-icons/react";
-import { mockFigmaPayload, normalizeFigmaChanges } from "@aster-ui/figma-bridge";
+import { figmaRestFixturePayload, normalizeFigmaChanges } from "@aster-ui/figma-bridge";
 import { tokenVersion } from "@aster-ui/tokens";
 import { useCallback, useMemo, useState } from "react";
 import { DiffDrawer } from "./components/DiffDrawer";
@@ -31,7 +31,7 @@ import type {
 } from "./types";
 
 const figmaReview = normalizeFigmaChanges(
-  mockFigmaPayload,
+  figmaRestFixturePayload,
   "2026-09-01T09:51:00+09:00",
 );
 const repositoryEvidence = qualityEvidenceJson as QualityEvidence;

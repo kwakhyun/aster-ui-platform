@@ -1,0 +1,51 @@
+{
+  "title": "Localize TreatmentCard save action labels",
+  "summary": "Add an optional formatter that lets consumers localize saved and unsaved accessible labels while preserving the current Korean labels when omitted.",
+  "component": "TreatmentCard",
+  "semverImpact": "minor",
+  "apiChanges": [
+    {
+      "action": "add",
+      "prop": "getSaveLabel",
+      "type": "(saved: boolean, title: string) => string",
+      "required": false,
+      "rationale": "Consumers can localize both save states without replacing the button or weakening its aria-pressed contract."
+    }
+  ],
+  "implementationPlan": [
+    "Add the optional formatter to TreatmentCardProps and retain the existing Korean string construction as the fallback.",
+    "Use the formatter only for the save button accessible name while keeping aria-pressed, disabled, and onSavedChange behavior unchanged.",
+    "Regenerate the component manifest and API documentation after implementation."
+  ],
+  "testCases": [
+    {
+      "name": "keeps default Korean labels",
+      "kind": "unit",
+      "assertion": "Without getSaveLabel, unsaved and saved buttons retain the existing Korean accessible names."
+    },
+    {
+      "name": "uses localized labels for both states",
+      "kind": "interaction",
+      "assertion": "The formatter receives the current saved state and title before and after onSavedChange interactions."
+    },
+    {
+      "name": "preserves the toggle accessibility contract",
+      "kind": "accessibility",
+      "assertion": "The button exposes a non-empty localized accessible name, aria-pressed, and disabled state without axe violations."
+    }
+  ],
+  "documentation": [
+    "Document getSaveLabel with Korean fallback and English localization examples in the generated TreatmentCard API page.",
+    "Add the localization decision and compatibility impact to the changelog."
+  ],
+  "risks": [
+    {
+      "risk": "A consumer formatter could return an empty label.",
+      "mitigation": "Validate the returned string in development and fall back to the existing Korean label when it is empty."
+    },
+    {
+      "risk": "Formatter identity changes could add unnecessary render work in large lists.",
+      "mitigation": "Call the formatter only during render and document that consumers should pass a stable function for large collections."
+    }
+  ]
+}

@@ -12,7 +12,7 @@
 
 ## 판정
 
-P0, P1, P2 시각 또는 사용성 문제가 남아 있지 않습니다.
+현재 소스와 동일한 revision에서 자동 시각 회귀와 수동 비교를 다시 수행한 결과, 열린 P0, P1, P2 시각 또는 사용성 문제는 0건입니다.
 
 - 검은 top bar, 3단 workspace, Coral accent, Blue focus, compact tree, 큰 TreatmentCard, 우측 inspector라는 핵심 구성이 유지됩니다.
 - 264px navigation, 유동 main, 376px inspector 비율과 62px top bar, 350px preview frame의 구조가 시안과 같은 계층을 유지합니다.
@@ -30,6 +30,7 @@ P0, P1, P2 시각 또는 사용성 문제가 남아 있지 않습니다.
 - Coral과 Ocean을 확인할 수 있는 theme selector를 추가했습니다.
 - iOS와 Android 컴포넌트 호환 표현을 제거하고 Swift, Compose token output으로 정확히 표시했습니다.
 - 하드코딩된 품질 성공 문구를 repository report에서 생성한 5개 근거로 교체했습니다.
+- 정적 placeholder 목록을 제거하고 manifest에서 생성한 6개 실제 컴포넌트만 노출합니다.
 
 ## 자동 시각 근거
 
@@ -57,6 +58,6 @@ P0, P1, P2 시각 또는 사용성 문제가 남아 있지 않습니다.
 ## 남은 P3 차이
 
 - portrait subject와 일부 임상 glyph는 승인 시안의 독점 원본이 아니라 가장 가까운 실제 asset과 Phosphor icon을 사용합니다.
-- working tree에는 Git commit 이력이 없어 UI가 CI 실행 성공 대신 repository verification snapshot을 표시합니다.
+- Studio는 로컬 repository verification과 GitHub Actions 실행을 구분합니다. 공개 CI와 Pages는 저장소 인증 후 별도 실행 근거로 확인합니다.
 
 final result: passed

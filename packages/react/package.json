@@ -1,6 +1,13 @@
 {
   "name": "@aster-ui/react",
   "version": "3.1.0-beta.2",
+  "description": "Accessible React components and generated public API contracts for Aster UI.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kwakhyun/aster-ui-platform.git",
+    "directory": "packages/react"
+  },
   "type": "module",
   "sideEffects": ["**/*.css"],
   "files": ["dist"],

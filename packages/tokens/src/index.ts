@@ -1,4 +1,4 @@
-import { tokenAliasPaths } from "./generated/token-contract";
+import { tokenAliasPaths } from "./generated/token-contract.js";
 
 export const tokenVersion = "3.1.0-beta.2" as const;
 

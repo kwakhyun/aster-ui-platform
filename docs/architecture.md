@@ -3,30 +3,41 @@
 Aster UI는 컴포넌트 갤러리가 아니라 디자인 변경을 검증 가능한 산출물로 전환하는 내부 제품입니다.
 
 ```text
-Figma fixture
-  → alias 및 change count 검증
+Figma Variables REST 또는 schema형 fixture
+  → collection, mode, alias 및 change count 검증
   → W3C DTCG core + semantic theme
   → CSS, JSON, Swift, Compose 토큰 생성
-  → React 웹 컴포넌트와 생성형 API manifest
+  → React 웹 컴포넌트 레지스트리와 전체 API manifest
+  → Claude Code 구조화 제안과 결정론적 검증
   → 단위, axe, 시각, API, 성능, 보안 검증
   → 사람 검토
   → 로컬 릴리스 리허설 또는 release-please 제안
-  → 선언형 소비 앱 도입률 스캔
+  → 세 소비 앱의 선언형 도입률 및 deprecated 사용 스캔
 ```
 
 ## 패키지 경계
 
 - 앱은 공개 패키지만 소비하며 `@aster-ui/react`는 앱 코드를 참조하지 않습니다.
-- `@aster-ui/figma-bridge`는 transport payload를 `TokenChange`로 정규화하기 전에 모든 alias를 거부 우선 방식으로 검증합니다.
+- `@aster-ui/figma-bridge`는 Figma Variables REST 응답을 읽고 collection과 mode를 선택합니다. semantic alias를 `TokenChange`로 정규화하기 전에 대상 variable과 DTCG 경로를 거부 우선 방식으로 검증합니다.
 - `@aster-ui/tokens`의 DTCG JSON이 단일 진실 공급원입니다. Coral과 Ocean의 semantic key parity를 테스트합니다.
 - `@aster-ui/react`는 Web 컴포넌트만 제공합니다. Swift와 Compose 파일은 공유 토큰 산출물이며 네이티브 UI 구현으로 표현하지 않습니다.
 - Studio 전용 hover, focus 미리보기 상태는 공개 컴포넌트 API와 분리됩니다.
 
 ## 공개 API와 호환성
 
-`TreatmentCardProps`는 TypeScript AST에서 manifest로 생성됩니다. 컴포넌트는 `HTMLElement` ref와 표준 article 속성을 전달하고, 통화와 locale을 실제 포맷에 반영합니다. 이미지는 `srcSet`, `sizes`, `loading`, `fetchPriority`를 포함한 표준 이미지 속성을 받을 수 있습니다.
+컴포넌트 레지스트리가 source와 props interface, 카테고리, 상태, ref 및 DOM 속성 계약을 선언합니다. 생성기는 6개 컴포넌트의 TypeScript AST에서 38개 공개 prop과 기본값을 읽어 manifest와 API 문서를 만듭니다. Studio의 탐색 목록과 API 패널도 이 manifest를 사용하므로 구현되지 않은 컴포넌트를 노출하지 않습니다.
 
-`pnpm api:check`는 현재 manifest를 기준 계약과 비교합니다. prop 제거, 타입 변경, optional prop의 필수 전환, 기본값 변경뿐 아니라 package 및 component identity, forwarded ref, article attribute 전달, 지원 플랫폼과 토큰 산출물 제거를 breaking change로 처리합니다.
+`TreatmentCard`는 `HTMLElement` ref와 표준 article 속성을 전달하고, 통화와 locale을 실제 포맷에 반영합니다. 이미지는 `srcSet`, `sizes`, `loading`, `fetchPriority`를 포함한 표준 이미지 속성을 받을 수 있습니다. Button, Badge, Alert, Tabs, TextField도 native 속성과 ref를 전달하며 키보드 및 ARIA 계약을 테스트합니다.
+
+`pnpm api:check`는 모든 컴포넌트의 현재 manifest를 기준 계약과 비교합니다. 컴포넌트와 prop 제거, 타입 변경, optional prop의 필수 전환, 기본값 변경, forwarded ref, DOM 속성 계약, 토큰 산출물 제거를 breaking change로 처리합니다.
+
+## 소비 앱과 마이그레이션
+
+Studio, 클리닉 탐색 웹, 운영 백오피스가 공용 패키지를 소비합니다. 각 앱은 eligible component와 deprecated component를 선언하고 AST 스캐너는 실제 import와 JSX 사용만 집계합니다. `PrimaryButton` 마이그레이션 도구는 TypeScript AST로 import, JSX tag, 기본 tone을 바꾸며 before와 after fixture로 회귀를 검사합니다.
+
+## AI 경계
+
+Claude Code는 tools가 없는 비대화형 프로세스로 실행되어 JSON Schema 제안만 반환합니다. 별도 검증기가 현재 manifest, semver, unit 및 접근성 테스트, 문서와 위험 항목을 검사합니다. 제안과 승인 receipt는 source mutation을 수행하지 않으며 실제 구현은 일반 브랜치 검토와 전체 품질 게이트를 거칩니다.
 
 ## 실패 처리
 
@@ -47,3 +58,4 @@ Figma fixture
 - Kubernetes는 immutable image digest만 입력받는 renderer를 사용하고, UID/GID 101, service account token 미탑재, capability drop, seccomp, privilege escalation 차단을 적용합니다.
 - `/healthz`는 단순 문자열이 아니라 실제 빌드된 `index.html`의 존재를 확인하며, CI는 문서가 참조하는 정적 asset까지 요청합니다.
 - release-please 실행 전 `pnpm verify`를 수행합니다. 검증 보고서 생성 뒤 Studio를 다시 빌드하므로 배포 파일과 화면의 품질 근거가 같은 source revision을 가리킵니다.
+- GitHub Pages 배포는 CI의 전체 품질 job과 hardened container job이 모두 통과한 main push에서만 실행됩니다. Vite base path는 저장소 경로를 입력으로 받아 서브패스의 정적 자산을 보존합니다.

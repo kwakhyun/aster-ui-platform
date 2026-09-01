@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-01T10:30:00+09:00",
+  "provider": {
+    "id": "checked-in-fixture",
+    "version": "1",
+    "execution": "offline deterministic replay"
+  },
+  "request": {
+    "path": "ai/requests/localize-treatment-card-save-label.md",
+    "digest": "a306ccd7a4832225d7f85af8da9ea6612ed1026f6ae8dc695f7aef8cd16d668a"
+  },
+  "prompt": {
+    "template": "ai/prompts/design-system-proposal.md",
+    "digest": "82935d27a99cf0080de33ca19ded5e94f06f840df5d5127300e2fefeeeb21e13"
+  },
+  "context": {
+    "package": "@aster-ui/react",
+    "version": "3.1.0-beta.2",
+    "componentCount": 6,
+    "manifestDigest": "683a2231d57a88b221d469ea8928622318c609ff635732ba649253ba9a85f0cc"
+  },
+  "proposal": {
+    "title": "Localize TreatmentCard save action labels",
+    "summary": "Add an optional formatter that lets consumers localize saved and unsaved accessible labels while preserving the current Korean labels when omitted.",
+    "component": "TreatmentCard",
+    "semverImpact": "minor",
+    "apiChanges": [
+      {
+        "action": "add",
+        "prop": "getSaveLabel",
+        "type": "(saved: boolean, title: string) => string",
+        "required": false,
+        "rationale": "Consumers can localize both save states without replacing the button or weakening its aria-pressed contract."
+      }
+    ],
+    "implementationPlan": [
+      "Add the optional formatter to TreatmentCardProps and retain the existing Korean string construction as the fallback.",
+      "Use the formatter only for the save button accessible name while keeping aria-pressed, disabled, and onSavedChange behavior unchanged.",
+      "Regenerate the component manifest and API documentation after implementation."
+    ],
+    "testCases": [
+      {
+        "name": "keeps default Korean labels",
+        "kind": "unit",
+        "assertion": "Without getSaveLabel, unsaved and saved buttons retain the existing Korean accessible names."
+      },
+      {
+        "name": "uses localized labels for both states",
+        "kind": "interaction",
+        "assertion": "The formatter receives the current saved state and title before and after onSavedChange interactions."
+      },
+      {
+        "name": "preserves the toggle accessibility contract",
+        "kind": "accessibility",
+        "assertion": "The button exposes a non-empty localized accessible name, aria-pressed, and disabled state without axe violations."
+      }
+    ],
+    "documentation": [
+      "Document getSaveLabel with Korean fallback and English localization examples in the generated TreatmentCard API page.",
+      "Add the localization decision and compatibility impact to the changelog."
+    ],
+    "risks": [
+      {
+        "risk": "A consumer formatter could return an empty label.",
+        "mitigation": "Validate the returned string in development and fall back to the existing Korean label when it is empty."
+      },
+      {
+        "risk": "Formatter identity changes could add unnecessary render work in large lists.",
+        "mitigation": "Call the formatter only during render and document that consumers should pass a stable function for large collections."
+      }
+    ]
+  },
+  "automatedValidation": {
+    "status": "passed",
+    "checks": [
+      "public component exists",
+      "semver impact matches API shape",
+      "unit verification is specified",
+      "accessibility verification is specified",
+      "documentation is specified",
+      "risks and mitigations are specified"
+    ]
+  },
+  "humanReview": {
+    "status": "required",
+    "reviewer": null,
+    "reviewedAt": null
+  },
+  "sourceMutation": {
+    "allowedByThisCommand": false,
+    "applied": false
+  }
+}

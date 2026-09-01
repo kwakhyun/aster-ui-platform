@@ -6,11 +6,21 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
     "@aster-ui/react": "workspace:*",
     "react": "19.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@vitest/coverage-v8": "4.1.11",
+    "axe-core": "4.13.0",
+    "jsdom": "30.0.1",
+    "react-dom": "19.2.0",
+    "vitest": "4.1.11"
   }
 }

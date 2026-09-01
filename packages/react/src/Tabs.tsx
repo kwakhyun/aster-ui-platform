@@ -46,7 +46,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
   const selectedValue = enabledItems.some((item) => item.value === requestedValue)
     ? requestedValue
     : enabledItems[0]?.value ?? "";
-  const selectedItem = items.find((item) => item.value === selectedValue);
+  const selectedIndex = items.findIndex((item) => item.value === selectedValue);
   const id = useId().replace(/:/g, "");
 
   const select = (nextValue: string) => {
@@ -69,7 +69,8 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
     const nextItem = enabledItems[nextIndex];
     if (!nextItem) return;
     select(nextItem.value);
-    document.getElementById(`${id}-tab-${nextItem.value}`)?.focus();
+    const nextItemIndex = items.findIndex((item) => item.value === nextItem.value);
+    document.getElementById(`${id}-tab-${nextItemIndex}`)?.focus();
   };
 
   return (
@@ -79,16 +80,16 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
       className={["aster-tabs", `aster-tabs--${orientation}`, className].filter(Boolean).join(" ")}
     >
       <div className="aster-tabs__list" role="tablist" aria-label={ariaLabel} aria-orientation={orientation}>
-        {items.map((item) => {
+        {items.map((item, itemIndex) => {
           const selected = item.value === selectedValue;
           return (
             <button
               key={item.value}
-              id={`${id}-tab-${item.value}`}
+              id={`${id}-tab-${itemIndex}`}
               type="button"
               role="tab"
               aria-selected={selected}
-              aria-controls={`${id}-panel-${item.value}`}
+              aria-controls={`${id}-panel-${itemIndex}`}
               disabled={item.disabled}
               tabIndex={selected ? 0 : -1}
               onClick={() => select(item.value)}
@@ -99,17 +100,22 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
           );
         })}
       </div>
-      {selectedItem ? (
-        <div
-          id={`${id}-panel-${selectedItem.value}`}
-          role="tabpanel"
-          aria-labelledby={`${id}-tab-${selectedItem.value}`}
-          className="aster-tabs__panel"
-          tabIndex={0}
-        >
-          {selectedItem.content}
-        </div>
-      ) : null}
+      {items.map((item, itemIndex) => {
+        const selected = itemIndex === selectedIndex;
+        return (
+          <div
+            key={item.value}
+            id={`${id}-panel-${itemIndex}`}
+            role="tabpanel"
+            aria-labelledby={`${id}-tab-${itemIndex}`}
+            className="aster-tabs__panel"
+            tabIndex={selected ? 0 : -1}
+            hidden={!selected}
+          >
+            {item.content}
+          </div>
+        );
+      })}
     </div>
   );
 });

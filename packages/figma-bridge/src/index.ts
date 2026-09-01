@@ -33,6 +33,25 @@ export interface FigmaVariablesPayload {
   readonly changes: readonly FigmaVariableChange[];
 }
 
+export {
+  createFigmaVariablesPayload,
+  extractFigmaAliasSnapshot,
+  fetchFigmaLocalVariables,
+  FigmaRestError,
+} from "./figma-rest.js";
+export type {
+  FigmaAuthentication,
+  FigmaColor,
+  FigmaLocalVariable,
+  FigmaLocalVariablesResponse,
+  FigmaPayloadOptions,
+  FigmaResolvedType,
+  FigmaSnapshotOptions,
+  FigmaVariableAlias,
+  FigmaVariableCollection,
+  FigmaVariableValue,
+} from "./figma-rest.js";
+
 export class FigmaContractError extends Error {
   override readonly name = "FigmaContractError";
 }
@@ -122,27 +141,27 @@ export function normalizeFigmaChanges(
   };
 }
 
-export const mockFigmaPayload: FigmaVariablesPayload = {
-  source: "Figma / Treatment Card",
+export const figmaRestFixturePayload: FigmaVariablesPayload = {
+  source: "Figma REST / Aster semantic tokens",
   sourceVersion: 12,
   sourceTheme: "coral",
   changes: [
     {
-      id: "action-primary",
+      id: "color-action-primary",
       name: "color.action.primary",
       previousAlias: "color.coral.500",
       nextAlias: "color.coral.700",
       scopes: ["WEB", "IOS", "ANDROID"],
     },
     {
-      id: "focus-ring",
+      id: "color-focus-ring",
       name: "color.focus.ring",
       previousAlias: "color.coral.300",
       nextAlias: "color.blue.500",
       scopes: ["WEB", "IOS", "ANDROID"],
     },
     {
-      id: "text-accent",
+      id: "color-text-accent",
       name: "color.text.accent",
       previousAlias: "color.coral.500",
       nextAlias: "color.coral.700",

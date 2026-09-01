@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "transport": {
+    "mode": "sanitized-fixture",
+    "endpoint": "GET /v1/files/:file_key/variables/local",
+    "authentication": "not used for fixture replay"
+  },
+  "sourceContract": {
+    "collection": "Aster semantic tokens",
+    "mode": "Coral",
+    "trackedPrefix": "semantic/",
+    "documentation": "https://developers.figma.com/docs/rest-api/variables-endpoints/",
+    "requiredScope": "file_variables:read"
+  },
+  "payload": {
+    "source": "Figma REST / Aster semantic tokens",
+    "sourceVersion": 12,
+    "sourceTheme": "coral",
+    "changes": [
+      {
+        "id": "color-action-primary",
+        "name": "color.action.primary",
+        "previousAlias": "color.coral.500",
+        "nextAlias": "color.coral.700",
+        "scopes": [
+          "WEB",
+          "IOS",
+          "ANDROID"
+        ]
+      },
+      {
+        "id": "color-focus-ring",
+        "name": "color.focus.ring",
+        "previousAlias": "color.coral.300",
+        "nextAlias": "color.blue.500",
+        "scopes": [
+          "WEB",
+          "IOS",
+          "ANDROID"
+        ]
+      },
+      {
+        "id": "color-text-accent",
+        "name": "color.text.accent",
+        "previousAlias": "color.coral.500",
+        "nextAlias": "color.coral.700",
+        "scopes": [
+          "WEB",
+          "IOS",
+          "ANDROID"
+        ]
+      }
+    ]
+  },
+  "review": {
+    "source": "Figma REST / Aster semantic tokens",
+    "sourceVersion": 12,
+    "sourceTheme": "coral",
+    "syncedAt": "2026-09-01T09:51:00+09:00",
+    "requiresHumanReview": true,
+    "changes": [
+      {
+        "id": "color-action-primary",
+        "token": "color.action.primary",
+        "before": "{color.coral.500}",
+        "after": "{color.coral.700}",
+        "impact": [
+          "web",
+          "ios",
+          "android"
+        ]
+      },
+      {
+        "id": "color-focus-ring",
+        "token": "color.focus.ring",
+        "before": "{color.coral.300}",
+        "after": "{color.blue.500}",
+        "impact": [
+          "web",
+          "ios",
+          "android"
+        ]
+      },
+      {
+        "id": "color-text-accent",
+        "token": "color.text.accent",
+        "before": "{color.coral.500}",
+        "after": "{color.coral.700}",
+        "impact": [
+          "web",
+          "ios",
+          "android"
+        ]
+      }
+    ],
+    "validation": {
+      "aliasesResolved": true,
+      "changeCount": 3
+    }
+  },
+  "humanReview": {
+    "required": true,
+    "completed": false,
+    "note": "This command creates a review artifact. It never writes to Figma or source files."
+  }
+}

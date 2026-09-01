@@ -1,6 +1,13 @@
 {
   "name": "@aster-ui/tokens",
   "version": "3.1.0-beta.2",
+  "description": "W3C DTCG tokens compiled to CSS, JSON, Swift, and Compose artifacts.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kwakhyun/aster-ui-platform.git",
+    "directory": "packages/tokens"
+  },
   "type": "module",
   "files": ["dist"],
   "exports": {
