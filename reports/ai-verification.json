@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "command": "pnpm ai:check",
+  "status": "passed",
+  "proposalChecks": 6,
+  "proposalRejections": 4,
+  "reportIntegrityRejections": 3,
+  "approvalHappyPaths": 1,
+  "failClosedBoundaries": 7,
+  "providerTimeouts": 1,
+  "providerOutputLimits": 2,
+  "sourceMutations": 0,
+  "generatedAt": "2026-09-01T09:56:39.191Z",
+  "sourceRevision": "workspace:7a04ebbce541f4497e01",
+  "gitCommit": "f78d600018215e7481983227c50a7fe86eb59f94",
+  "runId": "local:92493",
+  "artifactDigest": "sha256:78c996070b382f68fa620ae25d90e1c22a2b06738eacea99c752104353cf587d"
+}

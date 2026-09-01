@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "command": "pnpm figma:check",
+  "status": "passed",
+  "changeCount": 3,
+  "aliasesResolved": true,
+  "humanReviewRequired": true,
+  "sourceMutationApplied": false,
+  "generatedAt": "2026-09-01T09:56:38.542Z",
+  "sourceRevision": "workspace:7a04ebbce541f4497e01",
+  "gitCommit": "f78d600018215e7481983227c50a7fe86eb59f94",
+  "runId": "local:92456",
+  "artifactDigest": "sha256:397cd6e26a49a03ad71745a6789377a4e21988adc47ea54b2800324893e772eb"
+}

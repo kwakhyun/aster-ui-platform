@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 1,
+  "command": "pnpm test:coverage",
+  "status": "passed",
+  "coverage": {
+    "Clinic consumer": {
+      "lines": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "Backoffice consumer": {
+      "lines": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "Tokens": {
+      "lines": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "Figma bridge": {
+      "lines": {
+        "total": 85,
+        "covered": 83,
+        "skipped": 0,
+        "pct": 97.64
+      },
+      "statements": {
+        "total": 93,
+        "covered": 90,
+        "skipped": 0,
+        "pct": 96.77
+      },
+      "functions": {
+        "total": 15,
+        "covered": 15,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 98,
+        "covered": 95,
+        "skipped": 0,
+        "pct": 96.93
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "React": {
+      "lines": {
+        "total": 61,
+        "covered": 60,
+        "skipped": 0,
+        "pct": 98.36
+      },
+      "statements": {
+        "total": 74,
+        "covered": 69,
+        "skipped": 0,
+        "pct": 93.24
+      },
+      "functions": {
+        "total": 20,
+        "covered": 19,
+        "skipped": 0,
+        "pct": 95
+      },
+      "branches": {
+        "total": 114,
+        "covered": 94,
+        "skipped": 0,
+        "pct": 82.45
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "Studio": {
+      "lines": {
+        "total": 356,
+        "covered": 340,
+        "skipped": 0,
+        "pct": 95.5
+      },
+      "statements": {
+        "total": 397,
+        "covered": 367,
+        "skipped": 0,
+        "pct": 92.44
+      },
+      "functions": {
+        "total": 144,
+        "covered": 132,
+        "skipped": 0,
+        "pct": 91.66
+      },
+      "branches": {
+        "total": 388,
+        "covered": 343,
+        "skipped": 0,
+        "pct": 88.4
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "generatedAt": "2026-09-01T09:56:51.816Z",
+  "sourceRevision": "workspace:7a04ebbce541f4497e01",
+  "gitCommit": "f78d600018215e7481983227c50a7fe86eb59f94",
+  "runId": "local:94517",
+  "artifactDigest": "sha256:327007c3dadfb48115d7e97aed35e359f7daa13488d9ed5023ee37eb7c2950ec"
+}

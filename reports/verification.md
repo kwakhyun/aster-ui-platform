@@ -1,10 +1,10 @@
 # Production Verification
 
-이 문서는 저장소의 구조화된 JSON 근거와 coverage summary에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 `pnpm verification:check`가 현재 소스와의 정합성을 검사합니다.
+이 문서는 저장소의 provenance 결합 JSON 근거에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 `pnpm verification:check`가 현재 소스, source 변경 commit, Studio 품질 근거와의 정합성을 검사합니다.
 
-- 생성 기준: 2026. 09. 01. 18:04 KST
-- 소스 리비전: `workspace:3510c681f5fa434b4df7`
-- Git commit: `7fcd7e4ed05bde3a4465467ea1091225c892a37b`
+- 생성 기준: 2026. 09. 01. 18:57 KST
+- 소스 리비전: `workspace:7a04ebbce541f4497e01`
+- Git commit: `f78d600018215e7481983227c50a7fe86eb59f94`
 
 ## 판정
 
@@ -20,7 +20,7 @@
 | API compatibility | 6 components, 38 props, 0 breaking changes |
 | Adoption | 13/13 eligible components across 3 consumers, 0 deprecated usages |
 | Figma review fixture | 3 aliases resolved, human review required, source mutation disabled |
-| AI proposal fixture | 6 deterministic checks passed, human review required, source mutation disabled |
+| AI proposal and approval E2E | 6 proposal checks, 7 fail-closed boundaries, provider timeout and output limits, source mutation disabled |
 | Browser visual and accessibility | 7 scenarios, 6 snapshots, 4 axe checks |
 | Production dependency audit | 0 known vulnerabilities |
 | Evidence provenance | revision, run ID, Git commit, artifact digest verified |
@@ -40,7 +40,7 @@
 
 | Asset | Actual | Budget |
 | --- | ---: | ---: |
-| JavaScript gzip | 92,410 B | 190,000 B |
+| JavaScript gzip | 92,408 B | 190,000 B |
 | CSS gzip | 10,359 B | 35,000 B |
 | Largest responsive image | 33,812 B | 60,000 B |
 | Self-hosted font | 48,256 B | 120,000 B |
