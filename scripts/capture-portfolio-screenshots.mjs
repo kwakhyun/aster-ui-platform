@@ -39,13 +39,24 @@ try {
     animations: "disabled",
   });
 
-  await page.getByRole("tab", { name: "API", exact: true }).last().click();
+  const inspectorApiTab = page.getByRole("tab", { name: "API", exact: true }).last();
+  await inspectorApiTab.focus();
+  await inspectorApiTab.press("ArrowRight");
+  await page.getByRole("tab", { name: "Tokens", exact: true }).last().press("ArrowLeft");
   await page.screenshot({
     path: path.join(projectRoot, "design/qa-focus-inspector-final.png"),
     animations: "disabled",
   });
   await page.getByRole("tab", { name: "Preview", exact: true }).click();
-  await page.getByRole("button", { name: "Laser toning 저장" }).focus();
+  await page.getByRole("button", { name: "Default 상태 미리보기" }).click();
+  const saveButton = page.getByRole("button", { name: "Laser toning 저장" });
+  await saveButton.focus();
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Tab");
+  const saveButtonHasKeyboardFocus = await saveButton.evaluate((element) =>
+    element === document.activeElement && element.matches(":focus-visible")
+  );
+  if (!saveButtonHasKeyboardFocus) throw new Error("Workspace keyboard focus was not visible during capture.");
   await page.screenshot({
     path: path.join(projectRoot, "design/qa-focus-workspace-final.png"),
     animations: "disabled",
