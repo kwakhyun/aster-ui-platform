@@ -47,6 +47,8 @@
 
 추가로 1280 × 720 데스크톱에서 동기화 상태 strip이 workspace 경계를 넘지 않는지 검사합니다. 시각 비교 허용치는 전체 픽셀의 0.3%입니다.
 
+시각 기준선은 checked-in passing evidence fixture를 명시적으로 주입해 실행 순서와 무관하게 같은 상태를 캡처합니다. Playwright evidence reporter는 별도로 현재 source revision을 기록하며, 최종 Studio 빌드는 fixture override 없이 현재 revision으로 근거를 다시 검증합니다.
+
 ## 수동 점검
 
 - main card와 네 state card의 이미지 crop이 슬롯을 벗어나지 않습니다.

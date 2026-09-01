@@ -33,11 +33,11 @@ Figma Variables REST 또는 schema형 fixture
 
 ## 소비 앱과 마이그레이션
 
-Studio, 클리닉 탐색 웹, 운영 백오피스가 공용 패키지를 소비합니다. 각 앱은 eligible component와 deprecated component를 선언하고 AST 스캐너는 실제 import와 JSX 사용만 집계합니다. `PrimaryButton` 마이그레이션 도구는 TypeScript AST로 import, JSX tag, 기본 tone을 바꾸며 before와 after fixture로 회귀를 검사합니다.
+Studio, 클리닉 탐색 웹, 운영 백오피스가 공용 패키지를 소비합니다. 각 앱은 eligible component와 deprecated component를 선언하고 AST 스캐너는 실제 import와 JSX 사용만 집계합니다. 두 소비 예제는 공용 컴포넌트를 실제로 렌더링하고 WCAG 태그 기반 axe 검사를 실행합니다. `PrimaryButton` 마이그레이션 도구는 TypeScript AST로 import, JSX tag, 기본 tone을 바꾸며 before와 after fixture로 회귀를 검사합니다.
 
 ## AI 경계
 
-Claude Code는 tools가 없는 비대화형 프로세스로 실행되어 JSON Schema 제안만 반환합니다. 별도 검증기가 현재 manifest, semver, unit 및 접근성 테스트, 문서와 위험 항목을 검사합니다. 제안과 승인 receipt는 source mutation을 수행하지 않으며 실제 구현은 일반 브랜치 검토와 전체 품질 게이트를 거칩니다.
+Claude Code는 tools가 없는 비대화형 프로세스로 실행되어 JSON Schema 제안만 반환합니다. 별도 검증기가 현재 manifest, semver, unit 및 접근성 테스트, 문서와 위험 항목을 검사합니다. 승인 명령도 현재 request, prompt, manifest digest와 검증 결과를 다시 계산해 `passed` 필드 변조를 신뢰하지 않습니다. 제안과 승인 receipt는 source mutation을 수행하지 않으며 실제 구현은 일반 브랜치 검토와 전체 품질 게이트를 거칩니다.
 
 ## 실패 처리
 
@@ -58,4 +58,5 @@ Claude Code는 tools가 없는 비대화형 프로세스로 실행되어 JSON Sc
 - Kubernetes는 immutable image digest만 입력받는 renderer를 사용하고, UID/GID 101, service account token 미탑재, capability drop, seccomp, privilege escalation 차단을 적용합니다.
 - `/healthz`는 단순 문자열이 아니라 실제 빌드된 `index.html`의 존재를 확인하며, CI는 문서가 참조하는 정적 asset까지 요청합니다.
 - release-please 실행 전 `pnpm verify`를 수행합니다. 검증 보고서 생성 뒤 Studio를 다시 빌드하므로 배포 파일과 화면의 품질 근거가 같은 source revision을 가리킵니다.
+- 시각 회귀 빌드는 checked-in passing evidence fixture를 명시적으로 사용하고, reporter는 현재 source revision으로 결과를 기록합니다. 최종 빌드는 fixture override를 제거하며 Turborepo 캐시 키에는 이 입력과 Pages base path가 모두 포함됩니다.
 - GitHub Pages 배포는 CI의 전체 품질 job과 hardened container job이 모두 통과한 main push에서만 실행됩니다. Vite base path는 저장소 경로를 입력으로 받아 서브패스의 정적 자산을 보존합니다.

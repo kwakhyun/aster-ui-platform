@@ -4,6 +4,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "env": ["ASTER_BASE_PATH", "ASTER_VISUAL_FIXTURE_MODE", "ASTER_VISUAL_FIXTURE_REVISION"],
       "outputs": ["dist/**"]
     },
     "typecheck": {

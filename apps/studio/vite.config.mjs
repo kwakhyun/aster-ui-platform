@@ -6,7 +6,11 @@ import { getSourceRevision } from "../../scripts/lib/provenance.mjs";
 
 export default defineConfig(async () => {
   const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
-  const sourceRevision = await getSourceRevision(projectRoot);
+  const visualFixtureRevision = process.env.ASTER_VISUAL_FIXTURE_REVISION;
+  if (visualFixtureRevision && process.env.ASTER_VISUAL_FIXTURE_MODE !== "true") {
+    throw new Error("ASTER_VISUAL_FIXTURE_REVISION is restricted to the visual-test build.");
+  }
+  const sourceRevision = visualFixtureRevision ?? await getSourceRevision(projectRoot);
   return {
     base: process.env.ASTER_BASE_PATH ?? "/",
     publicDir: "public-prod",
