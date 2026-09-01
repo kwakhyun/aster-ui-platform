@@ -5,60 +5,77 @@ import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const sourcePath = path.join(projectRoot, "packages/react/src/TreatmentCard.tsx");
+const registryPath = path.join(projectRoot, "packages/react/component-registry.json");
 const packagePath = path.join(projectRoot, "packages/react/package.json");
 const outputPath = path.join(projectRoot, "packages/react/component-manifest.json");
-const sourceText = await readFile(sourcePath, "utf8");
 const packageJson = JSON.parse(await readFile(packagePath, "utf8"));
-const sourceFile = ts.createSourceFile(sourcePath, sourceText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
-const contract = sourceFile.statements.find(
-  (statement) => ts.isInterfaceDeclaration(statement) && statement.name.text === "TreatmentCardProps",
-);
+const registry = JSON.parse(await readFile(registryPath, "utf8"));
 
-if (!contract || !ts.isInterfaceDeclaration(contract)) {
-  throw new Error("TreatmentCardProps interface was not found.");
-}
-
-const defaults = new Map();
-function collectDefaults(node) {
-  if (ts.isBindingElement(node) && ts.isIdentifier(node.name) && node.initializer) {
-    defaults.set(node.name.text, node.initializer.getText(sourceFile));
+async function generateComponent(entry) {
+  const sourcePath = path.join(projectRoot, "packages/react", entry.source);
+  const sourceText = await readFile(sourcePath, "utf8");
+  const sourceFile = ts.createSourceFile(
+    sourcePath,
+    sourceText,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  const contract = sourceFile.statements.find(
+    (statement) => ts.isInterfaceDeclaration(statement) && statement.name.text === entry.propsInterface,
+  );
+  if (!contract || !ts.isInterfaceDeclaration(contract)) {
+    throw new Error(`${entry.propsInterface} interface was not found in ${entry.source}.`);
   }
-  ts.forEachChild(node, collectDefaults);
-}
-collectDefaults(sourceFile);
 
-const props = contract.members.flatMap((member) => {
-  if (!ts.isPropertySignature(member) || !member.type || !member.name || !ts.isIdentifier(member.name)) {
-    return [];
+  const defaults = new Map();
+  function collectDefaults(node) {
+    if (ts.isBindingElement(node) && ts.isIdentifier(node.name) && node.initializer) {
+      defaults.set(node.name.text, node.initializer.getText(sourceFile));
+    }
+    ts.forEachChild(node, collectDefaults);
   }
-  const name = member.name.text;
-  return [{
-    name,
-    type: member.type.getText(sourceFile).replace(/\s+/g, " ").trim(),
-    required: !member.questionToken,
-    default: defaults.get(name) ?? null,
-  }];
-});
+  collectDefaults(sourceFile);
+
+  const props = contract.members.flatMap((member) => {
+    if (!ts.isPropertySignature(member) || !member.type || !member.name || !ts.isIdentifier(member.name)) {
+      return [];
+    }
+    const name = member.name.text;
+    return [{
+      name,
+      type: member.type.getText(sourceFile).replace(/\s+/g, " ").trim(),
+      required: !member.questionToken,
+      default: defaults.get(name) ?? null,
+    }];
+  });
+
+  return {
+    name: entry.name,
+    category: entry.category,
+    generatedFrom: `packages/react/${entry.source}#${entry.propsInterface}`,
+    propsInterface: entry.propsInterface,
+    status: entry.status,
+    description: entry.description,
+    platforms: entry.platforms,
+    forwardsRef: entry.forwardsRef,
+    extendsElementAttributes: entry.extendsElementAttributes,
+    props,
+  };
+}
 
 const manifest = {
-  schemaVersion: 1,
-  generatedFrom: "packages/react/src/TreatmentCard.tsx#TreatmentCardProps",
-  name: "TreatmentCard",
+  schemaVersion: 2,
+  generatedFrom: "packages/react/component-registry.json",
   package: packageJson.name,
   version: packageJson.version,
-  status: "beta",
-  description: "의료미용 시술 정보를 접근 가능한 HTML article 계약으로 제공하는 웹 컴포넌트입니다.",
-  platforms: ["Web"],
   crossPlatformTokenArtifacts: ["CSS", "Swift", "Compose"],
-  forwardsRef: "HTMLElement",
-  extendsArticleAttributes: true,
-  props,
   requiredEvidence: {
     unit: "pnpm --filter @aster-ui/react test",
     apiCompatibility: "pnpm api:check",
     browserAccessibility: "pnpm test:visual",
   },
+  components: await Promise.all(registry.components.map(generateComponent)),
 };
 const serialized = `${JSON.stringify(manifest, null, 2)}\n`;
 

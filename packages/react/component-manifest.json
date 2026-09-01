@@ -1,128 +1,336 @@
 {
-  "schemaVersion": 1,
-  "generatedFrom": "packages/react/src/TreatmentCard.tsx#TreatmentCardProps",
-  "name": "TreatmentCard",
+  "schemaVersion": 2,
+  "generatedFrom": "packages/react/component-registry.json",
   "package": "@aster-ui/react",
   "version": "3.1.0-beta.2",
-  "status": "beta",
-  "description": "의료미용 시술 정보를 접근 가능한 HTML article 계약으로 제공하는 웹 컴포넌트입니다.",
-  "platforms": [
-    "Web"
-  ],
   "crossPlatformTokenArtifacts": [
     "CSS",
     "Swift",
     "Compose"
   ],
-  "forwardsRef": "HTMLElement",
-  "extendsArticleAttributes": true,
-  "props": [
-    {
-      "name": "title",
-      "type": "string",
-      "required": true,
-      "default": null
-    },
-    {
-      "name": "category",
-      "type": "string",
-      "required": true,
-      "default": null
-    },
-    {
-      "name": "imageUrl",
-      "type": "string",
-      "required": true,
-      "default": null
-    },
-    {
-      "name": "imageAlt",
-      "type": "string",
-      "required": true,
-      "default": null
-    },
-    {
-      "name": "imageProps",
-      "type": "Omit<ImgHTMLAttributes<HTMLImageElement>, \"alt\" | \"src\">",
-      "required": false,
-      "default": null
-    },
-    {
-      "name": "price",
-      "type": "number",
-      "required": true,
-      "default": null
-    },
-    {
-      "name": "currency",
-      "type": "TreatmentCardCurrency",
-      "required": false,
-      "default": "\"KRW\""
-    },
-    {
-      "name": "locale",
-      "type": "string",
-      "required": false,
-      "default": "\"ko-KR\""
-    },
-    {
-      "name": "downtime",
-      "type": "string",
-      "required": true,
-      "default": null
-    },
-    {
-      "name": "sessions",
-      "type": "string",
-      "required": true,
-      "default": null
-    },
-    {
-      "name": "results",
-      "type": "string",
-      "required": false,
-      "default": null
-    },
-    {
-      "name": "headingLevel",
-      "type": "TreatmentCardHeadingLevel",
-      "required": false,
-      "default": "\"h3\""
-    },
-    {
-      "name": "variant",
-      "type": "TreatmentCardVariant",
-      "required": false,
-      "default": "\"default\""
-    },
-    {
-      "name": "disabled",
-      "type": "boolean",
-      "required": false,
-      "default": "false"
-    },
-    {
-      "name": "saved",
-      "type": "boolean",
-      "required": false,
-      "default": "false"
-    },
-    {
-      "name": "onSavedChange",
-      "type": "( saved: boolean, event: Parameters<MouseEventHandler<HTMLButtonElement>>[0], ) => void",
-      "required": false,
-      "default": null
-    },
-    {
-      "name": "onSelect",
-      "type": "MouseEventHandler<HTMLButtonElement>",
-      "required": false,
-      "default": null
-    }
-  ],
   "requiredEvidence": {
     "unit": "pnpm --filter @aster-ui/react test",
     "apiCompatibility": "pnpm api:check",
     "browserAccessibility": "pnpm test:visual"
-  }
+  },
+  "components": [
+    {
+      "name": "Alert",
+      "category": "Feedback",
+      "generatedFrom": "packages/react/src/Alert.tsx#AlertProps",
+      "propsInterface": "AlertProps",
+      "status": "beta",
+      "description": "상태의 긴급도에 맞는 라이브 리전과 선택적 해제 동작을 제공하는 알림입니다.",
+      "platforms": [
+        "Web"
+      ],
+      "forwardsRef": "HTMLDivElement",
+      "extendsElementAttributes": "HTMLAttributes<HTMLDivElement>",
+      "props": [
+        {
+          "name": "tone",
+          "type": "AlertTone",
+          "required": false,
+          "default": "\"info\""
+        },
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "action",
+          "type": "ReactNode",
+          "required": false,
+          "default": null
+        },
+        {
+          "name": "dismissLabel",
+          "type": "string",
+          "required": false,
+          "default": "\"알림 닫기\""
+        },
+        {
+          "name": "onDismiss",
+          "type": "() => void",
+          "required": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "name": "Badge",
+      "category": "Feedback",
+      "generatedFrom": "packages/react/src/Badge.tsx#BadgeProps",
+      "propsInterface": "BadgeProps",
+      "status": "beta",
+      "description": "짧은 상태와 분류 정보를 토큰 기반 톤으로 표시하는 인라인 레이블입니다.",
+      "platforms": [
+        "Web"
+      ],
+      "forwardsRef": "HTMLSpanElement",
+      "extendsElementAttributes": "HTMLAttributes<HTMLSpanElement>",
+      "props": [
+        {
+          "name": "tone",
+          "type": "BadgeTone",
+          "required": false,
+          "default": "\"neutral\""
+        },
+        {
+          "name": "size",
+          "type": "BadgeSize",
+          "required": false,
+          "default": "\"md\""
+        }
+      ]
+    },
+    {
+      "name": "Button",
+      "category": "Actions",
+      "generatedFrom": "packages/react/src/Button.tsx#ButtonProps",
+      "propsInterface": "ButtonProps",
+      "status": "beta",
+      "description": "네이티브 버튼 계약과 포커스 가시성을 보존하는 기본 액션 컴포넌트입니다.",
+      "platforms": [
+        "Web"
+      ],
+      "forwardsRef": "HTMLButtonElement",
+      "extendsElementAttributes": "ButtonHTMLAttributes<HTMLButtonElement>",
+      "props": [
+        {
+          "name": "tone",
+          "type": "ButtonTone",
+          "required": false,
+          "default": "\"primary\""
+        },
+        {
+          "name": "size",
+          "type": "ButtonSize",
+          "required": false,
+          "default": "\"md\""
+        },
+        {
+          "name": "leadingIcon",
+          "type": "ReactNode",
+          "required": false,
+          "default": null
+        }
+      ]
+    },
+    {
+      "name": "Tabs",
+      "category": "Navigation",
+      "generatedFrom": "packages/react/src/Tabs.tsx#TabsProps",
+      "propsInterface": "TabsProps",
+      "status": "beta",
+      "description": "ARIA 탭 패턴과 방향별 키보드 이동을 지원하는 제어 및 비제어 탐색 컴포넌트입니다.",
+      "platforms": [
+        "Web"
+      ],
+      "forwardsRef": "HTMLDivElement",
+      "extendsElementAttributes": "HTMLAttributes<HTMLDivElement>",
+      "props": [
+        {
+          "name": "items",
+          "type": "readonly TabItem[]",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "default": null
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false,
+          "default": null
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "required": false,
+          "default": null
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "orientation",
+          "type": "TabsOrientation",
+          "required": false,
+          "default": "\"horizontal\""
+        }
+      ]
+    },
+    {
+      "name": "TextField",
+      "category": "Form",
+      "generatedFrom": "packages/react/src/TextField.tsx#TextFieldProps",
+      "propsInterface": "TextFieldProps",
+      "status": "beta",
+      "description": "레이블, 도움말, 오류 메시지의 접근성 연결을 보장하는 텍스트 입력 필드입니다.",
+      "platforms": [
+        "Web"
+      ],
+      "forwardsRef": "HTMLInputElement",
+      "extendsElementAttributes": "InputHTMLAttributes<HTMLInputElement>",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "required": false,
+          "default": null
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "default": null
+        },
+        {
+          "name": "hideLabel",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "fieldSize",
+          "type": "TextFieldSize",
+          "required": false,
+          "default": "\"md\""
+        }
+      ]
+    },
+    {
+      "name": "TreatmentCard",
+      "category": "Treatment",
+      "generatedFrom": "packages/react/src/TreatmentCard.tsx#TreatmentCardProps",
+      "propsInterface": "TreatmentCardProps",
+      "status": "beta",
+      "description": "의료미용 시술 정보를 접근 가능한 article 계약으로 제공하는 도메인 컴포넌트입니다.",
+      "platforms": [
+        "Web"
+      ],
+      "forwardsRef": "HTMLElement",
+      "extendsElementAttributes": "ComponentPropsWithoutRef<article>",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "category",
+          "type": "string",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "imageUrl",
+          "type": "string",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "imageAlt",
+          "type": "string",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "imageProps",
+          "type": "Omit<ImgHTMLAttributes<HTMLImageElement>, \"alt\" | \"src\">",
+          "required": false,
+          "default": null
+        },
+        {
+          "name": "price",
+          "type": "number",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "currency",
+          "type": "TreatmentCardCurrency",
+          "required": false,
+          "default": "\"KRW\""
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "required": false,
+          "default": "\"ko-KR\""
+        },
+        {
+          "name": "downtime",
+          "type": "string",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "sessions",
+          "type": "string",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "results",
+          "type": "string",
+          "required": false,
+          "default": null
+        },
+        {
+          "name": "headingLevel",
+          "type": "TreatmentCardHeadingLevel",
+          "required": false,
+          "default": "\"h3\""
+        },
+        {
+          "name": "variant",
+          "type": "TreatmentCardVariant",
+          "required": false,
+          "default": "\"default\""
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "saved",
+          "type": "boolean",
+          "required": false,
+          "default": "false"
+        },
+        {
+          "name": "onSavedChange",
+          "type": "( saved: boolean, event: Parameters<MouseEventHandler<HTMLButtonElement>>[0], ) => void",
+          "required": false,
+          "default": null
+        },
+        {
+          "name": "onSelect",
+          "type": "MouseEventHandler<HTMLButtonElement>",
+          "required": false,
+          "default": null
+        }
+      ]
+    }
+  ]
 }

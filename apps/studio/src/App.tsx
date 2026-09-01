@@ -16,6 +16,7 @@ import { Workspace } from "./components/Workspace";
 import { useReleaseWorkflow } from "./hooks/useReleaseWorkflow";
 import { copyText } from "./lib/clipboard";
 import qualityEvidenceJson from "./generated/quality-evidence.json";
+import { components } from "./data/catalog";
 import {
   readStoredReviewReceipt,
   storeReviewReceipt,
@@ -48,6 +49,7 @@ export function App({
   buildSourceRevision = embeddedSourceRevision,
 }: AppProps = {}) {
   const [workspaceTab, setWorkspaceTab] = useState<WorkspaceTab>("preview");
+  const [selectedComponent, setSelectedComponent] = useState("TreatmentCard");
   const [inspectorTab, setInspectorTab] = useState<InspectorTab>("tokens");
   const [platform, setPlatform] = useState<Platform>("web");
   const [theme, setTheme] = useState<StudioTheme>("coral");
@@ -140,23 +142,28 @@ export function App({
       <div className="app-layout">
         <Sidebar
           open={sidebarOpen}
+          selectedComponent={selectedComponent}
           onRequestOpen={() => setSidebarOpen(true)}
           onClose={() => setSidebarOpen(false)}
           onCopyPackage={() => void handleCopy("@aster-ui/react", "Package name")}
-          onSelectUnavailable={(name) => showToast(`${name} is documented, but outside this focused MVP flow.`)}
+          onSelectComponent={(name) => {
+            setSelectedComponent(name);
+            setWorkspaceTab("preview");
+            setInspectorTab("api");
+          }}
         />
 
         <main id="main-workspace" className="main" tabIndex={-1}>
           <header className="component-header">
             <div className="component-header__title">
               <Cube size={28} aria-hidden="true" />
-              <h1>TreatmentCard</h1>
+              <h1>{selectedComponent}</h1>
               <code>@aster-ui/react</code>
               <span>v{tokenVersion}</span>
             </div>
             <p>
               <FigmaLogo weight="fill" aria-hidden="true" />
-              Figma <i /> Treatment Card / v12
+              Figma variables <i /> {components.length} shipped web components
             </p>
           </header>
 
@@ -170,6 +177,7 @@ export function App({
 
           <Workspace
             tab={workspaceTab}
+            componentName={selectedComponent}
             platform={platform}
             theme={theme}
             previewState={previewState}
@@ -187,6 +195,7 @@ export function App({
 
         <Inspector
           tab={inspectorTab}
+          componentName={selectedComponent}
           review={figmaReview}
           qualityEvidence={displayedEvidence}
           onTabChange={setInspectorTab}

@@ -13,18 +13,20 @@ import { useModalFocus } from "../hooks/useModalFocus";
 
 interface SidebarProps {
   readonly open: boolean;
+  readonly selectedComponent: string;
   readonly onRequestOpen: () => void;
   readonly onClose: () => void;
   readonly onCopyPackage: () => void;
-  readonly onSelectUnavailable: (name: string) => void;
+  readonly onSelectComponent: (name: string) => void;
 }
 
 export function Sidebar({
   open,
+  selectedComponent,
   onRequestOpen,
   onClose,
   onCopyPackage,
-  onSelectUnavailable,
+  onSelectComponent,
 }: SidebarProps) {
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
@@ -105,7 +107,7 @@ export function Sidebar({
               </h2>
               <ul>
                 {group.items.map((item) => {
-                  const selected = item === "TreatmentCard";
+                  const selected = item === selectedComponent;
                   return (
                     <li key={item}>
                       <button
@@ -113,7 +115,7 @@ export function Sidebar({
                         className={selected ? "is-selected" : ""}
                         aria-current={selected ? "true" : undefined}
                         onClick={() => {
-                          if (!selected) onSelectUnavailable(item);
+                          onSelectComponent(item);
                           onClose();
                         }}
                       >

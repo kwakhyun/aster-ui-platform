@@ -63,6 +63,24 @@ importers:
         specifier: 4.1.11
         version: 4.1.11(@types/node@26.4.0)(@vitest/coverage-v8@4.1.11)(jsdom@30.0.1)(vite@6.4.2(@types/node@26.4.0)(jiti@2.7.0)(lightningcss@1.32.0))
 
+  apps/backoffice-web:
+    dependencies:
+      '@aster-ui/react':
+        specifier: workspace:*
+        version: link:../../packages/react
+      react:
+        specifier: 19.2.0
+        version: 19.2.0
+
+  apps/clinic-web:
+    dependencies:
+      '@aster-ui/react':
+        specifier: workspace:*
+        version: link:../../packages/react
+      react:
+        specifier: 19.2.0
+        version: 19.2.0
+
   apps/studio:
     dependencies:
       '@aster-ui/figma-bridge':

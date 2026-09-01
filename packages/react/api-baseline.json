@@ -1,28 +1,88 @@
 {
-  "component": "TreatmentCard",
+  "schemaVersion": 2,
   "package": "@aster-ui/react",
   "version": "3.1.0-beta.2",
-  "platforms": ["Web"],
   "crossPlatformTokenArtifacts": ["CSS", "Swift", "Compose"],
-  "forwardsRef": "HTMLElement",
-  "extendsArticleAttributes": true,
-  "props": [
-    { "name": "title", "type": "string", "required": true, "default": null },
-    { "name": "category", "type": "string", "required": true, "default": null },
-    { "name": "imageUrl", "type": "string", "required": true, "default": null },
-    { "name": "imageAlt", "type": "string", "required": true, "default": null },
-    { "name": "imageProps", "type": "Omit<ImgHTMLAttributes<HTMLImageElement>, \"alt\" | \"src\">", "required": false, "default": null },
-    { "name": "price", "type": "number", "required": true, "default": null },
-    { "name": "currency", "type": "TreatmentCardCurrency", "required": false, "default": "\"KRW\"" },
-    { "name": "locale", "type": "string", "required": false, "default": "\"ko-KR\"" },
-    { "name": "downtime", "type": "string", "required": true, "default": null },
-    { "name": "sessions", "type": "string", "required": true, "default": null },
-    { "name": "results", "type": "string", "required": false, "default": null },
-    { "name": "headingLevel", "type": "TreatmentCardHeadingLevel", "required": false, "default": "\"h3\"" },
-    { "name": "variant", "type": "TreatmentCardVariant", "required": false, "default": "\"default\"" },
-    { "name": "disabled", "type": "boolean", "required": false, "default": "false" },
-    { "name": "saved", "type": "boolean", "required": false, "default": "false" },
-    { "name": "onSavedChange", "type": "( saved: boolean, event: Parameters<MouseEventHandler<HTMLButtonElement>>[0], ) => void", "required": false, "default": null },
-    { "name": "onSelect", "type": "MouseEventHandler<HTMLButtonElement>", "required": false, "default": null }
+  "components": [
+    {
+      "name": "Alert",
+      "forwardsRef": "HTMLDivElement",
+      "extendsElementAttributes": "HTMLAttributes<HTMLDivElement>",
+      "props": [
+        { "name": "tone", "type": "AlertTone", "required": false, "default": "\"info\"" },
+        { "name": "title", "type": "ReactNode", "required": true, "default": null },
+        { "name": "action", "type": "ReactNode", "required": false, "default": null },
+        { "name": "dismissLabel", "type": "string", "required": false, "default": "\"알림 닫기\"" },
+        { "name": "onDismiss", "type": "() => void", "required": false, "default": null }
+      ]
+    },
+    {
+      "name": "Badge",
+      "forwardsRef": "HTMLSpanElement",
+      "extendsElementAttributes": "HTMLAttributes<HTMLSpanElement>",
+      "props": [
+        { "name": "tone", "type": "BadgeTone", "required": false, "default": "\"neutral\"" },
+        { "name": "size", "type": "BadgeSize", "required": false, "default": "\"md\"" }
+      ]
+    },
+    {
+      "name": "Button",
+      "forwardsRef": "HTMLButtonElement",
+      "extendsElementAttributes": "ButtonHTMLAttributes<HTMLButtonElement>",
+      "props": [
+        { "name": "tone", "type": "ButtonTone", "required": false, "default": "\"primary\"" },
+        { "name": "size", "type": "ButtonSize", "required": false, "default": "\"md\"" },
+        { "name": "leadingIcon", "type": "ReactNode", "required": false, "default": null }
+      ]
+    },
+    {
+      "name": "Tabs",
+      "forwardsRef": "HTMLDivElement",
+      "extendsElementAttributes": "HTMLAttributes<HTMLDivElement>",
+      "props": [
+        { "name": "items", "type": "readonly TabItem[]", "required": true, "default": null },
+        { "name": "value", "type": "string", "required": false, "default": null },
+        { "name": "defaultValue", "type": "string", "required": false, "default": null },
+        { "name": "onValueChange", "type": "(value: string) => void", "required": false, "default": null },
+        { "name": "ariaLabel", "type": "string", "required": true, "default": null },
+        { "name": "orientation", "type": "TabsOrientation", "required": false, "default": "\"horizontal\"" }
+      ]
+    },
+    {
+      "name": "TextField",
+      "forwardsRef": "HTMLInputElement",
+      "extendsElementAttributes": "InputHTMLAttributes<HTMLInputElement>",
+      "props": [
+        { "name": "label", "type": "string", "required": true, "default": null },
+        { "name": "hint", "type": "string", "required": false, "default": null },
+        { "name": "error", "type": "string", "required": false, "default": null },
+        { "name": "hideLabel", "type": "boolean", "required": false, "default": "false" },
+        { "name": "fieldSize", "type": "TextFieldSize", "required": false, "default": "\"md\"" }
+      ]
+    },
+    {
+      "name": "TreatmentCard",
+      "forwardsRef": "HTMLElement",
+      "extendsElementAttributes": "ComponentPropsWithoutRef<article>",
+      "props": [
+        { "name": "title", "type": "string", "required": true, "default": null },
+        { "name": "category", "type": "string", "required": true, "default": null },
+        { "name": "imageUrl", "type": "string", "required": true, "default": null },
+        { "name": "imageAlt", "type": "string", "required": true, "default": null },
+        { "name": "imageProps", "type": "Omit<ImgHTMLAttributes<HTMLImageElement>, \"alt\" | \"src\">", "required": false, "default": null },
+        { "name": "price", "type": "number", "required": true, "default": null },
+        { "name": "currency", "type": "TreatmentCardCurrency", "required": false, "default": "\"KRW\"" },
+        { "name": "locale", "type": "string", "required": false, "default": "\"ko-KR\"" },
+        { "name": "downtime", "type": "string", "required": true, "default": null },
+        { "name": "sessions", "type": "string", "required": true, "default": null },
+        { "name": "results", "type": "string", "required": false, "default": null },
+        { "name": "headingLevel", "type": "TreatmentCardHeadingLevel", "required": false, "default": "\"h3\"" },
+        { "name": "variant", "type": "TreatmentCardVariant", "required": false, "default": "\"default\"" },
+        { "name": "disabled", "type": "boolean", "required": false, "default": "false" },
+        { "name": "saved", "type": "boolean", "required": false, "default": "false" },
+        { "name": "onSavedChange", "type": "( saved: boolean, event: Parameters<MouseEventHandler<HTMLButtonElement>>[0], ) => void", "required": false, "default": null },
+        { "name": "onSelect", "type": "MouseEventHandler<HTMLButtonElement>", "required": false, "default": null }
+      ]
+    }
   ]
 }

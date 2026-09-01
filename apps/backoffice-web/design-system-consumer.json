@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "consumer": "Aster UI Studio",
+  "consumer": "Clinic operations backoffice",
   "sourceRoots": ["src"],
   "package": "@aster-ui/react",
-  "eligibleComponents": ["Alert", "Badge", "Button", "Tabs", "TextField", "TreatmentCard"],
+  "eligibleComponents": ["Alert", "Badge", "Button", "TextField"],
   "deprecatedComponents": ["LegacyClinicCard", "PrimaryButton"]
 }

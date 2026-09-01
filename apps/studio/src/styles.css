@@ -363,6 +363,22 @@ button:focus-visible, input:focus-visible, a:focus-visible, [tabindex]:focus-vis
   width: 100%;
   max-width: 716px;
 }
+.component-showcase {
+  width: min(520px, calc(100% - 32px));
+  margin-inline: auto;
+  border: 1px solid #e3e4e7;
+  border-radius: 12px;
+  background: #fff;
+  padding: 28px;
+  box-shadow: 0 14px 36px rgb(17 18 20 / 7%);
+}
+.component-showcase > .aster-button { min-width: 180px; }
+.component-showcase > .aster-text-field { max-width: 380px; }
+.component-showcase > .aster-tabs { width: 100%; }
+.preview-canvas__state-preview[data-preview-state="focus"] .component-showcase > :first-child {
+  outline: 3px solid var(--semantic-color-focus-surface, #dbeafe);
+  outline-offset: 3px;
+}
 .preview-canvas__state-preview > .aster-treatment-card {
   overflow: visible;
   border: 0;

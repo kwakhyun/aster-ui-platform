@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "consumer": "Aster UI Studio",
+  "consumer": "Clinic discovery web",
   "sourceRoots": ["src"],
   "package": "@aster-ui/react",
-  "eligibleComponents": ["Alert", "Badge", "Button", "Tabs", "TextField", "TreatmentCard"],
+  "eligibleComponents": ["Button", "Tabs", "TreatmentCard"],
   "deprecatedComponents": ["LegacyClinicCard", "PrimaryButton"]
 }

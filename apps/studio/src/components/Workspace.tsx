@@ -5,13 +5,14 @@ import {
   Globe,
   WarningCircle,
 } from "@phosphor-icons/react";
-import { TreatmentCard } from "@aster-ui/react";
+import { Alert, Badge, Button, Tabs, TextField, TreatmentCard } from "@aster-ui/react";
 import { themeNames, tokenArtifactPlatforms } from "@aster-ui/tokens";
 import {
-  apiProperties,
+  getApiProperties,
+  getComponent,
+  getComponentUsage,
   responsiveTreatmentImage,
   treatment,
-  treatmentCardUsage,
 } from "../data/catalog";
 import { handleHorizontalTabKeyDown } from "../lib/tabs";
 import type {
@@ -27,6 +28,7 @@ import { NativeArtifactPreview } from "./NativeArtifactPreview";
 
 interface WorkspaceProps {
   readonly tab: WorkspaceTab;
+  readonly componentName: string;
   readonly platform: Platform;
   readonly theme: StudioTheme;
   readonly previewState: PreviewStateOption["id"];
@@ -56,6 +58,7 @@ const platforms: readonly { id: Platform; label: string }[] = [
 
 export function Workspace({
   tab,
+  componentName,
   platform,
   theme,
   previewState,
@@ -70,6 +73,9 @@ export function Workspace({
   onCopyUsage,
 }: WorkspaceProps) {
   const passedCount = qualityEvidence.checks.filter((check) => check.status === "passed").length;
+  const component = getComponent(componentName);
+  const apiProperties = getApiProperties(componentName);
+  const componentUsage = getComponentUsage(componentName);
 
   return (
     <div className="workspace">
@@ -148,24 +154,19 @@ export function Workspace({
             >
               {platform === "web" ? (
                 <div className="preview-canvas__state-preview" data-preview-state={previewState}>
-                  <TreatmentCard
-                    {...treatment}
-                    imageProps={{
-                      ...responsiveTreatmentImage,
-                      loading: "eager",
-                      fetchPriority: "high",
-                    }}
-                    disabled={previewState === "disabled"}
+                  <ComponentPreview
+                    componentName={componentName}
+                    previewState={previewState}
                     saved={saved}
                     onSavedChange={onSavedChange}
-                    onSelect={onCardSelect}
+                    onCardSelect={onCardSelect}
                   />
                 </div>
               ) : (
                 <NativeArtifactPreview platform={platform} theme={theme} />
               )}
             </div>
-            {platform === "web" ? (
+            {platform === "web" && componentName === "TreatmentCard" ? (
               <StateStrip selected={previewState} onSelect={onStateChange} />
             ) : null}
           </>
@@ -176,18 +177,18 @@ export function Workspace({
             <div className="workspace-panel__heading">
               <div>
                 <span>Typed public contract</span>
-                <h2 id="api-heading">TreatmentCardProps</h2>
+                <h2 id="api-heading">{component?.propsInterface ?? `${componentName}Props`}</h2>
               </div>
               <button
                 type="button"
                 aria-label="API 사용 예시 복사"
-                onClick={() => onCopyUsage(treatmentCardUsage)}
+                onClick={() => onCopyUsage(componentUsage)}
               >
                 <CopySimple /> Copy usage
               </button>
             </div>
             <div className="api-panel__grid">
-              <pre tabIndex={0} aria-label="TreatmentCard 사용 예시"><code>{treatmentCardUsage}</code></pre>
+              <pre tabIndex={0} aria-label={`${componentName} 사용 예시`}><code>{componentUsage}</code></pre>
               <table>
                 <thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead>
                 <tbody>
@@ -253,6 +254,68 @@ export function Workspace({
           </section>
         ) : null}
       </div>
+    </div>
+  );
+}
+
+interface ComponentPreviewProps {
+  readonly componentName: string;
+  readonly previewState: PreviewStateOption["id"];
+  readonly saved: boolean;
+  readonly onSavedChange: (saved: boolean) => void;
+  readonly onCardSelect: () => void;
+}
+
+function ComponentPreview({
+  componentName,
+  previewState,
+  saved,
+  onSavedChange,
+  onCardSelect,
+}: ComponentPreviewProps) {
+  const disabled = previewState === "disabled";
+
+  if (componentName === "TreatmentCard") {
+    return (
+      <TreatmentCard
+        {...treatment}
+        imageProps={{
+          ...responsiveTreatmentImage,
+          loading: "eager",
+          fetchPriority: "high",
+        }}
+        disabled={disabled}
+        saved={saved}
+        onSavedChange={onSavedChange}
+        onSelect={onCardSelect}
+      />
+    );
+  }
+
+  return (
+    <div className="component-showcase" aria-label={`${componentName} 미리보기`}>
+      {componentName === "Alert" ? (
+        <Alert tone="success" title="토큰 동기화 완료">3개 변경을 검증했습니다.</Alert>
+      ) : null}
+      {componentName === "Badge" ? <Badge tone="success">Ready</Badge> : null}
+      {componentName === "Button" ? <Button disabled={disabled}>Review changes</Button> : null}
+      {componentName === "Tabs" ? (
+        <Tabs
+          ariaLabel="시술 정보"
+          items={[
+            { value: "overview", label: "개요", content: "레이저 토닝 시술 개요" },
+            { value: "aftercare", label: "사후 관리", content: "자외선 차단제를 사용하세요." },
+          ]}
+        />
+      ) : null}
+      {componentName === "TextField" ? (
+        <TextField
+          label="클리닉 검색"
+          hint="병원명 또는 지역을 입력하세요."
+          placeholder="예: 강남구"
+          disabled={disabled}
+        />
+      ) : null}
     </div>
   );
 }

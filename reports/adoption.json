@@ -1,22 +1,61 @@
 {
   "schemaVersion": 3,
   "denominator": "Components explicitly declared eligible by each consumer manifest",
-  "consumerCount": 1,
-  "eligibleComponents": 2,
-  "adoptedComponents": 2,
+  "consumerCount": 3,
+  "eligibleComponents": 13,
+  "adoptedComponents": 13,
   "adoptionRate": 1,
   "deprecatedUsageCount": 0,
-  "confidence": "single-declared-consumer; portfolio signal only",
+  "confidence": "multi-consumer repository scan",
   "consumers": [
+    {
+      "consumer": "Clinic operations backoffice",
+      "package": "@aster-ui/react",
+      "filesScanned": 1,
+      "eligibleComponents": 4,
+      "adoptedComponents": 4,
+      "adoptionRate": 1,
+      "componentUsages": {
+        "Alert": 1,
+        "Badge": 1,
+        "Button": 1,
+        "TextField": 1
+      },
+      "deprecatedUsages": {
+        "LegacyClinicCard": 0,
+        "PrimaryButton": 0
+      }
+    },
+    {
+      "consumer": "Clinic discovery web",
+      "package": "@aster-ui/react",
+      "filesScanned": 1,
+      "eligibleComponents": 3,
+      "adoptedComponents": 3,
+      "adoptionRate": 1,
+      "componentUsages": {
+        "Button": 1,
+        "Tabs": 1,
+        "TreatmentCard": 1
+      },
+      "deprecatedUsages": {
+        "LegacyClinicCard": 0,
+        "PrimaryButton": 0
+      }
+    },
     {
       "consumer": "Aster UI Studio",
       "package": "@aster-ui/react",
       "filesScanned": 25,
-      "eligibleComponents": 2,
-      "adoptedComponents": 2,
+      "eligibleComponents": 6,
+      "adoptedComponents": 6,
       "adoptionRate": 1,
       "componentUsages": {
-        "Button": 6,
+        "Alert": 1,
+        "Badge": 1,
+        "Button": 7,
+        "Tabs": 1,
+        "TextField": 1,
         "TreatmentCard": 2
       },
       "deprecatedUsages": {
@@ -26,9 +65,9 @@
     }
   ],
   "status": "healthy",
-  "generatedAt": "2026-09-01T06:43:52.686Z",
-  "sourceRevision": "workspace:3e7d2c8a7aa6bd38cda9",
-  "gitCommit": null,
-  "runId": "local:79284",
-  "artifactDigest": "sha256:b0f7f593bb1407f1e51ea169e2d66574c5afd7c49df6b35db8e6ca50f03539a7"
+  "generatedAt": "2026-09-01T08:07:56.864Z",
+  "sourceRevision": "workspace:97f19244aabb3ee2d7b2",
+  "gitCommit": "7f00999f918c51fb137d6ad44ef62d4859993c7c",
+  "runId": "local:4746",
+  "artifactDigest": "sha256:e7906a62d3fcd00e02afe88130eb9376be9bb3b04d976b9918b8c81094955d36"
 }

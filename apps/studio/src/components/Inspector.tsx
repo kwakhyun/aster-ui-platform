@@ -5,13 +5,14 @@ import {
   Info,
   WarningCircle,
 } from "@phosphor-icons/react";
-import { apiProperties } from "../data/catalog";
+import { getApiProperties } from "../data/catalog";
 import { handleHorizontalTabKeyDown } from "../lib/tabs";
 import type { InspectorTab, QualityEvidence } from "../types";
 import { EvidenceProvenance } from "./EvidenceProvenance";
 
 interface InspectorProps {
   readonly tab: InspectorTab;
+  readonly componentName: string;
   readonly review: FigmaSyncReview;
   readonly qualityEvidence: QualityEvidence;
   readonly onTabChange: (tab: InspectorTab) => void;
@@ -27,6 +28,7 @@ const tabs: readonly { id: InspectorTab; label: string }[] = [
 
 export function Inspector({
   tab,
+  componentName,
   review,
   qualityEvidence,
   onTabChange,
@@ -35,6 +37,7 @@ export function Inspector({
 }: InspectorProps) {
   const apiEvidence = qualityEvidence.checks.find((check) => check.id === "api");
   const passedCount = qualityEvidence.checks.filter((check) => check.status === "passed").length;
+  const apiProperties = getApiProperties(componentName);
 
   return (
     <aside className="inspector" aria-label="컴포넌트 검사기">
@@ -104,7 +107,7 @@ export function Inspector({
         {tab === "api" ? (
           <section className="inspector-section api-inspector" aria-labelledby="api-inspector-heading">
             <div className="inspector-section__heading">
-              <h2 id="api-inspector-heading">API contract</h2>
+              <h2 id="api-inspector-heading">{componentName} API</h2>
               <Info aria-label="공개 API 계약" />
             </div>
             <dl>
