@@ -54,7 +54,7 @@ try {
   await page.keyboard.press("Shift+Tab");
   await page.keyboard.press("Tab");
   const saveButtonHasKeyboardFocus = await saveButton.evaluate((element) =>
-    element === document.activeElement && element.matches(":focus-visible")
+    element === element.ownerDocument.activeElement && element.matches(":focus-visible")
   );
   if (!saveButtonHasKeyboardFocus) throw new Error("Workspace keyboard focus was not visible during capture.");
   await page.screenshot({
