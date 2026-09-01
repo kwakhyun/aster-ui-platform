@@ -8,8 +8,8 @@
     "fontBytes": 120000
   },
   "actual": {
-    "javascriptGzipBytes": 89876,
-    "cssGzipBytes": 9665,
+    "javascriptGzipBytes": 92413,
+    "cssGzipBytes": 10359,
     "largestImageBytes": 33812,
     "fontBytes": 48256
   },
@@ -25,9 +25,9 @@
   ],
   "failures": [],
   "status": "passed",
-  "generatedAt": "2026-09-01T06:43:53.373Z",
-  "sourceRevision": "workspace:3e7d2c8a7aa6bd38cda9",
-  "gitCommit": null,
-  "runId": "local:79376",
-  "artifactDigest": "sha256:5458e6e30a8439ed2834a91aee980581d18ad4834e010c01f433fa7d3f976fb9"
+  "generatedAt": "2026-09-01T08:53:12.957Z",
+  "sourceRevision": "workspace:9189313fd24befa9bb9f",
+  "gitCommit": "473e784c4da02402a0fccca7ba0281069c9d128d",
+  "runId": "local:32344",
+  "artifactDigest": "sha256:d384eaacbe0668b7a47b36cdb47bf0ae8fa9a0bf87df38c9d9e71453719afe3f"
 }

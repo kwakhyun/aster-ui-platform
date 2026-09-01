@@ -3,9 +3,9 @@
   "command": "pnpm test",
   "scope": "All Turborepo workspace unit suites, including axe state tests",
   "status": "passed",
-  "generatedAt": "2026-09-01T06:43:48.098Z",
-  "sourceRevision": "workspace:3e7d2c8a7aa6bd38cda9",
-  "gitCommit": null,
-  "runId": "local:79067",
-  "artifactDigest": "sha256:706464f89069eeb6860392bc91cfb9ba7d348a1acb0fa2d2251eb9f38c129a2b"
+  "generatedAt": "2026-09-01T08:53:04.496Z",
+  "sourceRevision": "workspace:9189313fd24befa9bb9f",
+  "gitCommit": "473e784c4da02402a0fccca7ba0281069c9d128d",
+  "runId": "local:31918",
+  "artifactDigest": "sha256:496cf9d4277f0541e79b0dc4dfa7b94a7e46fefd3864d7910c5917fbdbaa5c8e"
 }

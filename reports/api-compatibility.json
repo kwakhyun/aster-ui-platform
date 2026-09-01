@@ -8,9 +8,9 @@
   "breakingChanges": [],
   "status": "passed",
   "command": "pnpm api:check",
-  "generatedAt": "2026-09-01T08:03:20.678Z",
-  "sourceRevision": "workspace:638859503576bcfe6d2e",
-  "gitCommit": "7f00999f918c51fb137d6ad44ef62d4859993c7c",
-  "runId": "local:87809",
-  "artifactDigest": "sha256:f5256e095b1f02b8fe86408e3e8a366667220cd97cc781887449d80f529106b9"
+  "generatedAt": "2026-09-01T08:53:12.481Z",
+  "sourceRevision": "workspace:9189313fd24befa9bb9f",
+  "gitCommit": "473e784c4da02402a0fccca7ba0281069c9d128d",
+  "runId": "local:32287",
+  "artifactDigest": "sha256:f8542f27db3c7de039d9a19b2c1578feef73f77d2a3ba1798a9668b033816473"
 }

@@ -11,7 +11,7 @@
     {
       "consumer": "Clinic operations backoffice",
       "package": "@aster-ui/react",
-      "filesScanned": 1,
+      "filesScanned": 2,
       "eligibleComponents": 4,
       "adoptedComponents": 4,
       "adoptionRate": 1,
@@ -29,7 +29,7 @@
     {
       "consumer": "Clinic discovery web",
       "package": "@aster-ui/react",
-      "filesScanned": 1,
+      "filesScanned": 2,
       "eligibleComponents": 3,
       "adoptedComponents": 3,
       "adoptionRate": 1,
@@ -65,9 +65,9 @@
     }
   ],
   "status": "healthy",
-  "generatedAt": "2026-09-01T08:07:56.864Z",
-  "sourceRevision": "workspace:97f19244aabb3ee2d7b2",
-  "gitCommit": "7f00999f918c51fb137d6ad44ef62d4859993c7c",
-  "runId": "local:4746",
-  "artifactDigest": "sha256:e7906a62d3fcd00e02afe88130eb9376be9bb3b04d976b9918b8c81094955d36"
+  "generatedAt": "2026-09-01T08:53:11.811Z",
+  "sourceRevision": "workspace:9189313fd24befa9bb9f",
+  "gitCommit": "473e784c4da02402a0fccca7ba0281069c9d128d",
+  "runId": "local:32230",
+  "artifactDigest": "sha256:fdcaaa649ef2885e70599ceff90631d76965a6443f3ec08399a2fab60d2ddc06"
 }
