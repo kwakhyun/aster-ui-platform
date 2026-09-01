@@ -2,9 +2,9 @@
 
 이 문서는 저장소의 구조화된 JSON 근거와 coverage summary에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 `pnpm verification:check`가 현재 소스와의 정합성을 검사합니다.
 
-- 생성 기준: 2026. 09. 01. 17:53 KST
-- 소스 리비전: `workspace:9189313fd24befa9bb9f`
-- Git commit: `473e784c4da02402a0fccca7ba0281069c9d128d`
+- 생성 기준: 2026. 09. 01. 18:04 KST
+- 소스 리비전: `workspace:3510c681f5fa434b4df7`
+- Git commit: `7fcd7e4ed05bde3a4465467ea1091225c892a37b`
 
 ## 판정
 
@@ -40,7 +40,7 @@
 
 | Asset | Actual | Budget |
 | --- | ---: | ---: |
-| JavaScript gzip | 92,413 B | 190,000 B |
+| JavaScript gzip | 92,410 B | 190,000 B |
 | CSS gzip | 10,359 B | 35,000 B |
 | Largest responsive image | 33,812 B | 60,000 B |
 | Self-hosted font | 48,256 B | 120,000 B |
