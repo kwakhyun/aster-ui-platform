@@ -4,11 +4,6 @@
   "private": true,
   "description": "A production-minded cross-platform design-system operations portfolio project.",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kwakhyun/aster-ui-platform.git"
-  },
-  "homepage": "https://kwakhyun.github.io/aster-ui-platform/",
   "packageManager": "pnpm@10.29.2",
   "engines": {
     "node": ">=22"
@@ -20,7 +15,7 @@
   },
   "scripts": {
     "dev": "turbo run dev --filter=@aster-ui/studio",
-    "build": "turbo run build",
+    "build": "pnpm clean && turbo run build",
     "typecheck": "turbo run typecheck",
     "lint": "eslint .",
     "test": "turbo run test",
@@ -28,7 +23,7 @@
     "test:coverage": "turbo run test:coverage",
     "test:sites": "pnpm --filter=@aster-ui/studio test:sites",
     "check": "pnpm portfolio:neutrality:check && pnpm lint && pnpm typecheck && pnpm test && node scripts/record-unit-evidence.mjs && pnpm build && pnpm tokens:contract:check && pnpm native:check && pnpm figma:check && pnpm ai:check && pnpm manifest:check && pnpm docs:check && pnpm adoption:check && pnpm migration:check && pnpm api:check && pnpm release:check && pnpm perf:check && pnpm package:check && pnpm k8s:check && pnpm supply-chain:check && pnpm provenance:check",
-    "verify": "pnpm security:audit && pnpm check && pnpm test:coverage && pnpm test:sites && pnpm test:visual && pnpm evidence:generate && pnpm --filter=@aster-ui/studio build && pnpm evidence:check && pnpm verification:generate && pnpm verification:check",
+    "verify": "pnpm security:audit && pnpm check && pnpm test:coverage && pnpm coverage:record && pnpm test:sites && pnpm test:visual && pnpm evidence:generate && pnpm --filter=@aster-ui/studio build && pnpm evidence:check && pnpm verification:generate && pnpm verification:check",
     "clean": "turbo run clean",
     "portfolio:neutrality:check": "node scripts/check-portfolio-neutrality.mjs",
     "tokens:build": "pnpm --filter=@aster-ui/tokens build",
@@ -39,7 +34,7 @@
     "figma:check": "pnpm --filter=@aster-ui/tokens build && pnpm --filter=@aster-ui/figma-bridge build && node scripts/sync-figma-variables.mjs --check",
     "ai:propose": "node scripts/generate-ai-proposal.mjs",
     "ai:fixture": "node scripts/generate-ai-proposal.mjs --fixture",
-    "ai:check": "node scripts/generate-ai-proposal.mjs --check",
+    "ai:check": "node scripts/check-ai-workflow.mjs",
     "ai:approve": "node scripts/approve-ai-proposal.mjs",
     "package:check": "node scripts/check-package-contents.mjs",
     "k8s:render": "node scripts/render-k8s-manifest.mjs",
@@ -57,6 +52,7 @@
     "release:check": "node scripts/verify-release-contract.mjs",
     "perf:check": "node scripts/check-performance-budget.mjs",
     "security:audit": "pnpm audit --prod --audit-level high && node scripts/record-security-evidence.mjs",
+    "coverage:record": "node scripts/record-coverage-evidence.mjs",
     "evidence:generate": "node scripts/generate-quality-evidence.mjs",
     "evidence:check": "node scripts/generate-quality-evidence.mjs --check",
     "verification:generate": "node scripts/generate-verification-report.mjs",

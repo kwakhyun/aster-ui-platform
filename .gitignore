@@ -4,9 +4,10 @@ dist/
 coverage/
 playwright-report/
 test-results/
+reports/ai-approvals/
+reports/ai-proposals/
 *.log
 .DS_Store
 .env
 .env.*
 !.env.example
-

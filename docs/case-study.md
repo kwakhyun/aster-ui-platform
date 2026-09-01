@@ -62,9 +62,9 @@ Claude Code 경로는 tools를 비활성화한 비대화형 프로세스로 실�
 | Figma | REST schema adapter, 3개 alias 변경 fixture, 읽기 전용 human review |
 | 소비 제품 | 3개 선언형 소비 앱, 13/13 eligible component, deprecated usage 0 |
 | 마이그레이션 | `PrimaryButton`에서 `Button`으로 바꾸는 TypeScript AST codemod fixture |
-| AI | Claude Code structured proposal wrapper, 6개 제안 검증과 보고서 무결성 거부 사례, 별도 승인 receipt |
+| AI | Claude Code structured proposal wrapper, 제안 검증과 변조 및 경로 이탈 거부, timeout, 별도 승인 receipt E2E |
 | 품질 | 단위와 상호작용, axe, 실제 Chrome 시각 회귀, 확대, 모바일, forced-colors, 성능과 보안 게이트 |
-| 운영 | release-please, immutable Action SHA와 image digest, 비루트 읽기 전용 컨테이너, CI 뒤 Pages 배포 |
+| 운영 | release-please, immutable Action SHA와 image digest, 비루트 읽기 전용 컨테이너, 전체 검증 뒤 Pages를 배포하는 workflow |
 
 실행 시점과 source revision이 포함된 최신 수치는 [`reports/verification.md`](../reports/verification.md)와 각 JSON evidence에서 확인할 수 있습니다.
 

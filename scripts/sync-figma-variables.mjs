@@ -6,6 +6,7 @@ import {
   fetchFigmaLocalVariables,
   normalizeFigmaChanges,
 } from "../packages/figma-bridge/dist/index.js";
+import { createEvidenceReport } from "./lib/provenance.mjs";
 
 const projectRoot = process.cwd();
 const fixtureBefore = "packages/figma-bridge/fixtures/local-variables.before.json";
@@ -102,6 +103,19 @@ if (process.argv.includes("--check")) {
     console.error("Figma REST fixture report is out of date.");
     process.exitCode = 1;
   } else {
+    const evidence = await createEvidenceReport({
+      schemaVersion: 1,
+      command: "pnpm figma:check",
+      status: "passed",
+      changeCount: review.validation.changeCount,
+      aliasesResolved: review.validation.aliasesResolved,
+      humanReviewRequired: report.humanReview.required,
+      sourceMutationApplied: false,
+    });
+    await writeFile(
+      path.join(projectRoot, "reports/figma-verification.json"),
+      `${JSON.stringify(evidence, null, 2)}\n`,
+    );
     console.log(`Figma REST fixture passed: ${review.validation.changeCount} alias changes require human review.`);
   }
 } else {

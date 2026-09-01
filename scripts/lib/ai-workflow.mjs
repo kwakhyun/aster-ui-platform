@@ -123,15 +123,58 @@ export function validateProposal(proposal, manifest) {
   ];
 }
 
-export function validateProposalReport(report, { manifest, request, promptTemplate }) {
+export function validateProposalReport(report, context) {
+  const {
+    manifest,
+    request,
+    requestPath,
+    promptTemplate,
+    promptTemplatePath,
+  } = context;
   const failures = [];
   if (!report || typeof report !== "object" || Array.isArray(report)) {
     throw new Error("AI proposal report must be an object.");
   }
+  if (!hasOnlyKeys(report, [
+    "schemaVersion",
+    "generatedAt",
+    "provider",
+    "request",
+    "prompt",
+    "context",
+    "proposal",
+    "automatedValidation",
+    "humanReview",
+    "sourceMutation",
+  ])) failures.push("proposal report contains unsupported fields");
   const checks = validateProposal(report.proposal, manifest);
   const expectedPrompt = createProposalPrompt(promptTemplate, request, manifest);
 
   if (report.schemaVersion !== 1) failures.push("unsupported proposal report schema");
+  if (typeof report.generatedAt !== "string" || !Number.isFinite(Date.parse(report.generatedAt))) {
+    failures.push("proposal report generatedAt must be a valid timestamp");
+  }
+  if (!report.provider || typeof report.provider !== "object"
+    || !hasOnlyKeys(report.provider, ["id", "version", "execution"])
+    || !isNonEmptyString(report.provider.id)
+    || !isNonEmptyString(report.provider.version)
+    || !isNonEmptyString(report.provider.execution)) {
+    failures.push("proposal provider metadata is invalid");
+  }
+  if (!report.request || typeof report.request !== "object"
+    || !hasOnlyKeys(report.request, ["path", "digest"])) {
+    failures.push("proposal request metadata is invalid");
+  }
+  if (!report.prompt || typeof report.prompt !== "object"
+    || !hasOnlyKeys(report.prompt, ["template", "digest"])) {
+    failures.push("proposal prompt metadata is invalid");
+  }
+  if (requestPath && report.request?.path !== requestPath) {
+    failures.push("request path does not match the approved input");
+  }
+  if (promptTemplatePath && report.prompt?.template !== promptTemplatePath) {
+    failures.push("prompt template path does not match the approved input");
+  }
   if (report.request?.digest !== digest(request)) failures.push("request digest does not match current input");
   if (report.prompt?.digest !== digest(expectedPrompt)) failures.push("prompt digest does not match current inputs");
   if (report.context?.package !== manifest.package
@@ -144,11 +187,69 @@ export function validateProposalReport(report, { manifest, request, promptTempla
     || JSON.stringify(report.automatedValidation?.checks) !== JSON.stringify(checks)) {
     failures.push("automated validation receipt does not match a fresh validation");
   }
-  if (report.humanReview?.status !== "required") failures.push("human review is not required");
+  if (!report.humanReview || typeof report.humanReview !== "object"
+    || !hasOnlyKeys(report.humanReview, ["status", "reviewer", "reviewedAt"])
+    || report.humanReview.status !== "required"
+    || report.humanReview.reviewer !== null
+    || report.humanReview.reviewedAt !== null) {
+    failures.push("human review is not required or is already claimed");
+  }
   if (report.sourceMutation?.allowedByThisCommand !== false || report.sourceMutation?.applied !== false) {
     failures.push("source mutation boundary is not disabled");
   }
 
   if (failures.length > 0) throw new Error(`AI proposal report validation failed:\n- ${failures.join("\n- ")}`);
   return checks;
+}
+
+export function validateReviewer(reviewer) {
+  if (!isNonEmptyString(reviewer) || reviewer.trim().length > 100 || /[\r\n]/u.test(reviewer)) {
+    throw new Error("Reviewer must be a single non-empty line of at most 100 characters.");
+  }
+  return reviewer.trim();
+}
+
+export function createApprovalReceipt(report, context) {
+  validateProposalReport(report, context);
+  const reviewer = validateReviewer(context.reviewer);
+  const reviewedAt = context.reviewedAt ?? new Date().toISOString();
+  if (!Number.isFinite(Date.parse(reviewedAt))) {
+    throw new Error("Approval reviewedAt must be a valid timestamp.");
+  }
+  if (!isNonEmptyString(context.proposalPath)) {
+    throw new Error("Approval proposalPath must be a non-empty project path.");
+  }
+  return {
+    schemaVersion: 2,
+    proposalPath: context.proposalPath,
+    reportDigest: digest(report),
+    proposalDigest: digest(report.proposal),
+    requestDigest: report.request.digest,
+    promptDigest: report.prompt.digest,
+    manifestDigest: report.context.manifestDigest,
+    status: "approved",
+    reviewer,
+    reviewedAt,
+    sourceMutation: {
+      applied: false,
+      note: "Approval authorizes a separate implementation review. It does not apply generated code.",
+    },
+  };
+}
+
+export function validateApprovalReceipt(receipt, report, context) {
+  validateProposalReport(report, context);
+  if (!receipt || typeof receipt !== "object" || Array.isArray(receipt)) {
+    throw new Error("AI approval receipt must be an object.");
+  }
+  const expected = createApprovalReceipt(report, {
+    ...context,
+    proposalPath: receipt.proposalPath,
+    reviewer: receipt.reviewer,
+    reviewedAt: receipt.reviewedAt,
+  });
+  if (!hasOnlyKeys(receipt, Object.keys(expected)) || JSON.stringify(receipt) !== JSON.stringify(expected)) {
+    throw new Error("AI approval receipt does not match the current validated proposal.");
+  }
+  return true;
 }

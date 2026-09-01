@@ -2,7 +2,7 @@
 
 의료미용 제품군의 디자인 언어를 안전하게 전달하는 디자인 시스템 운영 제품 PoC입니다. Figma Variables 변경, W3C DTCG 토큰, React 공용 API, 소비 앱 도입률, AI 제안 검증, 사람 승인, 릴리스 품질 근거를 하나의 흐름으로 연결했습니다.
 
-[케이스 스터디](docs/case-study.md) | [자동 생성 검증 보고서](reports/verification.md) | [디자인 QA](design-qa.md) | [GitHub Actions](https://github.com/kwakhyun/aster-ui-platform/actions) | [GitHub Pages](https://kwakhyun.github.io/aster-ui-platform/)
+[케이스 스터디](docs/case-study.md) | [자동 생성 검증 보고서](reports/verification.md) | [디자인 QA](design-qa.md)
 
 ![Aster UI Studio verified implementation](design/implementation-desktop-final.png)
 
@@ -27,10 +27,10 @@
 | API automation | 레지스트리와 TypeScript AST에서 6개 컴포넌트, 38개 prop manifest와 문서 생성 |
 | Tokens | 31개 W3C DTCG 경로, Coral과 Ocean, CSS와 JSON과 Swift와 Compose 산출물 |
 | Figma | 실제 Variables REST schema adapter, PAT와 OAuth 인증, 비식별 fixture, 사람 검토 모델 |
-| AI | Claude Code JSON Schema 제안, semver와 테스트 및 위험 검증, 현재 입력 재검증, 별도 사람 승인 receipt |
+| AI | Claude Code JSON Schema 제안, semver와 테스트 및 위험 검증, 제한 시간과 경로 격리, 별도 사람 승인 receipt E2E |
 | Adoption | Studio, 클리닉 탐색 웹, 운영 백오피스의 실제 import와 JSX 사용 스캔 |
 | Migration | `PrimaryButton`을 `Button`으로 바꾸는 TypeScript AST codemod와 fixture |
-| Delivery | release-please, immutable Action SHA, 비루트 컨테이너, CI 뒤 GitHub Pages 배포 |
+| Delivery | release-please, immutable Action SHA, 비루트 컨테이너, 전체 검증 뒤 Pages를 배포하는 workflow |
 
 웹 컴포넌트는 Web 전용입니다. Swift와 Compose 파일은 같은 토큰 소스에서 만든 네이티브 토큰 산출물이며 iOS 또는 Android 컴포넌트 구현으로 표현하지 않습니다.
 
@@ -45,7 +45,7 @@ Figma Variables REST / sanitized fixture
   → Claude Code proposal, deterministic validation, human review
   → unit, axe, browser visual, performance, security gates
   → local release rehearsal or release-please
-  → GitHub Pages only after quality and container CI jobs
+  → Pages deployment workflow gated by quality and container CI jobs
 ```
 
 Studio의 `Publish`는 외부 registry를 바꾸지 않는 로컬 리허설입니다. 실제 Figma 쓰기와 npm 배포도 수행했다고 주장하지 않습니다.
@@ -65,7 +65,7 @@ pnpm dev
 pnpm verify
 ```
 
-`pnpm verify`는 의존성 감사, lint, strict TypeScript, unit과 interaction, coverage, build, 토큰 및 네이티브 산출물, Figma와 AI fixture, manifest와 문서, 도입률과 codemod, API 호환성, 릴리스, 성능, 패키지 내용, Kubernetes, 공급망, Sites runtime, 실제 Chrome 시각 회귀와 axe를 순서대로 실행합니다. 마지막에는 구조화된 근거에서 검증 보고서를 다시 만들고 최신성을 검사합니다.
+`pnpm verify`는 의존성 감사, lint, strict TypeScript, unit과 interaction, provenance가 결합된 coverage, build, 토큰 및 네이티브 산출물, Figma fixture, AI 제안과 승인 E2E, manifest와 문서, 도입률과 codemod, API 호환성, 릴리스, 성능, 패키지 내용, Kubernetes, 공급망, Sites runtime, 실제 Chrome 시각 회귀와 axe를 순서대로 실행합니다. 마지막에는 구조화된 근거에서 검증 보고서를 다시 만들고 최신성을 검사합니다.
 
 ## 실행 가능한 Figma와 AI 경계
 
@@ -87,7 +87,7 @@ pnpm ai:propose -- \
   --output reports/ai-proposals/treatment-card-label.claude.json
 ```
 
-Claude Code는 tools가 비활성화된 상태에서 구조화 제안만 반환합니다. CI에서는 `pnpm ai:check`가 같은 결정론적 검증을 오프라인으로 재생합니다. 사람 승인도 코드를 적용하지 않습니다. 상세 정책은 [AI 워크플로](docs/ai-governance.md)를 참고하세요.
+Claude Code는 tools가 비활성화된 상태에서 구조화 제안만 반환합니다. CI에서는 `pnpm ai:check`가 결정론적 제안 검증, 사람 승인 영수증, 변조 및 경로 이탈 거부, provider timeout, 소스 무변경을 오프라인으로 재생합니다. 사람 승인도 코드를 적용하지 않습니다. 상세 정책은 [AI 워크플로](docs/ai-governance.md)를 참고하세요.
 
 ## 검증 가능한 계약
 
@@ -120,6 +120,6 @@ Claude Code는 tools가 비활성화된 상태에서 구조화 제안만 반환�
 - Figma 라이브 API는 파일과 계정 권한이 있는 환경에서만 실행할 수 있습니다.
 - Claude 라이브 제안은 실행 환경의 Claude Code 로그인이 필요합니다.
 - 저장소 내부 도입률은 실제 조직 도입률이나 사용자 성과 지표가 아닙니다.
-- GitHub Actions와 Pages 링크는 공개 저장소의 첫 main workflow가 완료된 뒤 실행 근거가 됩니다.
+- 공개 원격 저장소와 Pages 실행 이력은 아직 연결하지 않았습니다. workflow 구성과 로컬 검증 결과를 공개 CI 성공으로 표현하지 않습니다.
 
 MIT License

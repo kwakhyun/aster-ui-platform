@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 import {
   createEvidenceReport,
+  getSourceGitCommit,
   getSourceRevision,
   verifyEvidenceReport,
 } from "./lib/provenance.mjs";
@@ -22,9 +23,11 @@ const [unit, api, visual, performance, security] = await Promise.all([
   readReport("security-audit.json"),
 ]);
 const sourceRevision = await getSourceRevision(projectRoot);
+const sourceGitCommit = getSourceGitCommit(projectRoot);
 
 function isPassingCurrentReport(report) {
-  return report?.status === "passed" && verifyEvidenceReport(report, sourceRevision);
+  return report?.status === "passed"
+    && verifyEvidenceReport(report, sourceRevision, sourceGitCommit);
 }
 
 function evidenceFields(report) {
@@ -101,8 +104,7 @@ if (process.argv.includes("--check")) {
   const isCurrent = current?.schemaVersion === 3
     && Number.isFinite(generatedAt)
     && typeof current.runId === "string"
-    && current.sourceRevision === evidence.sourceRevision
-    && current.artifactDigest === evidence.artifactDigest
+    && verifyEvidenceReport(current, sourceRevision, sourceGitCommit)
     && JSON.stringify(current.checks) === JSON.stringify(evidence.checks);
   if (!isCurrent) {
     console.error("Studio quality evidence is out of date.");

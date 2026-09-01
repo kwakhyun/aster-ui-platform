@@ -1,7 +1,12 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
-import { getSourceRevision, verifyEvidenceReport } from "./lib/provenance.mjs";
+import { validateProposalReport } from "./lib/ai-workflow.mjs";
+import {
+  getSourceGitCommit,
+  getSourceRevision,
+  verifyEvidenceReport,
+} from "./lib/provenance.mjs";
 
 const projectRoot = process.cwd();
 const outputPath = path.join(projectRoot, "reports/verification.md");
@@ -51,28 +56,39 @@ const evidenceReportPaths = {
   visual: "reports/visual-regression.json",
   performance: "reports/performance-budget.json",
   security: "reports/security-audit.json",
+  coverage: "reports/coverage.json",
+  ai: "reports/ai-verification.json",
+  figma: "reports/figma-verification.json",
 };
-const coveragePaths = {
-  "Clinic consumer": "apps/clinic-web/coverage/coverage-summary.json",
-  "Backoffice consumer": "apps/backoffice-web/coverage/coverage-summary.json",
-  Tokens: "packages/tokens/coverage/coverage-summary.json",
-  "Figma bridge": "packages/figma-bridge/coverage/coverage-summary.json",
-  React: "packages/react/coverage/coverage-summary.json",
-  Studio: "apps/studio/coverage/coverage-summary.json",
-};
+const aiRequestPath = "ai/requests/localize-treatment-card-save-label.md";
+const aiPromptPath = "ai/prompts/design-system-proposal.md";
 
-const [sourceRevision, testSuiteCount, figma, ai] = await Promise.all([
+const [
+  sourceRevision,
+  testSuiteCount,
+  figma,
+  aiProposal,
+  qualityEvidence,
+  componentManifest,
+  aiRequest,
+  aiPromptTemplate,
+] = await Promise.all([
   getSourceRevision(projectRoot),
   countWorkspaceTestSuites(),
   readJson("reports/figma-sync.json"),
   readJson("reports/ai-workflow.json"),
+  readJson("apps/studio/src/generated/quality-evidence.json"),
+  readJson("packages/react/component-manifest.json"),
+  readFile(path.join(projectRoot, aiRequestPath), "utf8"),
+  readFile(path.join(projectRoot, aiPromptPath), "utf8"),
 ]);
+const sourceGitCommit = getSourceGitCommit(projectRoot);
 const evidenceEntries = await Promise.all(
   Object.entries(evidenceReportPaths).map(async ([name, reportPath]) => [name, await readJson(reportPath)]),
 );
 const evidence = Object.fromEntries(evidenceEntries);
 const staleEvidence = evidenceEntries
-  .filter(([, report]) => !verifyEvidenceReport(report, sourceRevision))
+  .filter(([, report]) => !verifyEvidenceReport(report, sourceRevision, sourceGitCommit))
   .map(([name]) => name);
 if (staleEvidence.length > 0) {
   throw new Error(`Verification report refused stale or invalid evidence: ${staleEvidence.join(", ")}`);
@@ -82,32 +98,58 @@ if (evidence.unit.status !== "passed"
   || evidence.visual.status !== "passed"
   || evidence.performance.status !== "passed"
   || evidence.security.status !== "passed"
+  || evidence.coverage.status !== "passed"
+  || evidence.ai.status !== "passed"
+  || evidence.figma.status !== "passed"
   || evidence.adoption.status !== "healthy") {
   throw new Error("Verification report refused a non-passing repository report.");
+}
+const qualityReports = {
+  unit: evidence.unit,
+  api: evidence.api,
+  visual: evidence.visual,
+  performance: evidence.performance,
+  security: evidence.security,
+};
+const qualityChecksMatch = qualityEvidence.checks?.length === Object.keys(qualityReports).length
+  && Object.entries(qualityReports).every(([id, report]) => {
+    const check = qualityEvidence.checks.find((candidate) => candidate.id === id);
+    return check?.status === "passed"
+      && check.sourceRevision === report.sourceRevision
+      && check.gitCommit === report.gitCommit
+      && check.evidenceDigest === report.artifactDigest;
+  });
+if (!verifyEvidenceReport(qualityEvidence, sourceRevision, sourceGitCommit) || !qualityChecksMatch) {
+  throw new Error("Verification report refused stale or inconsistent Studio quality evidence.");
 }
 if (!figma.review?.validation?.aliasesResolved || figma.humanReview?.required !== true) {
   throw new Error("Verification report refused an invalid Figma review boundary.");
 }
-if (ai.automatedValidation?.status !== "passed"
-  || ai.humanReview?.status !== "required"
-  || ai.sourceMutation?.applied !== false) {
-  throw new Error("Verification report refused an invalid AI review boundary.");
+try {
+  validateProposalReport(aiProposal, {
+    manifest: componentManifest,
+    request: aiRequest,
+    requestPath: aiRequestPath,
+    promptTemplate: aiPromptTemplate,
+    promptTemplatePath: aiPromptPath,
+  });
+} catch (error) {
+  throw new Error("Verification report refused an invalid or stale AI review boundary.", {
+    cause: error,
+  });
 }
 
-const coverageEntries = await Promise.all(
-  Object.entries(coveragePaths).map(async ([name, reportPath]) => [name, await readJson(reportPath)]),
-);
 const latestGeneratedAt = evidenceEntries
   .map(([, report]) => report.generatedAt)
   .sort((left, right) => Date.parse(right) - Date.parse(left))[0];
-const coverageRows = coverageEntries.map(([name, report]) =>
-  `| ${name} | ${formatPercent(report.total.statements)}% | ${formatPercent(report.total.branches)}% | ${formatPercent(report.total.functions)}% | ${formatPercent(report.total.lines)}% |`
+const coverageRows = Object.entries(evidence.coverage.coverage).map(([name, report]) =>
+  `| ${name} | ${formatPercent(report.statements)}% | ${formatPercent(report.branches)}% | ${formatPercent(report.functions)}% | ${formatPercent(report.lines)}% |`
 ).join("\n");
-const gitCommit = evidence.unit.gitCommit;
+const gitCommit = sourceGitCommit;
 
 const markdown = `# Production Verification
 
-이 문서는 저장소의 구조화된 JSON 근거와 coverage summary에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 \`pnpm verification:check\`가 현재 소스와의 정합성을 검사합니다.
+이 문서는 저장소의 provenance 결합 JSON 근거에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 \`pnpm verification:check\`가 현재 소스, source 변경 commit, Studio 품질 근거와의 정합성을 검사합니다.
 
 - 생성 기준: ${formatKoreanDate(latestGeneratedAt)} KST
 - 소스 리비전: \`${sourceRevision}\`
@@ -126,8 +168,8 @@ const markdown = `# Production Verification
 | Sites worker | 4 runtime route cases passed |
 | API compatibility | ${evidence.api.checkedComponents} components, ${evidence.api.checkedProps} props, ${evidence.api.breakingChanges.length} breaking changes |
 | Adoption | ${evidence.adoption.adoptedComponents}/${evidence.adoption.eligibleComponents} eligible components across ${evidence.adoption.consumerCount} consumers, ${evidence.adoption.deprecatedUsageCount} deprecated usages |
-| Figma review fixture | ${figma.review.validation.changeCount} aliases resolved, human review required, source mutation disabled |
-| AI proposal fixture | ${ai.automatedValidation.checks.length} deterministic checks passed, human review required, source mutation disabled |
+| Figma review fixture | ${evidence.figma.changeCount} aliases resolved, human review required, source mutation disabled |
+| AI proposal and approval E2E | ${evidence.ai.proposalChecks} proposal checks, ${evidence.ai.failClosedBoundaries} fail-closed boundaries, provider timeout and output limits, source mutation disabled |
 | Browser visual and accessibility | ${evidence.visual.passed} scenarios, ${evidence.visual.snapshots} snapshots, ${evidence.visual.accessibilityChecks} axe checks |
 | Production dependency audit | ${evidence.security.knownVulnerabilities} known vulnerabilities |
 | Evidence provenance | revision, run ID, Git commit, artifact digest verified |

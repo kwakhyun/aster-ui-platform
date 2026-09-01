@@ -28,13 +28,16 @@ pnpm ai:propose -- \
 - plan permission mode
 - session persistence 비활성화
 - 기본 0.50달러 budget cap
+- 기본 120초 timeout과 stdout 및 stderr 상한
+- 요청은 `ai/requests/`, 결과는 `reports/ai-proposals/` 내부로 제한
+- 기존 결과 파일 덮어쓰기 차단
 - 요청, prompt, manifest digest와 Claude Code 버전 기록
 
 로그인되지 않았거나 구조화 출력이 없으면 실패합니다. provider 오류는 prompt 전체나 credential을 다시 출력하지 않고 짧은 실패 사유로 정리합니다.
 
 ## 결정론적 검증
 
-`pnpm ai:check`는 라이브 provider 없이 같은 경계 조건을 검증합니다.
+`pnpm ai:check`는 라이브 provider 없이 제안부터 승인까지 같은 경계 조건을 검증합니다.
 
 - 대상 컴포넌트가 현재 manifest에 존재하는가
 - 신규 prop이 기존 API와 충돌하지 않는가
@@ -46,6 +49,11 @@ pnpm ai:propose -- \
 - 사람 검토 상태가 `required`인가
 - 승인 시점의 request, prompt, manifest digest가 현재 파일과 일치하는가
 - 자동 통과 필드, manifest digest, source mutation 경계가 변조되지 않았는가
+- 승인 영수증이 제안 보고서 전체와 request, prompt, manifest digest에 결합됐는가
+- 승인 또는 제안 경로가 허용된 디렉터리를 벗어나지 않는가
+- 승인 영수증과 제안 보고서를 덮어쓰지 않는가
+- provider가 응답하지 않을 때 timeout으로 종료되는가
+- 전체 검증 전후 source revision이 동일한가
 
 fixture 보고서는 [`reports/ai-workflow.json`](../reports/ai-workflow.json)에 있습니다.
 
@@ -58,7 +66,9 @@ pnpm ai:approve -- \
   --output reports/ai-approvals/treatment-card-label.json
 ```
 
-승인 명령은 현재 파일을 기준으로 제안과 보고서 무결성을 다시 검증한 뒤 proposal과 request digest를 담은 별도 receipt를 만듭니다. 승인 receipt도 코드를 적용하지 않습니다. 구현 뒤에는 manifest와 문서 재생성, API 호환성 검사, 실제 브라우저 axe와 시각 회귀를 포함한 `pnpm verify`가 필요합니다.
+승인 명령은 현재 파일을 기준으로 제안과 보고서 무결성을 다시 검증한 뒤 보고서 전체와 proposal, request, prompt, manifest digest를 담은 별도 receipt를 새 파일로 만듭니다. 기존 receipt와 proposal은 덮어쓰지 않습니다. 승인 receipt도 코드를 적용하지 않습니다. 구현 뒤에는 manifest와 문서 재생성, API 호환성 검사, 실제 브라우저 axe와 시각 회귀를 포함한 `pnpm verify`가 필요합니다.
+
+`reviewer`는 로컬 감사용 표시 이름이며 인증된 신원이나 전자서명이 아닙니다. 라이브 제안과 승인 파일은 기본적으로 Git에서 제외해 provider 출력이나 검토 메모가 실수로 커밋되지 않게 합니다.
 
 ## 자동 승인하지 않는 결정
 

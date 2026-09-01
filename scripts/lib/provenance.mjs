@@ -18,22 +18,37 @@ const excludedFiles = new Set([
   "apps/studio/src/generated/quality-evidence.json",
   "packages/react/component-manifest.json",
 ]);
-const revisionInputs = [
+export const sourceRevisionInputs = Object.freeze([
+  ".dockerignore",
+  ".github",
+  ".gitignore",
   ".npmrc",
+  ".release-please-manifest.json",
+  "CHANGELOG.md",
+  "CLAUDE.md",
+  "CONTRIBUTING.md",
+  "Dockerfile",
+  "LICENSE",
+  "README.md",
+  "ai",
   "apps",
+  "design/aster-ui-final-target.png",
+  "design-qa.md",
+  "docs",
   "eslint.config.mjs",
-  "infra/nginx-main.conf",
-  "infra/nginx.conf",
+  "examples",
+  "infra",
   "package.json",
   "packages",
   "playwright.config.ts",
   "pnpm-lock.yaml",
   "pnpm-workspace.yaml",
+  "release-please-config.json",
   "scripts",
   "tests",
   "tsconfig.base.json",
   "turbo.json",
-];
+]);
 
 function stableSerialize(value) {
   if (Array.isArray(value)) return `[${value.map(stableSerialize).join(",")}]`;
@@ -53,7 +68,7 @@ export function computeEvidenceDigest(core, sourceRevision, gitCommit = null) {
   return `sha256:${sha256(stableSerialize({ core, gitCommit, sourceRevision }))}`;
 }
 
-export function verifyEvidenceReport(report, expectedSourceRevision) {
+export function verifyEvidenceReport(report, expectedSourceRevision, expectedGitCommit) {
   if (!report || typeof report !== "object") return false;
   const {
     generatedAt,
@@ -70,6 +85,7 @@ export function verifyEvidenceReport(report, expectedSourceRevision) {
     && typeof generatedAt === "string"
     && Number.isFinite(Date.parse(generatedAt))
     && (gitCommit === null || (typeof gitCommit === "string" && /^[a-f0-9]{40}$/.test(gitCommit)))
+    && (expectedGitCommit === undefined || gitCommit === expectedGitCommit)
     && artifactDigest === computeEvidenceDigest(core, sourceRevision, gitCommit);
 }
 
@@ -91,9 +107,9 @@ async function collectSourceFiles(directory, projectRoot) {
   return files;
 }
 
-export async function getSourceRevision(projectRoot = process.cwd()) {
+export async function getSourceFiles(projectRoot = process.cwd()) {
   const files = [];
-  for (const input of revisionInputs) {
+  for (const input of sourceRevisionInputs) {
     const target = path.join(projectRoot, input);
     const metadata = await stat(target);
     if (metadata.isDirectory()) {
@@ -103,6 +119,11 @@ export async function getSourceRevision(projectRoot = process.cwd()) {
     }
   }
   files.sort((left, right) => left.relative.localeCompare(right.relative));
+  return files;
+}
+
+export async function getSourceRevision(projectRoot = process.cwd()) {
+  const files = await getSourceFiles(projectRoot);
   const hash = createHash("sha256");
   for (const file of files) {
     hash.update(file.relative);
@@ -114,9 +135,17 @@ export async function getSourceRevision(projectRoot = process.cwd()) {
   return `workspace:${workspaceDigest}`;
 }
 
-export function getGitCommit(projectRoot = process.cwd()) {
+export function getSourceGitCommit(projectRoot = process.cwd()) {
   try {
-    const revision = execFileSync("git", ["rev-parse", "HEAD"], {
+    const excludedPathspecs = [...excludedFiles].map((file) => `:(exclude)${file}`);
+    const revision = execFileSync("git", [
+      "log",
+      "-1",
+      "--format=%H",
+      "--",
+      ...sourceRevisionInputs,
+      ...excludedPathspecs,
+    ], {
       cwd: projectRoot,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
@@ -130,7 +159,7 @@ export function getGitCommit(projectRoot = process.cwd()) {
 
 export async function createEvidenceReport(core, projectRoot = process.cwd()) {
   const sourceRevision = await getSourceRevision(projectRoot);
-  const gitCommit = getGitCommit(projectRoot);
+  const gitCommit = getSourceGitCommit(projectRoot);
   const runId = process.env.GITHUB_RUN_ID
     ? `github:${process.env.GITHUB_RUN_ID}`
     : `local:${process.pid}`;

@@ -1,4 +1,3 @@
-import { spawn } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
@@ -8,6 +7,11 @@ import {
   validateProposal,
   validateProposalReport,
 } from "./lib/ai-workflow.mjs";
+import { runBoundedCommand } from "./lib/bounded-process.mjs";
+import {
+  prepareOutputFileWithin,
+  resolveExistingFileWithin,
+} from "./lib/safe-project-path.mjs";
 
 const projectRoot = process.cwd();
 const defaultRequest = "ai/requests/localize-treatment-card-save-label.md";
@@ -16,7 +20,22 @@ const fixtureOutputPath = "reports/ai-workflow.json";
 
 function argument(name) {
   const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] : undefined;
+  if (index < 0) return undefined;
+  const value = process.argv[index + 1];
+  if (!value || value.startsWith("--")) throw new Error(`${name} requires a value.`);
+  return value;
+}
+
+function boundedNumberArgument(name, fallback, { minimum, maximum, integer = false }) {
+  const rawValue = argument(name);
+  const value = rawValue === undefined ? fallback : Number(rawValue);
+  if (!Number.isFinite(value)
+    || (integer && !Number.isInteger(value))
+    || value < minimum
+    || value > maximum) {
+    throw new Error(`${name} must be between ${minimum} and ${maximum}${integer ? " as an integer" : ""}.`);
+  }
+  return value;
 }
 
 async function readJson(relativePath) {
@@ -24,45 +43,44 @@ async function readJson(relativePath) {
 }
 
 function extractStructuredOutput(rawOutput) {
-  const envelope = JSON.parse(rawOutput);
+  let envelope;
+  try {
+    envelope = JSON.parse(rawOutput);
+  } catch {
+    throw new Error("Claude Code did not return valid JSON output.");
+  }
   if (envelope && typeof envelope === "object" && envelope.is_error === true) {
-    throw new Error(`Claude Code proposal failed: ${String(envelope.result ?? "unknown provider error")}`);
+    throw new Error("Claude Code reported a provider error.");
   }
   if (envelope && typeof envelope === "object" && envelope.structured_output) {
     return envelope.structured_output;
   }
   if (envelope && typeof envelope === "object" && typeof envelope.result === "string") {
-    return JSON.parse(envelope.result);
+    try {
+      return JSON.parse(envelope.result);
+    } catch {
+      throw new Error("Claude Code did not return valid structured output.");
+    }
   }
   return envelope;
 }
 
-function runCommand(command, args) {
-  return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { stdio: ["ignore", "pipe", "pipe"] });
-    let stdout = "";
-    let stderr = "";
-    child.stdout.on("data", (chunk) => {
-      stdout += chunk;
-      if (stdout.length > 10 * 1024 * 1024) child.kill();
-    });
-    child.stderr.on("data", (chunk) => {
-      stderr += chunk;
-      if (stderr.length > 1024 * 1024) child.kill();
-    });
-    child.on("error", reject);
-    child.on("close", (code) => resolve({ code: code ?? 1, stdout, stderr }));
-  });
-}
-
 const fixtureMode = process.argv.includes("--fixture") || process.argv.includes("--check");
 const provider = fixtureMode ? "fixture" : (argument("--provider") ?? "claude");
-const requestPath = fixtureMode ? defaultRequest : (argument("--request") ?? defaultRequest);
-const outputPath = fixtureMode ? fixtureOutputPath : argument("--output");
-if (!outputPath) throw new Error("--output is required outside fixture mode.");
+if (!fixtureMode && provider !== "claude") throw new Error("Only the claude provider is supported for live proposals.");
+const requestedRequestPath = fixtureMode ? defaultRequest : (argument("--request") ?? defaultRequest);
+const requestFile = fixtureMode
+  ? path.resolve(projectRoot, defaultRequest)
+  : await resolveExistingFileWithin(projectRoot, "ai/requests", requestedRequestPath, "--request");
+const requestPath = path.relative(projectRoot, requestFile).split(path.sep).join("/");
+const requestedOutputPath = fixtureMode ? fixtureOutputPath : argument("--output");
+if (!requestedOutputPath) throw new Error("--output is required outside fixture mode.");
+const resolvedOutput = fixtureMode
+  ? path.resolve(projectRoot, fixtureOutputPath)
+  : await prepareOutputFileWithin(projectRoot, "reports/ai-proposals", requestedOutputPath, "--output");
 
 const [request, promptTemplate, schema, manifest] = await Promise.all([
-  readFile(path.resolve(projectRoot, requestPath), "utf8"),
+  readFile(requestFile, "utf8"),
   readFile(path.resolve(projectRoot, "ai/prompts/design-system-proposal.md"), "utf8"),
   readJson("ai/schemas/proposal.schema.json"),
   readJson("packages/react/component-manifest.json"),
@@ -82,7 +100,22 @@ if (provider === "fixture") {
   generatedAt = "2026-09-01T10:30:00+09:00";
 } else if (provider === "claude") {
   const claudeBinary = process.env.CLAUDE_BIN ?? "claude";
-  const versionResult = await runCommand(claudeBinary, ["--version"]);
+  const timeoutMs = boundedNumberArgument("--timeout-ms", 120_000, {
+    minimum: 1_000,
+    maximum: 600_000,
+    integer: true,
+  });
+  const maxBudgetUsd = boundedNumberArgument("--max-budget-usd", 0.5, {
+    minimum: 0.01,
+    maximum: 5,
+  });
+  const versionResult = await runBoundedCommand(claudeBinary, ["--version"], {
+    timeoutMs: 10_000,
+    maxStdoutBytes: 64 * 1024,
+    maxStderrBytes: 64 * 1024,
+  }).catch(() => {
+    throw new Error("Claude Code executable could not be inspected.");
+  });
   if (versionResult.code !== 0) throw new Error("Claude Code executable could not be inspected.");
   const version = versionResult.stdout.trim();
   const args = [
@@ -98,18 +131,16 @@ if (provider === "fixture") {
     "plan",
     "--no-session-persistence",
     "--max-budget-usd",
-    argument("--max-budget-usd") ?? "0.50",
+    maxBudgetUsd.toFixed(2),
   ];
   const model = argument("--model");
   if (model) args.push("--model", model);
-  const result = await runCommand(claudeBinary, args);
-  try {
-    proposal = extractStructuredOutput(result.stdout);
-  } catch (error) {
-    if (error instanceof Error) throw error;
-    throw new Error("Claude Code did not return a valid structured proposal.", { cause: error });
-  }
+  const result = await runBoundedCommand(claudeBinary, args, { timeoutMs }).catch((error) => {
+    const reason = typeof error?.reason === "string" ? error.reason : "execution";
+    throw new Error(`Claude Code proposal did not complete (${reason}).`);
+  });
   if (result.code !== 0) throw new Error("Claude Code proposal failed without a structured error.");
+  proposal = extractStructuredOutput(result.stdout);
   providerMetadata = {
     id: "claude-code",
     version,
@@ -154,9 +185,14 @@ const report = {
     applied: false,
   },
 };
-validateProposalReport(report, { manifest, request, promptTemplate });
+validateProposalReport(report, {
+  manifest,
+  request,
+  requestPath,
+  promptTemplate,
+  promptTemplatePath: "ai/prompts/design-system-proposal.md",
+});
 const serialized = `${JSON.stringify(report, null, 2)}\n`;
-const resolvedOutput = path.resolve(projectRoot, outputPath);
 
 if (process.argv.includes("--check")) {
   const current = await readFile(resolvedOutput, "utf8").catch(() => "");
@@ -194,7 +230,13 @@ if (process.argv.includes("--check")) {
     for (const invalidReport of invalidReports) {
       let rejected = false;
       try {
-        validateProposalReport(invalidReport, { manifest, request, promptTemplate });
+        validateProposalReport(invalidReport, {
+          manifest,
+          request,
+          requestPath,
+          promptTemplate,
+          promptTemplatePath: "ai/prompts/design-system-proposal.md",
+        });
       } catch {
         rejected = true;
       }
@@ -204,6 +246,6 @@ if (process.argv.includes("--check")) {
   }
 } else {
   await mkdir(path.dirname(resolvedOutput), { recursive: true });
-  await writeFile(resolvedOutput, serialized);
+  await writeFile(resolvedOutput, serialized, fixtureMode ? undefined : { flag: "wx" });
   console.log(`Wrote proposal report to ${path.relative(projectRoot, resolvedOutput)}. Source mutation: disabled.`);
 }

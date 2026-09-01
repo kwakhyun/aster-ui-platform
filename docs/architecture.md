@@ -45,7 +45,7 @@ Claude Code는 tools가 없는 비대화형 프로세스로 실행되어 JSON Sc
 - 릴리스 리허설은 `AbortSignal`, idempotency key, 실패 메시지, 재시도, reset을 지원합니다.
 - 사람 검토는 `aster-ui:review:v1`, 릴리스 리허설은 `aster-ui:release:v3`에 저장합니다. source, version, theme, change fingerprint, reviewer, 품질 revision과 digest가 모두 현재 문맥과 일치할 때만 복구합니다.
 - 손상되었거나 구버전인 저장 데이터는 성공 상태로 해석하지 않습니다.
-- Studio build에는 배포 입력으로 계산한 workspace source revision을 삽입합니다. Git commit은 별도 감사 필드로 보존하므로 `.git`이 없는 container에서도 같은 입력은 같은 revision이 됩니다. 품질 근거의 revision이 다르거나 다섯 gate 중 하나라도 통과하지 않으면 릴리스 리허설 확인과 실행을 차단합니다.
+- Studio build에는 앱과 패키지뿐 아니라 AI 계약, CI, 컨테이너, 인프라, 마이그레이션 fixture와 사용자 문서를 포함한 배포 입력으로 계산한 workspace source revision을 삽입합니다. 생성 보고서와 캡처 이미지는 순환을 막기 위해 제외합니다. 최신 source 변경 commit은 별도 감사 필드로 보존하므로 evidence 전용 commit 뒤에도 같은 입력은 같은 revision과 commit을 가리킵니다. 품질 근거의 revision이 다르거나 다섯 gate 중 하나라도 통과하지 않으면 릴리스 리허설 확인과 실행을 차단합니다.
 - 리허설 실패나 취소 시 성공 receipt를 기록하지 않습니다.
 - Figma alias가 하나라도 해석되지 않으면 review 모델을 만들지 않습니다.
 
@@ -58,5 +58,5 @@ Claude Code는 tools가 없는 비대화형 프로세스로 실행되어 JSON Sc
 - Kubernetes는 immutable image digest만 입력받는 renderer를 사용하고, UID/GID 101, service account token 미탑재, capability drop, seccomp, privilege escalation 차단을 적용합니다.
 - `/healthz`는 단순 문자열이 아니라 실제 빌드된 `index.html`의 존재를 확인하며, CI는 문서가 참조하는 정적 asset까지 요청합니다.
 - release-please 실행 전 `pnpm verify`를 수행합니다. 검증 보고서 생성 뒤 Studio를 다시 빌드하므로 배포 파일과 화면의 품질 근거가 같은 source revision을 가리킵니다.
-- 시각 회귀 빌드는 checked-in passing evidence fixture를 명시적으로 사용하고, reporter는 현재 source revision으로 결과를 기록합니다. 최종 빌드는 fixture override를 제거하며 Turborepo 캐시 키에는 이 입력과 Pages base path가 모두 포함됩니다.
+- 시각 회귀 빌드는 checked-in passing evidence fixture를 명시적으로 사용하고, reporter는 현재 source revision으로 결과를 기록합니다. 최종 빌드는 fixture override를 제거하며 Turborepo 캐시 키에는 이 입력과 Pages base path가 모두 포함됩니다. 루트 build는 캐시 복원 전에 각 workspace의 `dist`를 지워 오래된 해시 자산이 다음 성능 측정이나 배포 산출물에 섞이지 않게 합니다.
 - GitHub Pages 배포는 CI의 전체 품질 job과 hardened container job이 모두 통과한 main push에서만 실행됩니다. Vite base path는 저장소 경로를 입력으로 받아 서브패스의 정적 자산을 보존합니다.

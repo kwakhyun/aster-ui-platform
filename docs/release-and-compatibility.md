@@ -19,4 +19,4 @@ Studio의 버튼은 실제 npm 배포가 아니라 로컬 릴리스 리허설입
 
 빌드에 삽입된 source revision과 품질 근거의 revision이 다르거나 다섯 품질 gate가 모두 통과하지 않으면 checkbox와 실행 버튼이 비활성화됩니다. 사용자는 Quality 화면에서 실패하거나 오래된 근거를 먼저 확인해야 합니다.
 
-실제 release-please workflow는 SHA로 고정된 Action에서 `pnpm verify`를 통과한 뒤에만 release 제안을 실행합니다. 이 순서는 품질 검사, 실제 브라우저 시각 및 접근성 검사, 프로덕션 의존성 감사를 먼저 수행하고, 근거 생성 후 Studio를 재빌드합니다. Studio의 로컬 근거는 Git commit을 기록하되 GitHub Actions 성공으로 표현하지 않으며, 공개 실행 상태는 저장소의 Actions 화면에서 별도로 확인합니다.
+release-please workflow는 SHA로 고정된 Action에서 `pnpm verify`를 통과한 뒤에만 release 제안을 실행하도록 구성했습니다. 이 순서는 품질 검사, 실제 브라우저 시각 및 접근성 검사, 프로덕션 의존성 감사를 먼저 수행하고, 근거 생성 후 Studio를 재빌드합니다. Studio의 로컬 근거는 최신 source 변경 commit을 기록하되 GitHub Actions 성공으로 표현하지 않습니다. 공개 원격 저장소가 연결되기 전에는 workflow 파일과 로컬 결과만 구현 근거로 사용합니다.
