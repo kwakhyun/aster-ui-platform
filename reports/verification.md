@@ -1,56 +1,59 @@
-# Production Verification
+# 프로덕션 검증 보고서
 
-이 문서는 저장소의 provenance 결합 JSON 근거에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 `pnpm verification:check`가 현재 소스, source 변경 commit, Studio 품질 근거와의 정합성을 검사합니다.
+이 문서는 출처 정보가 결합된 저장소의 JSON 근거에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 `pnpm verification:check`가 현재 소스, 소스 변경 커밋, Studio 품질 근거가 서로 일치하는지 검사합니다.
 
-- 생성 기준: 2026. 09. 01. 18:57 KST
-- 소스 리비전: `workspace:7a04ebbce541f4497e01`
-- Git commit: `f78d600018215e7481983227c50a7fe86eb59f94`
+- 생성 기준: 2026. 09. 01. 20:00 KST
+- 소스 리비전: `workspace:389cbd9dadf9e5bd0553`
+- Git 커밋: `456bf0cb68577bf412a5d3d88c2b02e77fd99ddf`
 
 ## 판정
 
-로컬에서 재현 가능한 종료 매트릭스 기준으로 열린 P0, P1, P2는 0건입니다. 이 판정은 아래 자동 근거와 사람 검토 경계가 모두 유효할 때만 생성됩니다. 공개 GitHub 실행, 실제 Figma 계정, npm registry, Kubernetes cluster처럼 자격 증명이나 외부 환경이 필요한 결과는 별도 경계로 남깁니다.
+로컬에서 재현할 수 있는 완료 기준으로 남아 있는 P0, P1, P2는 0건입니다.
+
+이 판정은 아래 자동 근거와 사람 검토 경계가 모두 유효할 때만 생성됩니다.
+공개 GitHub 실행, 실제 Figma 계정, npm 레지스트리, Kubernetes 클러스터처럼 인증 정보나 외부 환경이 필요한 결과는 별도 범위로 남깁니다.
 
 ## 자동화 근거
 
-| Gate | Result |
+| 검증 항목 | 결과 |
 | --- | --- |
-| Workspace unit and interaction suites | 6 package suites passed |
-| Consumer contract tests | Clinic과 backoffice 렌더링 및 WCAG-tagged axe 검사 passed |
-| Sites worker | 4 runtime route cases passed |
-| API compatibility | 6 components, 38 props, 0 breaking changes |
-| Adoption | 13/13 eligible components across 3 consumers, 0 deprecated usages |
-| Figma review fixture | 3 aliases resolved, human review required, source mutation disabled |
-| AI proposal and approval E2E | 6 proposal checks, 7 fail-closed boundaries, provider timeout and output limits, source mutation disabled |
-| Browser visual and accessibility | 7 scenarios, 6 snapshots, 4 axe checks |
-| Production dependency audit | 0 known vulnerabilities |
-| Evidence provenance | revision, run ID, Git commit, artifact digest verified |
+| 워크스페이스 단위 및 상호작용 테스트 | 패키지 검증 스위트 6개 통과 |
+| 소비 앱 계약 테스트 | 클리닉과 백오피스 렌더링 및 WCAG 태그 기반 axe 검사 통과 |
+| Sites 워커 | 런타임 경로 사례 4개 통과 |
+| API 호환성 | 컴포넌트 6개와 prop 38개 검사, 하위 호환성이 깨지는 변경 0건 |
+| 도입률 | 소비 앱 3개에서 대상 컴포넌트 13/13개 사용, 지원 중단 예정 API 사용 0건 |
+| Figma 검토 테스트 픽스처 | 별칭 3개 해석, 사람 검토 필수, 소스 변경 비활성화 |
+| AI 제안 및 승인 E2E | 제안 검사 6개, 실패 우선 경계 7개, 제공자 제한 시간과 출력 상한 적용, 소스 변경 비활성화 |
+| 브라우저 시각 및 접근성 | 시나리오 7개, 기준 이미지 6개, axe 검사 4회 통과 |
+| 프로덕션 의존성 감사 | 알려진 취약점 0건 |
+| 검증 근거 출처 | 리비전, 실행 ID, Git 커밋, 산출물 해시 확인 |
 
-## Coverage
+## 테스트 커버리지
 
-| Scope | Statements | Branches | Functions | Lines |
+| 범위 | 구문 | 분기 | 함수 | 줄 |
 | --- | ---: | ---: | ---: | ---: |
-| Clinic consumer | 100% | 100% | 100% | 100% |
-| Backoffice consumer | 100% | 100% | 100% | 100% |
-| Tokens | 100% | 100% | 100% | 100% |
-| Figma bridge | 96.77% | 96.93% | 100% | 97.64% |
-| React | 93.24% | 82.45% | 95% | 98.36% |
-| Studio | 92.44% | 88.4% | 91.66% | 95.5% |
+| 클리닉 소비 앱 | 100% | 100% | 100% | 100% |
+| 백오피스 소비 앱 | 100% | 100% | 100% | 100% |
+| 토큰 | 100% | 100% | 100% | 100% |
+| Figma 브리지 | 96.77% | 96.93% | 100% | 97.64% |
+| React 패키지 | 94.04% | 87.06% | 96.29% | 98.59% |
+| Studio | 92.48% | 88.46% | 91.72% | 95.53% |
 
 ## 성능 예산
 
-| Asset | Actual | Budget |
+| 자산 | 실제 크기 | 예산 |
 | --- | ---: | ---: |
-| JavaScript gzip | 92,408 B | 190,000 B |
+| JavaScript gzip | 92,329 B | 190,000 B |
 | CSS gzip | 10,359 B | 35,000 B |
-| Largest responsive image | 33,812 B | 60,000 B |
-| Self-hosted font | 48,256 B | 120,000 B |
+| 가장 큰 반응형 이미지 | 33,812 B | 60,000 B |
+| 프로젝트에 포함된 글꼴 | 48,256 B | 120,000 B |
 
 ## 검증 범위와 한계
 
-- 실제 Chrome에서 1440px Coral과 Ocean, Figma 검토 및 릴리스 리허설, 1280px, 확대 상당 viewport, 모바일, forced-colors를 검사합니다.
-- 각 브라우저 시나리오는 page error, console error, HTTP 4xx와 5xx, WCAG 태그가 있는 axe violation을 실패 처리합니다.
-- Figma REST와 Claude Code 경로는 실행 가능하지만, 라이브 호출은 각 서비스의 권한과 로그인이 필요합니다. CI는 비식별 fixture를 같은 계약으로 재생합니다.
+- 실제 Chrome에서 1440px Coral과 Ocean, Figma 검토 및 릴리스 리허설, 1280px, 확대에 해당하는 뷰포트, 모바일, 강제 색상 모드를 검사합니다.
+- 각 브라우저 시나리오에서 페이지 오류, 콘솔 오류, HTTP 4xx 및 5xx 응답, WCAG 태그가 있는 axe 위반이 발생하면 실패 처리합니다.
+- Figma REST와 Claude Code 경로는 실행할 수 있지만 라이브 호출에는 각 서비스의 권한과 로그인이 필요합니다. CI는 비식별 테스트 픽스처를 같은 계약으로 재생합니다.
 - Swift와 Compose는 공유 토큰 산출물입니다. 네이티브 컴포넌트 구현이나 실제 앱 배포를 주장하지 않습니다.
-- VoiceOver와 NVDA 수동 검증, npm 배포, cluster smoke test는 자동 근거에 포함하지 않습니다.
+- VoiceOver와 NVDA 수동 검증, npm 배포, 클러스터 스모크 테스트는 자동 근거에 포함하지 않습니다.
 
-final result: passed
+최종 결과: 통과

@@ -8,17 +8,17 @@
   },
   "request": {
     "path": "ai/requests/localize-treatment-card-save-label.md",
-    "digest": "a306ccd7a4832225d7f85af8da9ea6612ed1026f6ae8dc695f7aef8cd16d668a"
+    "digest": "b6e40e4d03ae60dc42436614d2afe6b2fba0708f39fe1d2aff2cfbed191af0e0"
   },
   "prompt": {
     "template": "ai/prompts/design-system-proposal.md",
-    "digest": "82935d27a99cf0080de33ca19ded5e94f06f840df5d5127300e2fefeeeb21e13"
+    "digest": "cf4c44230b6a3a204b9bf433caacfec06360e656876b5a83a0741da973737d29"
   },
   "context": {
     "package": "@aster-ui/react",
     "version": "3.1.0-beta.2",
     "componentCount": 6,
-    "manifestDigest": "683a2231d57a88b221d469ea8928622318c609ff635732ba649253ba9a85f0cc"
+    "manifestDigest": "e61347ec39ad7114623d6f2e2b2af4fc59bab98f371e3aca9c1517b642ae3479"
   },
   "proposal": {
     "title": "Localize TreatmentCard save action labels",

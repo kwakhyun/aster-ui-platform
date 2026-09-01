@@ -6,9 +6,9 @@
   "aliasesResolved": true,
   "humanReviewRequired": true,
   "sourceMutationApplied": false,
-  "generatedAt": "2026-09-01T09:56:38.542Z",
-  "sourceRevision": "workspace:7a04ebbce541f4497e01",
-  "gitCommit": "f78d600018215e7481983227c50a7fe86eb59f94",
-  "runId": "local:92456",
-  "artifactDigest": "sha256:397cd6e26a49a03ad71745a6789377a4e21988adc47ea54b2800324893e772eb"
+  "generatedAt": "2026-09-01T10:59:46.230Z",
+  "sourceRevision": "workspace:389cbd9dadf9e5bd0553",
+  "gitCommit": "456bf0cb68577bf412a5d3d88c2b02e77fd99ddf",
+  "runId": "local:28054",
+  "artifactDigest": "sha256:bc1e00b7d6cb7a8e86af60cb98daa48ad97707564760de273ead6bc21242a43b"
 }

@@ -133,28 +133,28 @@
     },
     "React": {
       "lines": {
-        "total": 61,
-        "covered": 60,
+        "total": 71,
+        "covered": 70,
         "skipped": 0,
-        "pct": 98.36
+        "pct": 98.59
       },
       "statements": {
-        "total": 74,
-        "covered": 69,
+        "total": 84,
+        "covered": 79,
         "skipped": 0,
-        "pct": 93.24
+        "pct": 94.04
       },
       "functions": {
-        "total": 20,
-        "covered": 19,
+        "total": 27,
+        "covered": 26,
         "skipped": 0,
-        "pct": 95
+        "pct": 96.29
       },
       "branches": {
-        "total": 114,
-        "covered": 94,
+        "total": 116,
+        "covered": 101,
         "skipped": 0,
-        "pct": 82.45
+        "pct": 87.06
       },
       "branchesTrue": {
         "total": 0,
@@ -165,28 +165,28 @@
     },
     "Studio": {
       "lines": {
-        "total": 356,
-        "covered": 340,
+        "total": 358,
+        "covered": 342,
         "skipped": 0,
-        "pct": 95.5
+        "pct": 95.53
       },
       "statements": {
-        "total": 397,
-        "covered": 367,
+        "total": 399,
+        "covered": 369,
         "skipped": 0,
-        "pct": 92.44
+        "pct": 92.48
       },
       "functions": {
-        "total": 144,
-        "covered": 132,
+        "total": 145,
+        "covered": 133,
         "skipped": 0,
-        "pct": 91.66
+        "pct": 91.72
       },
       "branches": {
-        "total": 388,
-        "covered": 343,
+        "total": 390,
+        "covered": 345,
         "skipped": 0,
-        "pct": 88.4
+        "pct": 88.46
       },
       "branchesTrue": {
         "total": 0,
@@ -196,9 +196,9 @@
       }
     }
   },
-  "generatedAt": "2026-09-01T09:56:51.816Z",
-  "sourceRevision": "workspace:7a04ebbce541f4497e01",
-  "gitCommit": "f78d600018215e7481983227c50a7fe86eb59f94",
-  "runId": "local:94517",
-  "artifactDigest": "sha256:327007c3dadfb48115d7e97aed35e359f7daa13488d9ed5023ee37eb7c2950ec"
+  "generatedAt": "2026-09-01T10:59:59.014Z",
+  "sourceRevision": "workspace:389cbd9dadf9e5bd0553",
+  "gitCommit": "456bf0cb68577bf412a5d3d88c2b02e77fd99ddf",
+  "runId": "local:28603",
+  "artifactDigest": "sha256:04157ff2d8b8c57e28ae861cfd3f77ebad0effcd463c1b38cd3746fead443eaa"
 }
