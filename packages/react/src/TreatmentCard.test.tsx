@@ -21,7 +21,7 @@ describe("TreatmentCard", () => {
     const ref = createRef<HTMLElement>();
     const onSavedChange = vi.fn();
     const onSelect = vi.fn();
-    render(
+    const { rerender } = render(
       <TreatmentCard
         {...props}
         ref={ref}
@@ -41,6 +41,55 @@ describe("TreatmentCard", () => {
     expect(ref.current).toHaveClass("consumer-card");
     expect(ref.current).toHaveAttribute("data-analytics-id", "treatment-card");
     expect(screen.getByText("₩79,000")).toBeInTheDocument();
+
+    rerender(
+      <TreatmentCard
+        {...props}
+        saved
+        onSavedChange={onSavedChange}
+        onSelect={onSelect}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Laser toning 저장 취소" }));
+    expect(onSavedChange).toHaveBeenLastCalledWith(false, expect.any(Object));
+  });
+
+  it("uses natural English accessible labels for English locales", () => {
+    const onSavedChange = vi.fn();
+    const onSelect = vi.fn();
+    const { rerender } = render(
+      <TreatmentCard
+        {...props}
+        locale="en-US"
+        currency="USD"
+        results="Brighter-looking skin"
+        onSavedChange={onSavedChange}
+        onSelect={onSelect}
+      />,
+    );
+
+    expect(screen.getByLabelText("Treatment details")).toBeInTheDocument();
+    expect(screen.getByText("Results")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Save Laser toning" }));
+    fireEvent.click(screen.getByRole("button", { name: "View details for Laser toning" }));
+
+    rerender(
+      <TreatmentCard
+        {...props}
+        locale="en-US"
+        currency="USD"
+        saved
+        onSavedChange={onSavedChange}
+        onSelect={onSelect}
+      />,
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Remove Laser toning from saved treatments" }),
+    );
+
+    expect(onSavedChange).toHaveBeenNthCalledWith(1, true, expect.any(Object));
+    expect(onSavedChange).toHaveBeenNthCalledWith(2, false, expect.any(Object));
+    expect(onSelect).toHaveBeenCalledWith(expect.any(Object));
   });
 
   it("honors currency and responsive image attributes without eager-loading by default", () => {
