@@ -106,6 +106,8 @@ jobs:
           node-version: 22.23.2
           cache: pnpm
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+        with:
+          enablement: true
       - run: pnpm install --frozen-lockfile
       - name: Build the verified Studio for the repository base path
         run: pnpm build
