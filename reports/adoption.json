@@ -65,9 +65,9 @@
     }
   ],
   "status": "healthy",
-  "generatedAt": "2026-09-01T10:59:48.318Z",
-  "sourceRevision": "workspace:389cbd9dadf9e5bd0553",
-  "gitCommit": "456bf0cb68577bf412a5d3d88c2b02e77fd99ddf",
-  "runId": "local:28180",
-  "artifactDigest": "sha256:ce44b4635225dfe5b2140e3f49a10b3dda6240ba03f99cc3ae1217a3b0ca4d44"
+  "generatedAt": "2026-09-02T08:27:47.580Z",
+  "sourceRevision": "workspace:df12cc5b1185707e8744",
+  "gitCommit": "428e60210945a4e00e966935197e18b6d9472bb5",
+  "runId": "local:37193",
+  "artifactDigest": "sha256:a41ac7ee7e962ed1af8f44656d51106f8de1c8dfab7f6fe8936213a728bddac6"
 }
