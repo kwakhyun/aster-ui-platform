@@ -3,6 +3,8 @@ WORKDIR /workspace
 RUN corepack enable
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.base.json ./
+COPY apps/backoffice-web/package.json apps/backoffice-web/package.json
+COPY apps/clinic-web/package.json apps/clinic-web/package.json
 COPY apps/studio/package.json apps/studio/package.json
 COPY packages/react/package.json packages/react/package.json
 COPY packages/tokens/package.json packages/tokens/package.json
