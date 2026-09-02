@@ -1,12 +1,14 @@
 # Aster UI Platform
 
 의료미용 제품군의 디자인 변경을 여러 제품과 플랫폼에 일관되게 전달하는 과정을 검증한 디자인 시스템 운영 PoC입니다.
-실제 배포를 수행하지 않고도 변경의 안전성과 배포 준비 상태를 확인할 수 있도록 설계했습니다.
+Figma에 쓰거나 npm에 배포하지 않고도 변경의 안전성과 릴리스 준비 상태를 확인할 수 있도록 설계했습니다.
 
 Figma Variables의 별칭 변경을 W3C DTCG 토큰, React 공용 API, 소비 앱 도입률과 대조합니다.
 이후 AI 제안 검증, 사람 승인, 릴리스 품질 근거까지 하나의 재현 가능한 흐름으로 연결합니다.
 
-[케이스 스터디](docs/case-study.md) | [자동 생성 검증 보고서](reports/verification.md) | [디자인 QA](design-qa.md) | [제품 문구 작성 원칙](docs/content-style.md)
+[![CI](https://github.com/kwakhyun/aster-ui-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/kwakhyun/aster-ui-platform/actions/workflows/ci.yml)
+
+[라이브 데모](https://kwakhyun.github.io/aster-ui-platform/) | [포트폴리오 PDF](output/pdf/aster-ui-platform-portfolio.pdf) | [케이스 스터디](docs/case-study.md) | [자동 생성 검증 보고서](reports/verification.md) | [디자인 QA](design-qa.md)
 
 ![Aster UI Studio 데스크톱 구현 화면](design/implementation-desktop-final.png)
 
@@ -132,11 +134,11 @@ CI에서는 `pnpm ai:check`가 결정론적 제안 검증과 사람 승인 기�
 
 접근성과 운영 세부 내용은 [아키텍처](docs/architecture.md), [접근성](docs/accessibility.md), [릴리스와 호환성](docs/release-and-compatibility.md)에서 확인할 수 있습니다.
 
-## 현재 범위와 한계
+## 현재 범위와 검증 경계
 
 - Figma 라이브 API는 파일과 계정 권한이 있는 환경에서만 실행할 수 있습니다.
 - Claude 라이브 제안은 실행 환경의 Claude Code 로그인이 필요합니다.
 - 저장소 내부 도입률은 실제 조직 도입률이나 사용자 성과 지표가 아닙니다.
-- 공개 원격 저장소와 GitHub Pages 실행 이력은 아직 연결하지 않았습니다. 따라서 이 문서의 검증 결과는 로컬 실행 기준이며 공개 CI 성공을 뜻하지 않습니다.
+- 저장소에 커밋한 JSON 검증 근거는 로컬 최종 검증 결과입니다. 공개 CI와 Pages 배포 상태는 [GitHub Actions](https://github.com/kwakhyun/aster-ui-platform/actions)에서 별도로 확인합니다.
 
 [MIT License](LICENSE)
