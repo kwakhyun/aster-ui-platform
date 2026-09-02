@@ -51,7 +51,7 @@ describe("Aster UI component review flow", () => {
     expect(screen.getByRole("tablist", { name: "Treatment information" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Tabs API" })).toBeInTheDocument();
     expect(screen.getByText("6 props")).toBeInTheDocument();
-    expect(screen.getByText("@aster-ui/react package gate")).toBeInTheDocument();
+    expect(screen.getByText("@aster-ui/react API check")).toBeInTheDocument();
     const apiEvidence = qualityEvidence.checks.find((check) => check.id === "api");
     expect(apiEvidence).toBeDefined();
     expect(screen.getByText(apiEvidence!.detail)).toBeInTheDocument();

@@ -155,7 +155,7 @@ const coverageRows = Object.entries(evidence.coverage.coverage).map(([name, repo
 ).join("\n");
 const gitCommit = sourceGitCommit;
 
-const markdown = `# 프로덕션 검증 보고서
+const markdown = `# 저장소 자동 검증 보고서
 
 이 문서는 출처 정보가 결합된 저장소의 JSON 근거에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 \`pnpm verification:check\`가 현재 소스 상태와 기준 Git 커밋, Studio 품질 근거가 서로 일치하는지 검사합니다.
 
@@ -163,7 +163,7 @@ const markdown = `# 프로덕션 검증 보고서
 - 소스 리비전: \`${sourceRevision}\`
 - Git 커밋: ${gitCommit ? `\`${gitCommit}\`` : "아직 커밋되지 않은 작업 트리"}
 
-## 판정
+## 결과
 
 아래에 열거한 자동 검증 범위에서는 실패가 발견되지 않았습니다. 이 결과는 검증하지 않은 사용 환경이나 정성적 UX 검토까지 포함한 무결점 선언이 아닙니다.
 
@@ -180,7 +180,7 @@ const markdown = `# 프로덕션 검증 보고서
 | API 호환성 | 컴포넌트 ${evidence.api.checkedComponents}개, 공개 prop ${evidence.api.checkedProps}개 검사, 하위 호환성이 깨지는 변경 ${evidence.api.breakingChanges.length}건 |
 | 도입률 | 소비 앱 ${evidence.adoption.consumerCount}개에서 대상 컴포넌트 ${evidence.adoption.adoptedComponents}/${evidence.adoption.eligibleComponents}개 사용, 지원 중단 예정 API 사용 ${evidence.adoption.deprecatedUsageCount}건 |
 | Figma 검토 테스트 픽스처 | 별칭 ${evidence.figma.changeCount}개 해석, 사람 검토 필수, 검증 단계의 소스 수정 없음 |
-| AI 제안 및 승인 E2E | 제안 검사 ${evidence.ai.proposalChecks}개, 검증 실패 시 중단하는 경계 ${evidence.ai.failClosedBoundaries}개, AI 제공자 호출 제한 시간과 출력 상한 적용, 검증 단계의 소스 수정 없음 |
+| AI 제안부터 승인까지의 전체 흐름 | 제안 검사 ${evidence.ai.proposalChecks}개, 검증 실패 시 중단하는 조건 ${evidence.ai.failClosedBoundaries}개, AI 제공자 호출 제한 시간과 출력 상한 적용, 검증 단계의 소스 수정 없음 |
 | 브라우저 시각 및 접근성 | 시나리오 ${evidence.visual.passed}개, 기준 이미지 ${evidence.visual.snapshots}개, axe 검사 ${evidence.visual.accessibilityChecks}회 통과 |
 | 프로덕션 의존성 감사 | 알려진 취약점 ${evidence.security.knownVulnerabilities}건 |
 | 검증 근거 출처 | 리비전, 실행 ID, Git 커밋, 산출물 해시 확인 |
@@ -208,7 +208,7 @@ ${coverageRows}
 - Swift와 Compose는 공유 토큰 산출물입니다. 네이티브 컴포넌트 구현이나 실제 앱 배포를 주장하지 않습니다.
 - VoiceOver와 NVDA 수동 검증, npm 배포, 클러스터 스모크 테스트는 자동 근거에 포함하지 않습니다.
 
-자동 검증 결과: 통과
+자동 검사 결과: 통과
 `;
 
 if (process.argv.includes("--check")) {

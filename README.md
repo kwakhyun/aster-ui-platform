@@ -1,10 +1,9 @@
 # Aster UI Platform
 
-의료미용 제품군의 디자인 변경을 여러 제품과 플랫폼에 일관되게 전달하는 과정을 검증한 디자인 시스템 운영 PoC입니다.
-Figma에 쓰거나 npm에 배포하지 않고도 변경의 안전성과 릴리스 준비 상태를 확인할 수 있도록 설계했습니다.
+의료미용 제품군을 가정해 디자인 변경이 토큰, 공용 React API, 세 소비 앱에 전달되는 과정을 구현한 개인 PoC입니다.
+Figma 데이터를 변경하거나 npm에 배포하지 않고도 별칭 변경, 소비 앱 사용 현황, 릴리스 준비 근거를 확인할 수 있습니다.
 
-Figma Variables의 별칭 변경을 W3C DTCG 토큰, React 공용 API, 소비 앱 도입률과 대조합니다.
-이후 AI 제안 검증, 사람 승인, 릴리스 품질 근거까지 하나의 재현 가능한 흐름으로 연결합니다.
+Figma Variables의 별칭을 W3C DTCG 토큰과 React 공개 API에 대조하고, AI 제안은 사람의 검토와 승인을 거치도록 구성했습니다.
 
 [![CI](https://github.com/kwakhyun/aster-ui-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/kwakhyun/aster-ui-platform/actions/workflows/ci.yml)
 
@@ -14,7 +13,7 @@ Figma Variables의 별칭 변경을 W3C DTCG 토큰, React 공용 API, 소비 �
 
 ## 왜 이 프로젝트를 만들었나
 
-디자인 시스템의 핵심 난점은 컴포넌트를 만드는 것보다 변경을 여러 제품과 플랫폼에 일관되고 안전하게 전달하는 데 있다고 판단했습니다. 그래서 컴포넌트 갤러리보다 다음 운영 질문에 집중했습니다.
+이 프로젝트는 디자인 시스템의 변경 전달 과정을 구현 대상으로 삼았습니다. 컴포넌트 갤러리만으로 확인하기 어려운 다음 운영 질문을 다뤘습니다.
 
 - Figma의 시맨틱 별칭 변경을 코드 계약과 어떻게 일치시킬 것인가
 - 여러 개발자가 쓰는 API의 하위 호환성과 문서를 어떻게 자동으로 유지할 것인가
@@ -28,12 +27,12 @@ Figma Variables의 별칭 변경을 W3C DTCG 토큰, React 공용 API, 소비 �
 
 | 영역 | 구현 |
 | --- | --- |
-| Studio | React, Vite, Tailwind CSS로 구현한 반응형 컴포넌트 검토 및 변경 관리 도구 |
+| Studio | React, Vite, Tailwind CSS로 구현한 반응형 컴포넌트 변경 검토 및 릴리스 준비 도구 |
 | React 패키지 | Button, Badge, Alert, Tabs, TextField, TreatmentCard의 HTML 속성 전달과 ref 계약 |
 | API 자동화 | 레지스트리와 TypeScript AST를 바탕으로 6개 컴포넌트의 공개 prop 38개를 추출하고 매니페스트 및 문서 생성 |
 | 토큰 | W3C DTCG 경로 31개, Coral 및 Ocean 테마, CSS, JSON, Swift, Compose 산출물 |
 | Figma | Figma Variables REST API 어댑터, PAT 및 OAuth 인증, 비식별 테스트 픽스처, 사람 검토 모델 |
-| AI | JSON Schema로 제한한 Claude Code 제안, SemVer, 테스트, 위험 검증, 제한 시간과 경로 격리, 제안부터 승인까지 검증하는 E2E |
+| AI | JSON Schema로 제한한 Claude Code 제안, SemVer, 테스트와 위험 검증, 제한 시간과 경로 격리, 제안부터 승인까지의 전체 흐름 검증 |
 | 도입률 | Studio, 클리닉 탐색 웹, 운영 백오피스의 실제 import와 JSX 사용 분석 |
 | 마이그레이션 | `PrimaryButton`을 `Button`으로 바꾸는 TypeScript AST 코드 변환 도구와 테스트 픽스처 |
 | 배포 | release-please, 커밋 SHA로 고정한 GitHub Actions, 비루트 컨테이너, 전체 검증 뒤 GitHub Pages를 배포하는 워크플로 |
@@ -75,10 +74,11 @@ pnpm verify
 
 - 의존성 감사, 린트, 엄격한 TypeScript 검사, 단위 및 상호작용 테스트
 - 소스 리비전과 해시를 포함한 커버리지 근거 기록 및 프로덕션 빌드
-- 토큰 및 네이티브 산출물, Figma 테스트 픽스처, AI 제안 및 승인 E2E
+- 토큰 및 네이티브 산출물, Figma 테스트 픽스처, AI 제안부터 승인까지의 전체 흐름 검증
 - 매니페스트와 문서, 도입률, 코드 변환 도구, API 호환성
 - 릴리스, 성능, 패키지 내용, Kubernetes, 공급망, Sites 런타임
-- 브라우저 시각 회귀와 axe 검사. 로컬에서는 Google Chrome, CI에서는 Ubuntu 24.04의 Playwright Chromium을 사용하며 macOS와 Linux의 글꼴 렌더링 차이를 분리한 승인 기준으로 검증합니다. Linux 기준 이미지는 수동 워크플로가 전체 세트를 생성하고 사람이 검토한 뒤에만 반영합니다.
+- 브라우저 시각 회귀와 axe 검사. 로컬에서는 Google Chrome, CI에서는 Ubuntu 24.04의 Playwright Chromium을 사용합니다.
+- macOS와 Linux의 글꼴 렌더링 차이는 플랫폼별 승인 이미지로 분리합니다. Linux 기준 이미지는 수동 워크플로로 전체 세트를 생성하고 사람이 검토한 뒤에만 반영합니다.
 
 마지막에는 구조화된 검증 결과에서 보고서를 다시 만들고 최신성을 확인합니다.
 
@@ -122,9 +122,9 @@ CI에서는 `pnpm ai:check`가 결정론적 제안 검증과 사람 승인 기�
 
 ## 저장소 안내
 
-- [`apps/studio`](apps/studio): 디자인 시스템 운영 Studio
+- [`apps/studio`](apps/studio): 디자인 변경 검토 및 릴리스 준비 Studio
 - [`apps/clinic-web`](apps/clinic-web): 사용자 제품 소비 예시
-- [`apps/backoffice-web`](apps/backoffice-web): 운영 제품 소비 예시
+- [`apps/backoffice-web`](apps/backoffice-web): 백오피스 소비 예시
 - [`packages/react`](packages/react): 공용 React 컴포넌트와 API 기준 계약
 - [`packages/tokens`](packages/tokens): DTCG 토큰의 다중 플랫폼 빌드
 - [`packages/figma-bridge`](packages/figma-bridge): Figma REST 어댑터와 검토 계약

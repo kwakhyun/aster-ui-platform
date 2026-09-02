@@ -1,6 +1,6 @@
 # 아키텍처
 
-Aster UI는 컴포넌트 갤러리가 아니라 디자인 변경을 검증 가능한 산출물로 전환하는 내부 제품입니다.
+Aster UI는 내부 디자인 시스템 도구를 가정한 개인 PoC입니다. Figma 토큰 변경을 코드, 소비 앱, 릴리스 준비 근거와 대조합니다.
 
 ```text
 Figma Variables REST 또는 스키마 기반 테스트 픽스처
@@ -18,8 +18,8 @@ Figma Variables REST 또는 스키마 기반 테스트 픽스처
 ## 패키지 경계
 
 - 앱은 공개 패키지만 소비하며 `@aster-ui/react`는 앱 코드를 참조하지 않습니다.
-- `@aster-ui/figma-bridge`는 Figma Variables REST 응답을 읽고 컬렉션과 모드를 선택합니다. 시맨틱 별칭을 `TokenChange`로 정규화하기 전에 대상 변수와 DTCG 경로를 실패 우선 방식으로 검증합니다.
-- `@aster-ui/tokens`의 DTCG JSON이 단일 진실 공급원입니다. Coral과 Ocean의 시맨틱 키 구성이 같은지 테스트합니다.
+- `@aster-ui/figma-bridge`는 Figma Variables REST 응답을 읽고 컬렉션과 모드를 선택합니다. 시맨틱 별칭을 `TokenChange`로 정규화하기 전에 대상 변수와 DTCG 경로를 검사하며, 조건이 맞지 않으면 결과를 만들지 않습니다.
+- `@aster-ui/tokens`의 DTCG JSON을 토큰 생성의 기준 원본으로 사용합니다. Coral과 Ocean의 시맨틱 키 구성이 같은지 테스트합니다.
 - `@aster-ui/react`는 웹 컴포넌트만 제공합니다. Swift와 Compose 파일은 공유 토큰 산출물이며 네이티브 UI 구현으로 표현하지 않습니다.
 - Studio 전용 호버 및 포커스 미리보기 상태는 공개 컴포넌트 API와 분리됩니다.
 
@@ -66,6 +66,8 @@ Claude Code는 도구 사용을 비활성화한 비대화형 프로세스로 실
 - Kubernetes는 변경 불가능한 이미지 해시만 입력받는 렌더러를 사용합니다. UID/GID 101, 서비스 계정 토큰 미탑재, capability 제거, seccomp, 권한 상승 차단을 적용합니다.
 - 상태 검사 엔드포인트인 `/healthz`는 실제 빌드된 `index.html`의 존재를 확인합니다. CI는 문서가 참조하는 정적 자산까지 요청합니다.
 - release-please 실행 전 `pnpm verify`를 수행합니다. 검증 보고서 생성 뒤 Studio를 다시 빌드하므로 배포 파일과 화면의 품질 근거가 같은 source revision을 가리킵니다.
-- 시각 회귀 빌드는 저장소에 포함된 통과 상태의 검증 근거 픽스처와 고정된 생성 시각을 사용하고, 리포터는 현재 소스 리비전으로 결과를 기록합니다. macOS와 Linux의 글꼴 안티앨리어싱 차이는 플랫폼별 승인 이미지로 분리해 0.3% 픽셀 차이 기준을 유지합니다. Linux 기준 이미지는 Ubuntu 24.04에서만 실행되는 `Refresh Linux visual baselines` 수동 워크플로가 전체 세트를 생성하며, 검토한 아티팩트만 저장소에 반영합니다.
+- 시각 회귀 빌드는 저장소에 포함된 통과 상태의 검증 근거 픽스처와 고정된 생성 시각을 사용합니다. 리포터는 현재 소스 리비전으로 결과를 기록합니다.
+- macOS와 Linux의 글꼴 안티앨리어싱 차이는 플랫폼별 승인 이미지로 분리하고 0.3% 픽셀 차이 기준을 적용합니다.
+- Linux 기준 이미지는 Ubuntu 24.04에서만 실행되는 `Refresh Linux visual baselines` 수동 워크플로로 전체 세트를 생성합니다. 사람이 검토한 이미지에 한해 저장소에 반영합니다.
 - 최종 빌드는 픽스처 재정의를 제거하며 Turborepo 캐시 키에는 이 입력과 Pages 기본 경로가 모두 포함됩니다. 루트 빌드는 캐시 복원 전에 각 워크스페이스의 `dist`를 지워 오래된 해시 자산이 다음 성능 측정이나 배포 산출물에 섞이지 않게 합니다.
 - GitHub Pages 배포는 CI의 전체 품질 작업과 강화된 컨테이너 작업이 모두 통과한 main 브랜치 푸시에서만 실행됩니다. Vite 기본 경로는 저장소 경로를 입력으로 받아 하위 경로의 정적 자산을 보존합니다.

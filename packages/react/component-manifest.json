@@ -20,7 +20,7 @@
       "generatedFrom": "packages/react/src/Alert.tsx#AlertProps",
       "propsInterface": "AlertProps",
       "status": "beta",
-      "description": "중요도에 맞는 라이브 리전과 선택형 닫기 동작을 제공하는 알림 컴포넌트입니다.",
+      "description": "중요도에 맞는 라이브 리전을 사용하며 필요할 때 닫기 동작을 제공하는 알림 컴포넌트입니다.",
       "platforms": [
         "Web"
       ],
@@ -92,7 +92,7 @@
       "generatedFrom": "packages/react/src/Button.tsx#ButtonProps",
       "propsInterface": "ButtonProps",
       "status": "beta",
-      "description": "기본 버튼 동작과 명확한 포커스 표시를 유지하는 버튼 컴포넌트입니다.",
+      "description": "네이티브 버튼 속성을 전달하고 키보드 포커스를 분명하게 표시하는 버튼 컴포넌트입니다.",
       "platforms": [
         "Web"
       ],
@@ -176,7 +176,7 @@
       "generatedFrom": "packages/react/src/TextField.tsx#TextFieldProps",
       "propsInterface": "TextFieldProps",
       "status": "beta",
-      "description": "레이블, 도움말, 오류 메시지의 접근성 연결을 보장하는 텍스트 입력 필드입니다.",
+      "description": "레이블, 도움말, 오류 메시지를 접근성 속성으로 입력 요소와 연결하는 텍스트 필드입니다.",
       "platforms": [
         "Web"
       ],
@@ -221,7 +221,7 @@
       "generatedFrom": "packages/react/src/TreatmentCard.tsx#TreatmentCardProps",
       "propsInterface": "TreatmentCardProps",
       "status": "beta",
-      "description": "의료미용 시술 정보를 접근 가능한 HTML article 요소로 제공하는 도메인 컴포넌트입니다.",
+      "description": "시술명, 가격, 회복 기간을 article 요소로 묶어 제공하는 의료미용 카드 컴포넌트입니다.",
       "platforms": [
         "Web"
       ],

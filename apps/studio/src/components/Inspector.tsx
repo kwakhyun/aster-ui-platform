@@ -129,7 +129,7 @@ export function Inspector({
             </dl>
             <EvidenceBlock
               evidence={apiEvidence}
-              label="@aster-ui/react package gate"
+              label="@aster-ui/react API check"
             />
           </section>
         ) : null}

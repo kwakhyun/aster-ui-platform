@@ -196,7 +196,7 @@ try {
     `${JSON.stringify(evidence, null, 2)}\n`,
   );
   console.log(
-    "AI workflow E2E passed: proposal validation, human approval, 7 fail-closed boundaries, provider timeout and output limits, and zero source mutation.",
+    "AI workflow check passed: proposal validation, human approval, 7 rejection cases, provider timeout and output limits, and no source file changes.",
   );
 } finally {
   await rm(temporaryDirectory, { recursive: true, force: true });

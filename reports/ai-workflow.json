@@ -12,13 +12,13 @@
   },
   "prompt": {
     "template": "ai/prompts/design-system-proposal.md",
-    "digest": "cf4c44230b6a3a204b9bf433caacfec06360e656876b5a83a0741da973737d29"
+    "digest": "763fcef14a28e9c81fd4d57e52bace3f265e95f6edb13abfb45afe7e02ebd7fc"
   },
   "context": {
     "package": "@aster-ui/react",
     "version": "3.1.0-beta.2",
     "componentCount": 6,
-    "manifestDigest": "e61347ec39ad7114623d6f2e2b2af4fc59bab98f371e3aca9c1517b642ae3479"
+    "manifestDigest": "2e46ddc0b46b680f1735ef50e85a73a4929de9eb34be3f1d5ffda574c72025f6"
   },
   "proposal": {
     "title": "Localize TreatmentCard save action labels",

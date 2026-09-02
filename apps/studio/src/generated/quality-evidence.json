@@ -7,11 +7,11 @@
       "status": "passed",
       "detail": "All workspace unit tests and axe UI-state checks passed.",
       "command": "pnpm test",
-      "generatedAt": "2026-09-02T10:26:01.194Z",
-      "sourceRevision": "workspace:88bc6ffde23443375416",
+      "generatedAt": "2026-09-02T18:42:28.827Z",
+      "sourceRevision": "workspace:d0895b2df9e89dfe9a82",
       "gitCommit": "be5a207b9bb95dc9b551bfcd02d92e2ee0062d74",
-      "runId": "local:75916",
-      "evidenceDigest": "sha256:4d0dc856979c338899f5d62159fba43c8a958c5c30ed5c5b4f2f499828b6b085"
+      "runId": "local:12187",
+      "evidenceDigest": "sha256:260e5d53d5db3cd6e585773338c79d27bf608084c03832346b08cb46f97ecc8a"
     },
     {
       "id": "api",
@@ -19,11 +19,11 @@
       "status": "passed",
       "detail": "38 public API props checked; no breaking changes found.",
       "command": "pnpm api:check",
-      "generatedAt": "2026-09-02T10:26:23.284Z",
-      "sourceRevision": "workspace:88bc6ffde23443375416",
+      "generatedAt": "2026-09-02T18:42:37.352Z",
+      "sourceRevision": "workspace:d0895b2df9e89dfe9a82",
       "gitCommit": "be5a207b9bb95dc9b551bfcd02d92e2ee0062d74",
-      "runId": "local:76577",
-      "evidenceDigest": "sha256:7c2db475effff7cb323cd38027f4bc1c25bd7af45e94b63bc24d6a1701b46ad4"
+      "runId": "local:13598",
+      "evidenceDigest": "sha256:d5f41b7b474fda5d732b3bf0f39d1d2f2ec21170c65e318903f6fb537d4b7986"
     },
     {
       "id": "visual",
@@ -31,11 +31,11 @@
       "status": "passed",
       "detail": "8 browser scenarios and 11 visual snapshots passed, including axe checks in Chrome.",
       "command": "pnpm test:visual",
-      "generatedAt": "2026-09-02T10:27:31.965Z",
-      "sourceRevision": "workspace:88bc6ffde23443375416",
+      "generatedAt": "2026-09-02T18:43:00.714Z",
+      "sourceRevision": "workspace:d0895b2df9e89dfe9a82",
       "gitCommit": "be5a207b9bb95dc9b551bfcd02d92e2ee0062d74",
-      "runId": "local:77325",
-      "evidenceDigest": "sha256:a15bd9bb6f3c12c0c6df811c84adb6e3dfa1e0c5f7f52a1bd5e4bcbd9a4826c8"
+      "runId": "local:15459",
+      "evidenceDigest": "sha256:9ee948f40d61f07893d907c8f7f1f22430a64256581f571fd039e681001ea557"
     },
     {
       "id": "performance",
@@ -43,11 +43,11 @@
       "status": "passed",
       "detail": "Production JavaScript, CSS, font, and responsive image sizes are within budget.",
       "command": "pnpm perf:check",
-      "generatedAt": "2026-09-02T10:26:24.321Z",
-      "sourceRevision": "workspace:88bc6ffde23443375416",
+      "generatedAt": "2026-09-02T18:42:37.827Z",
+      "sourceRevision": "workspace:d0895b2df9e89dfe9a82",
       "gitCommit": "be5a207b9bb95dc9b551bfcd02d92e2ee0062d74",
-      "runId": "local:76633",
-      "evidenceDigest": "sha256:03cd64f0565c99e2393f004b4c8a2aeef6b5def970879a4db60cb16d4e4aebf1"
+      "runId": "local:13655",
+      "evidenceDigest": "sha256:b7a8bdd688809793a5fab9d6bf934c64fe169a554043ed69a66438679de9c544"
     },
     {
       "id": "security",
@@ -55,16 +55,16 @@
       "status": "passed",
       "detail": "The production dependency audit found no known vulnerabilities.",
       "command": "pnpm audit --prod --audit-level high",
-      "generatedAt": "2026-09-02T10:25:17.466Z",
-      "sourceRevision": "workspace:88bc6ffde23443375416",
+      "generatedAt": "2026-09-02T18:42:17.722Z",
+      "sourceRevision": "workspace:d0895b2df9e89dfe9a82",
       "gitCommit": "be5a207b9bb95dc9b551bfcd02d92e2ee0062d74",
-      "runId": "local:75549",
-      "evidenceDigest": "sha256:ed95a36639bfa8220c0412a4ef582570df5474a6741143b140fae2d2931379fc"
+      "runId": "local:10738",
+      "evidenceDigest": "sha256:217377e8cabf4f90ad25a98183a224fd531be93ba8769727dea9a3a5760cf40c"
     }
   ],
-  "generatedAt": "2026-09-02T10:27:32.715Z",
-  "sourceRevision": "workspace:88bc6ffde23443375416",
+  "generatedAt": "2026-09-02T18:43:01.012Z",
+  "sourceRevision": "workspace:d0895b2df9e89dfe9a82",
   "gitCommit": "be5a207b9bb95dc9b551bfcd02d92e2ee0062d74",
-  "runId": "local:77489",
-  "artifactDigest": "sha256:2ec28473c436959a77ebffb06abebe338969aed67838a51315ddb02d1688566f"
+  "runId": "local:15997",
+  "artifactDigest": "sha256:0a902854b7036f60dd47674118f4905be082e2c84a02c5124f11cd0150abc210"
 }

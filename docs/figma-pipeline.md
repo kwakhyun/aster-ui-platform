@@ -1,6 +1,6 @@
 # Figma Variables에서 코드 검토까지
 
-`@aster-ui/figma-bridge`는 Figma Variables REST API의 로컬 변수 응답을 실제 전송 경계로 사용합니다. 공식 엔드포인트는 `GET /v1/files/:file_key/variables/local`이며 `file_variables:read` 범위가 필요합니다.
+`@aster-ui/figma-bridge`는 Figma Variables REST API에서 받은 로컬 변수 응답을 입력으로 사용합니다. 공식 엔드포인트는 `GET /v1/files/:file_key/variables/local`이며 `file_variables:read` 범위가 필요합니다.
 
 공식 문서:
 
@@ -17,10 +17,10 @@ Figma 로컬 변수 응답
   → 이전 및 다음 스냅샷 비교
   → DTCG 별칭 존재 여부 검증
   → Web, iOS, Android 영향 모델
-  → 필수 사람 검토 산출물
+  → 사람 검토용 변경 내역 생성
 ```
 
-다음 조건에서는 실패를 우선합니다.
+다음 조건 중 하나라도 해당하면 검토 모델 생성을 중단합니다.
 
 - 응답 객체 또는 변수 맵이 없음
 - 컬렉션이나 모드가 없음

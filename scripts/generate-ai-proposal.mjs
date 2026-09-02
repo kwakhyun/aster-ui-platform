@@ -247,5 +247,5 @@ if (process.argv.includes("--check")) {
 } else {
   await mkdir(path.dirname(resolvedOutput), { recursive: true });
   await writeFile(resolvedOutput, serialized, fixtureMode ? undefined : { flag: "wx" });
-  console.log(`Wrote proposal report to ${path.relative(projectRoot, resolvedOutput)}. Source mutation: disabled.`);
+  console.log(`Wrote proposal report to ${path.relative(projectRoot, resolvedOutput)}. No source files changed.`);
 }

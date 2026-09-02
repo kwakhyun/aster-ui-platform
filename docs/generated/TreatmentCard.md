@@ -2,7 +2,7 @@
 
 > `packages/react/component-manifest.json`에서 자동 생성된 문서입니다. 직접 수정하지 마세요.
 
-의료미용 시술 정보를 접근 가능한 HTML article 요소로 제공하는 도메인 컴포넌트입니다.
+시술명, 가격, 회복 기간을 article 요소로 묶어 제공하는 의료미용 카드 컴포넌트입니다.
 
 - 패키지: `@aster-ui/react`
 - 버전: `3.1.0-beta.2`
