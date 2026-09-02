@@ -27,7 +27,10 @@ async function waitForPreview() {
 const browser = await chromium.launch({ channel: "chrome", headless: true });
 try {
   await waitForPreview();
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1024 } });
+  const page = await browser.newPage({
+    viewport: { width: 1440, height: 1024 },
+    deviceScaleFactor: 2,
+  });
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: "TreatmentCard" }).waitFor();
   await page.screenshot({

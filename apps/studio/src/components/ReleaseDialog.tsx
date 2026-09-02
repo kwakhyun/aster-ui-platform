@@ -72,19 +72,23 @@ export function ReleaseDialog({
             <X />
           </button>
         </header>
-        <h2 id="release-title">Release rehearsal · {tokenVersion}</h2>
+        <h2 id="release-title">Release rehearsal · workspace {tokenVersion}</h2>
         <p id="release-description">
           Review the pending changes, verify the quality evidence, and save a local rehearsal record. This demo does not publish a package or modify Figma.
         </p>
 
         <dl className="release-dialog__summary">
           <div>
+            <dt>Target packages</dt>
+            <dd>@aster-ui/tokens, @aster-ui/react, and @aster-ui/figma-bridge</dd>
+          </div>
+          <div>
             <dt>Change type</dt>
             <dd>Backward-compatible prerelease</dd>
           </div>
           <div>
             <dt>Artifacts</dt>
-            <dd>React component, CSS tokens, Swift tokens, and Compose tokens</dd>
+            <dd>React package plus CSS, Swift, and Compose token outputs</dd>
           </div>
           <div>
             <dt>Automation</dt>
@@ -133,7 +137,7 @@ export function ReleaseDialog({
           />
           <span>
             <ShieldCheck aria-hidden="true" />
-            I reviewed the component API, quality evidence, and affected token artifacts.
+            I reviewed the workspace package scope, quality evidence, and affected token artifacts.
           </span>
         </label>
 

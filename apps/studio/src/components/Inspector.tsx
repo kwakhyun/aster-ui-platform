@@ -2,7 +2,6 @@ import type { FigmaSyncReview } from "@aster-ui/figma-bridge";
 import {
   CaretRight,
   CheckCircle,
-  Info,
   WarningCircle,
 } from "@phosphor-icons/react";
 import { getApiProperties } from "../data/catalog";
@@ -13,6 +12,7 @@ import { EvidenceProvenance } from "./EvidenceProvenance";
 interface InspectorProps {
   readonly tab: InspectorTab;
   readonly componentName: string;
+  readonly blocked: boolean;
   readonly review: FigmaSyncReview;
   readonly qualityEvidence: QualityEvidence;
   readonly onTabChange: (tab: InspectorTab) => void;
@@ -29,6 +29,7 @@ const tabs: readonly { id: InspectorTab; label: string }[] = [
 export function Inspector({
   tab,
   componentName,
+  blocked,
   review,
   qualityEvidence,
   onTabChange,
@@ -40,7 +41,12 @@ export function Inspector({
   const apiProperties = getApiProperties(componentName);
 
   return (
-    <aside className="inspector" aria-label="Component inspector">
+    <aside
+      className="inspector"
+      aria-label="Component inspector"
+      aria-hidden={blocked ? "true" : undefined}
+      inert={blocked ? true : undefined}
+    >
       <div className="inspector__tabs" role="tablist" aria-label="Inspector views">
         {tabs.map((item) => (
           <button
@@ -108,7 +114,7 @@ export function Inspector({
           <section className="inspector-section api-inspector" aria-labelledby="api-inspector-heading">
             <div className="inspector-section__heading">
               <h2 id="api-inspector-heading">{componentName} API</h2>
-              <Info aria-label="Public API contract" />
+              <span>{apiProperties.length} props</span>
             </div>
             <dl>
               {apiProperties.map((property) => (
@@ -121,7 +127,10 @@ export function Inspector({
                 </div>
               ))}
             </dl>
-            <EvidenceBlock evidence={apiEvidence} />
+            <EvidenceBlock
+              evidence={apiEvidence}
+              label="@aster-ui/react package gate"
+            />
           </section>
         ) : null}
 
@@ -180,13 +189,14 @@ function EvidenceList({ evidence, onViewVisualTests }: QualitySummaryProps) {
 
 interface EvidenceBlockProps {
   readonly evidence: QualityEvidence["checks"][number] | undefined;
+  readonly label?: string;
 }
 
-function EvidenceBlock({ evidence }: EvidenceBlockProps) {
+function EvidenceBlock({ evidence, label = "Package API compatibility" }: EvidenceBlockProps) {
   const passed = evidence?.status === "passed";
   return (
     <div className="compatibility-block" data-status={passed ? "passed" : "attention"}>
-      <span>API compatibility</span>
+      <span>{label}</span>
       <strong>{passed ? "Compatible" : "Review needed"}</strong>
       <p>{evidence?.detail ?? "Compatibility evidence is unavailable."}</p>
     </div>

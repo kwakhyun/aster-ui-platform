@@ -46,7 +46,7 @@ export function DiffDrawer({
               <FigmaLogo weight="fill" aria-hidden="true" />
               Figma change review
             </span>
-            <h2 id="diff-drawer-title">TreatmentCard · v12</h2>
+            <h2 id="diff-drawer-title">Semantic tokens · v{review.sourceVersion}</h2>
           </div>
           <button type="button" aria-label="Close" onClick={onClose}>
             <X />
@@ -54,6 +54,7 @@ export function DiffDrawer({
         </header>
 
         <div className="diff-drawer__meta">
+          <span>Workspace scope</span>
           <span>{review.validation.changeCount} token changes</span>
           <span>{review.sourceTheme.charAt(0).toUpperCase()}{review.sourceTheme.slice(1)} theme</span>
           <span>CSS, Swift, and Compose</span>

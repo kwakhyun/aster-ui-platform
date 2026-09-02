@@ -13,6 +13,7 @@ import { SyncStrip } from "./components/SyncStrip";
 import { Toast } from "./components/Toast";
 import { TopBar } from "./components/TopBar";
 import { Workspace } from "./components/Workspace";
+import { useMediaQuery } from "./hooks/useMediaQuery";
 import { useReleaseWorkflow } from "./hooks/useReleaseWorkflow";
 import { copyText } from "./lib/clipboard";
 import qualityEvidenceJson from "./generated/quality-evidence.json";
@@ -34,10 +35,17 @@ const figmaReview = normalizeFigmaChanges(
   figmaRestFixturePayload,
   "2026-09-01T09:51:00+09:00",
 );
-const repositoryEvidence = qualityEvidenceJson as QualityEvidence;
+const savedRepositoryEvidence = qualityEvidenceJson as QualityEvidence;
 const embeddedSourceRevision = typeof __ASTER_SOURCE_REVISION__ === "string"
   ? __ASTER_SOURCE_REVISION__
-  : repositoryEvidence.sourceRevision;
+  : savedRepositoryEvidence.sourceRevision;
+const visualFixtureMode = typeof __ASTER_VISUAL_FIXTURE_MODE__ === "boolean"
+  && __ASTER_VISUAL_FIXTURE_MODE__;
+const repositoryEvidence: QualityEvidence = visualFixtureMode ? {
+  ...savedRepositoryEvidence,
+  sourceRevision: embeddedSourceRevision,
+  checks: savedRepositoryEvidence.checks.map((check) => ({ ...check, status: "passed" })),
+} : savedRepositoryEvidence;
 
 interface AppProps {
   readonly evidence?: QualityEvidence;
@@ -63,6 +71,8 @@ export function App({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [toastTone, setToastTone] = useState<"success" | "info">("info");
+  const overlayNavigation = useMediaQuery("(max-width: 1060px)");
+  const navigationModalOpen = sidebarOpen && overlayNavigation;
   const evidenceCurrent = evidence.sourceRevision === buildSourceRevision;
   const displayedEvidence = useMemo<QualityEvidence>(() => evidenceCurrent ? evidence : {
     ...evidence,
@@ -126,12 +136,21 @@ export function App({
 
   return (
     <div className="app-shell" data-theme={theme}>
-      <a className="skip-link" href="#main-workspace">Skip to main content</a>
+      <a
+        className="skip-link"
+        href="#main-workspace"
+        aria-hidden={navigationModalOpen ? "true" : undefined}
+        tabIndex={navigationModalOpen ? -1 : undefined}
+      >
+        Skip to main content
+      </a>
       <TopBar
         activeTab={workspaceTab}
         sidebarOpen={sidebarOpen}
+        navigationModalOpen={navigationModalOpen}
         running={release.status === "running"}
         rehearsed={release.status === "rehearsed"}
+        evidenceGeneratedAt={displayedEvidence.generatedAt}
         onToggleSidebar={() => setSidebarOpen((open) => !open)}
         onNavigate={handleWorkspaceTab}
         onHelp={() => showToast("Tip: Press ⌘K or Ctrl+K to search components.")}
@@ -152,7 +171,13 @@ export function App({
           }}
         />
 
-        <main id="main-workspace" className="main" tabIndex={-1}>
+        <main
+          id="main-workspace"
+          className="main"
+          tabIndex={-1}
+          aria-hidden={navigationModalOpen ? "true" : undefined}
+          inert={navigationModalOpen ? true : undefined}
+        >
           <header className="component-header">
             <div className="component-header__title">
               <Cube size={28} aria-hidden="true" />
@@ -195,6 +220,7 @@ export function App({
         <Inspector
           tab={inspectorTab}
           componentName={selectedComponent}
+          blocked={navigationModalOpen}
           review={figmaReview}
           qualityEvidence={displayedEvidence}
           onTabChange={setInspectorTab}

@@ -181,14 +181,29 @@ button:focus-visible, input:focus-visible, a:focus-visible, [tabindex]:focus-vis
 }
 .sidebar__search input::placeholder { color: #9a9ca3; }
 .sidebar__search kbd { color: #666971; font-family: inherit; font-size: 10px; }
-.sidebar__label {
+.sidebar__heading {
+  @apply flex items-center justify-between;
   margin: 28px 3px 10px;
+}
+.sidebar__label {
   color: #5b5e66;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+.sidebar__close {
+  @apply flex items-center justify-center;
+  width: 40px;
+  height: 40px;
+  margin: -10px -9px -10px 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #5b5e66;
+  cursor: pointer;
+}
+.sidebar__close:hover { background: #f0f0f2; color: #222328; }
 .sidebar__tree { min-height: 0; flex: 1; overflow: auto; scrollbar-width: thin; }
 .sidebar__tree section + section { margin-top: 7px; }
 .sidebar__tree h2 {
@@ -442,7 +457,7 @@ button:focus-visible, input:focus-visible, a:focus-visible, [tabindex]:focus-vis
 .workspace-panel__heading span { color: #666971; font-size: 11px; }
 .workspace-panel__heading h2 { margin: 5px 0 0; font-size: 23px; font-weight: 650; letter-spacing: -0.03em; }
 .workspace-panel__heading button { @apply flex items-center; gap: 6px; border: 1px solid #dedfe2; border-radius: 7px; background: #fff; color: #4f525a; padding: 8px 11px; font-size: 11px; }
-.status-pill { border-radius: 999px; background: #edf9f0; color: #168a3f !important; padding: 6px 10px; font-weight: 620; }
+.status-pill { border-radius: 999px; background: #edf9f0; color: #116c32 !important; padding: 6px 10px; font-weight: 620; }
 .status-pill--attention { background: #fff4f1; color: #a92e27 !important; }
 .api-panel__grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 24px; padding-top: 24px; }
 .api-panel pre { min-width: 0; overflow: auto; border-radius: 9px; background: #17181a; color: #f8f8f9; margin: 0; padding: 22px; font-size: 12px; line-height: 1.75; }

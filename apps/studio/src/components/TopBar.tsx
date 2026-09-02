@@ -10,8 +10,10 @@ import type { WorkspaceTab } from "../types";
 interface TopBarProps {
   readonly activeTab: WorkspaceTab;
   readonly sidebarOpen: boolean;
+  readonly navigationModalOpen: boolean;
   readonly running: boolean;
   readonly rehearsed: boolean;
+  readonly evidenceGeneratedAt: string;
   readonly onToggleSidebar: () => void;
   readonly onNavigate: (tab: WorkspaceTab) => void;
   readonly onHelp: () => void;
@@ -28,21 +30,42 @@ const navigation: readonly { label: string; tab: WorkspaceTab }[] = [
 export function TopBar({
   activeTab,
   sidebarOpen,
+  navigationModalOpen,
   running,
   rehearsed,
+  evidenceGeneratedAt,
   onToggleSidebar,
   onNavigate,
   onHelp,
   onPublish,
 }: TopBarProps) {
+  const evidenceDate = new Date(evidenceGeneratedAt);
+  const evidenceDateAvailable = Number.isFinite(evidenceDate.getTime());
+  const formattedEvidenceDate = evidenceDateAvailable
+    ? new Intl.DateTimeFormat("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      timeZone: "Asia/Seoul",
+    }).formatToParts(evidenceDate)
+      .filter((part) => part.type === "year" || part.type === "month" || part.type === "day")
+      .map((part) => part.value)
+      .join(".")
+    : "unavailable";
+
   return (
     <header className="topbar">
-      <div className="topbar__brand">
+      <div
+        className="topbar__brand"
+        aria-hidden={navigationModalOpen ? "true" : undefined}
+        inert={navigationModalOpen ? true : undefined}
+      >
         <button
           type="button"
           className="topbar__menu"
           aria-label={sidebarOpen ? "Close component browser" : "Open component browser"}
           aria-expanded={sidebarOpen}
+          aria-controls="component-browser"
           onClick={onToggleSidebar}
         >
           <List size={21} />
@@ -51,7 +74,12 @@ export function TopBar({
         <span>Aster UI</span>
       </div>
 
-      <nav className="topbar__nav" aria-label="Primary sections">
+      <nav
+        className="topbar__nav"
+        aria-label="Primary sections"
+        aria-hidden={navigationModalOpen ? "true" : undefined}
+        inert={navigationModalOpen ? true : undefined}
+      >
         {navigation.map((item) => (
           <button
             key={item.tab}
@@ -65,8 +93,14 @@ export function TopBar({
         ))}
       </nav>
 
-      <div className="topbar__actions">
-        <time dateTime="2026-09-01">2026.09.01</time>
+      <div
+        className="topbar__actions"
+        aria-hidden={navigationModalOpen ? "true" : undefined}
+        inert={navigationModalOpen ? true : undefined}
+      >
+        <time dateTime={evidenceDateAvailable ? evidenceDate.toISOString() : undefined}>
+          Evidence · {formattedEvidenceDate}
+        </time>
         <button type="button" className="topbar__help" aria-label="Help" onClick={onHelp}>
           <Question size={20} />
         </button>
