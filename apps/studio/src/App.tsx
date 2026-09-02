@@ -41,8 +41,10 @@ const embeddedSourceRevision = typeof __ASTER_SOURCE_REVISION__ === "string"
   : savedRepositoryEvidence.sourceRevision;
 const visualFixtureMode = typeof __ASTER_VISUAL_FIXTURE_MODE__ === "boolean"
   && __ASTER_VISUAL_FIXTURE_MODE__;
+const visualFixtureGeneratedAt = "2026-09-01T00:45:00.000Z";
 const repositoryEvidence: QualityEvidence = visualFixtureMode ? {
   ...savedRepositoryEvidence,
+  generatedAt: visualFixtureGeneratedAt,
   sourceRevision: embeddedSourceRevision,
   checks: savedRepositoryEvidence.checks.map((check) => ({ ...check, status: "passed" })),
 } : savedRepositoryEvidence;
