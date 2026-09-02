@@ -165,16 +165,16 @@
     },
     "Studio": {
       "lines": {
-        "total": 368,
-        "covered": 354,
+        "total": 369,
+        "covered": 355,
         "skipped": 0,
-        "pct": 96.19
+        "pct": 96.2
       },
       "statements": {
-        "total": 409,
-        "covered": 382,
+        "total": 410,
+        "covered": 383,
         "skipped": 0,
-        "pct": 93.39
+        "pct": 93.41
       },
       "functions": {
         "total": 148,
@@ -196,9 +196,9 @@
       }
     }
   },
-  "generatedAt": "2026-09-02T09:36:01.567Z",
-  "sourceRevision": "workspace:ddfb2c4cd12b35d19862",
-  "gitCommit": "86a3acbff8b4684ad080e5f470981fb8c9deb135",
-  "runId": "local:81655",
-  "artifactDigest": "sha256:c9580c35c73d5da24f05fe4033cff7ccf37e526608e732b2274122feab34e1df"
+  "generatedAt": "2026-09-02T10:26:51.319Z",
+  "sourceRevision": "workspace:88bc6ffde23443375416",
+  "gitCommit": "be5a207b9bb95dc9b551bfcd02d92e2ee0062d74",
+  "runId": "local:76948",
+  "artifactDigest": "sha256:68dd8395a4032ddde00fc088f0474e9666d8647625a8656513cc1af8358400c5"
 }
