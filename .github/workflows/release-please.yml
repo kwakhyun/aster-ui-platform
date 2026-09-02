@@ -29,7 +29,12 @@ jobs:
       - run: pnpm verify
         env:
           CI: true
-      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4
+      - name: Create or update the release pull request
+        if: vars.RELEASE_PLEASE_PR_ENABLED == 'true'
+        uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4
         with:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+      - name: Report the safe public-repository boundary
+        if: vars.RELEASE_PLEASE_PR_ENABLED != 'true'
+        run: echo "Release contract verification passed; release PR creation remains explicitly disabled."

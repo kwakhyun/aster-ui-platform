@@ -140,5 +140,6 @@ CI에서는 `pnpm ai:check`가 결정론적 제안 검증과 사람 승인 기�
 - Claude 라이브 제안은 실행 환경의 Claude Code 로그인이 필요합니다.
 - 저장소 내부 도입률은 실제 조직 도입률이나 사용자 성과 지표가 아닙니다.
 - 저장소에 커밋한 JSON 검증 근거는 로컬 최종 검증 결과입니다. 공개 CI와 Pages 배포 상태는 [GitHub Actions](https://github.com/kwakhyun/aster-ui-platform/actions)에서 별도로 확인합니다.
+- 공개 저장소의 release-please 작업은 전체 검증까지 자동 실행합니다. 릴리스 PR 생성은 저장소 소유자가 Actions의 PR 생성 권한과 `RELEASE_PLEASE_PR_ENABLED=true` 변수를 명시적으로 설정한 경우에만 활성화됩니다.
 
 [MIT License](LICENSE)
