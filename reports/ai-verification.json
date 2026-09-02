@@ -10,9 +10,9 @@
   "providerTimeouts": 1,
   "providerOutputLimits": 2,
   "sourceMutations": 0,
-  "generatedAt": "2026-09-02T19:33:47.501Z",
-  "sourceRevision": "workspace:ed8a75d424add5270bd8",
-  "gitCommit": "bf6f8d169202176d843d282c3b117d2d1dade474",
-  "runId": "local:552",
-  "artifactDigest": "sha256:848a0fbda65639b60040225e18befc9d425f7fddd08c42d822b3b7caf9006f6a"
+  "generatedAt": "2026-09-02T21:15:29.691Z",
+  "sourceRevision": "workspace:1ae7fb10b171e3c8f77c",
+  "gitCommit": "d4145f1afac92b82d5a7a06ba493a96af20c993d",
+  "runId": "local:40085",
+  "artifactDigest": "sha256:257bf5124a1b068d250946328173bfddb48fb50eae5be87c31ae4c2a0a8ed828"
 }
