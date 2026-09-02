@@ -94,7 +94,7 @@ test("captures the Figma review and local rehearsal states", async ({ page }, te
   await assertBrowserAxe(page, testInfo);
 });
 
-test("covers every shipped component preview in Chrome", async ({ page }, testInfo) => {
+test("covers every shipped component preview in the browser", async ({ page }, testInfo) => {
   await assertBrowserAxe(page, testInfo);
 
   for (const componentName of ["Alert", "Badge", "Button", "Tabs", "TextField"] as const) {

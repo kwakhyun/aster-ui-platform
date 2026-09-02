@@ -1,9 +1,11 @@
 import { defineConfig } from "@playwright/test";
 
+const snapshotPlatform = process.platform;
+
 export default defineConfig({
   testDir: "./tests/visual",
   outputDir: "./test-results/playwright",
-  snapshotPathTemplate: "{testDir}/__screenshots__/{arg}{ext}",
+  snapshotPathTemplate: `{testDir}/__screenshots__/${snapshotPlatform}/{arg}{ext}`,
   timeout: 30_000,
   expect: {
     timeout: 5_000,
