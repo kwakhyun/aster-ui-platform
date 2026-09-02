@@ -157,7 +157,7 @@ const gitCommit = sourceGitCommit;
 
 const markdown = `# 프로덕션 검증 보고서
 
-이 문서는 출처 정보가 결합된 저장소의 JSON 근거에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 \`pnpm verification:check\`가 현재 소스, 소스 변경 커밋, Studio 품질 근거가 서로 일치하는지 검사합니다.
+이 문서는 출처 정보가 결합된 저장소의 JSON 근거에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 \`pnpm verification:check\`가 현재 소스 상태와 기준 Git 커밋, Studio 품질 근거가 서로 일치하는지 검사합니다.
 
 - 생성 기준: ${formatKoreanDate(latestGeneratedAt)} KST
 - 소스 리비전: \`${sourceRevision}\`
@@ -165,9 +165,9 @@ const markdown = `# 프로덕션 검증 보고서
 
 ## 판정
 
-로컬에서 재현할 수 있는 완료 기준으로 남아 있는 P0, P1, P2는 0건입니다.
+아래에 열거한 자동 검증 범위에서는 실패가 발견되지 않았습니다. 이 결과는 검증하지 않은 사용 환경이나 정성적 UX 검토까지 포함한 무결점 선언이 아닙니다.
 
-이 판정은 아래 자동 근거와 사람 검토 경계가 모두 유효할 때만 생성됩니다.
+이 판정은 아래 자동 근거가 현재 소스와 일치할 때만 생성됩니다. 사람 검토 결과와 우선순위 판정은 별도 기록으로 관리해야 합니다.
 공개 GitHub 실행, 실제 Figma 계정, npm 레지스트리, Kubernetes 클러스터처럼 인증 정보나 외부 환경이 필요한 결과는 별도 범위로 남깁니다.
 
 ## 자동화 근거
@@ -177,10 +177,10 @@ const markdown = `# 프로덕션 검증 보고서
 | 워크스페이스 단위 및 상호작용 테스트 | 패키지 검증 스위트 ${testSuiteCount}개 통과 |
 | 소비 앱 계약 테스트 | 클리닉과 백오피스 렌더링 및 WCAG 태그 기반 axe 검사 통과 |
 | Sites 워커 | 런타임 경로 사례 4개 통과 |
-| API 호환성 | 컴포넌트 ${evidence.api.checkedComponents}개와 prop ${evidence.api.checkedProps}개 검사, 하위 호환성이 깨지는 변경 ${evidence.api.breakingChanges.length}건 |
+| API 호환성 | 컴포넌트 ${evidence.api.checkedComponents}개, 공개 prop ${evidence.api.checkedProps}개 검사, 하위 호환성이 깨지는 변경 ${evidence.api.breakingChanges.length}건 |
 | 도입률 | 소비 앱 ${evidence.adoption.consumerCount}개에서 대상 컴포넌트 ${evidence.adoption.adoptedComponents}/${evidence.adoption.eligibleComponents}개 사용, 지원 중단 예정 API 사용 ${evidence.adoption.deprecatedUsageCount}건 |
-| Figma 검토 테스트 픽스처 | 별칭 ${evidence.figma.changeCount}개 해석, 사람 검토 필수, 소스 변경 비활성화 |
-| AI 제안 및 승인 E2E | 제안 검사 ${evidence.ai.proposalChecks}개, 실패 우선 경계 ${evidence.ai.failClosedBoundaries}개, 제공자 제한 시간과 출력 상한 적용, 소스 변경 비활성화 |
+| Figma 검토 테스트 픽스처 | 별칭 ${evidence.figma.changeCount}개 해석, 사람 검토 필수, 검증 단계의 소스 수정 없음 |
+| AI 제안 및 승인 E2E | 제안 검사 ${evidence.ai.proposalChecks}개, 검증 실패 시 중단하는 경계 ${evidence.ai.failClosedBoundaries}개, AI 제공자 호출 제한 시간과 출력 상한 적용, 검증 단계의 소스 수정 없음 |
 | 브라우저 시각 및 접근성 | 시나리오 ${evidence.visual.passed}개, 기준 이미지 ${evidence.visual.snapshots}개, axe 검사 ${evidence.visual.accessibilityChecks}회 통과 |
 | 프로덕션 의존성 감사 | 알려진 취약점 ${evidence.security.knownVulnerabilities}건 |
 | 검증 근거 출처 | 리비전, 실행 ID, Git 커밋, 산출물 해시 확인 |
@@ -202,13 +202,13 @@ ${coverageRows}
 
 ## 검증 범위와 한계
 
-- 실제 Chrome에서 1440px Coral과 Ocean, Figma 검토 및 릴리스 리허설, 1280px, 확대에 해당하는 뷰포트, 모바일, 강제 색상 모드를 검사합니다.
+- 실제 Chrome에서 여섯 컴포넌트의 미리보기, 1440px 뷰포트의 Coral 및 Ocean 테마, Figma 검토 및 릴리스 리허설, 1280px, 확대에 해당하는 뷰포트, 모바일, 강제 색상 모드를 검사합니다.
 - 각 브라우저 시나리오에서 페이지 오류, 콘솔 오류, HTTP 4xx 및 5xx 응답, WCAG 태그가 있는 axe 위반이 발생하면 실패 처리합니다.
-- Figma REST와 Claude Code 경로는 실행할 수 있지만 라이브 호출에는 각 서비스의 권한과 로그인이 필요합니다. CI는 비식별 테스트 픽스처를 같은 계약으로 재생합니다.
+- Figma REST 연동과 Claude Code 기반 AI 워크플로우는 실행할 수 있지만 라이브 호출에는 각 서비스의 권한과 로그인이 필요합니다. CI는 비식별 테스트 픽스처를 같은 계약으로 재생합니다.
 - Swift와 Compose는 공유 토큰 산출물입니다. 네이티브 컴포넌트 구현이나 실제 앱 배포를 주장하지 않습니다.
 - VoiceOver와 NVDA 수동 검증, npm 배포, 클러스터 스모크 테스트는 자동 근거에 포함하지 않습니다.
 
-최종 결과: 통과
+자동 검증 결과: 통과
 `;
 
 if (process.argv.includes("--check")) {

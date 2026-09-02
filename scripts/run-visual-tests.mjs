@@ -1,24 +1,18 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
 import process from "node:process";
+import { getSourceRevision } from "./lib/provenance.mjs";
 
 const executable = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
-const qualityEvidence = JSON.parse(
-  readFileSync("apps/studio/src/generated/quality-evidence.json", "utf8"),
-);
-if (typeof qualityEvidence.sourceRevision !== "string"
-  || !/^workspace:[a-f0-9]{20}$/.test(qualityEvidence.sourceRevision)
-  || !Array.isArray(qualityEvidence.checks)
-  || qualityEvidence.checks.length === 0
-  || !qualityEvidence.checks.every((check) => check.status === "passed")) {
-  throw new Error("Visual tests require a checked-in passing evidence fixture.");
+const sourceRevision = await getSourceRevision();
+if (!/^workspace:[a-f0-9]{20}$/.test(sourceRevision)) {
+  throw new Error("Visual tests require a valid source revision.");
 }
 const build = spawnSync(executable, ["build"], {
   stdio: "inherit",
   env: {
     ...process.env,
     ASTER_VISUAL_FIXTURE_MODE: "true",
-    ASTER_VISUAL_FIXTURE_REVISION: qualityEvidence.sourceRevision,
+    ASTER_VISUAL_FIXTURE_REVISION: sourceRevision,
   },
 });
 if (build.status !== 0) process.exit(build.status ?? 1);

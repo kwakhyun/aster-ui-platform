@@ -1,5 +1,5 @@
 import axe from "axe-core";
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
@@ -50,6 +50,11 @@ describe("Aster UI component review flow", () => {
     await user.click(screen.getByRole("button", { name: "Tabs" }));
     expect(screen.getByRole("tablist", { name: "Treatment information" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Tabs API" })).toBeInTheDocument();
+    expect(screen.getByText("6 props")).toBeInTheDocument();
+    expect(screen.getByText("@aster-ui/react package gate")).toBeInTheDocument();
+    const apiEvidence = qualityEvidence.checks.find((check) => check.id === "api");
+    expect(apiEvidence).toBeDefined();
+    expect(screen.getByText(apiEvidence!.detail)).toBeInTheDocument();
   });
 
   it("switches state, platform, workspace, and inspector views", async () => {
@@ -57,6 +62,10 @@ describe("Aster UI component review flow", () => {
     render(<App />);
 
     expect(screen.getByRole("heading", { name: "TreatmentCard" })).toBeInTheDocument();
+    expect(screen.getByText(/^Evidence · \d{4}\.\d{2}\.\d{2}$/)).toHaveAttribute(
+      "datetime",
+      qualityEvidence.generatedAt,
+    );
     await user.click(screen.getByRole("button", { name: "Preview disabled state" }));
     expect(screen.getByRole("button", { name: "Preview disabled state" })).toHaveAttribute(
       "aria-pressed",
@@ -120,7 +129,7 @@ describe("Aster UI component review flow", () => {
 
     const trigger = screen.getByRole("button", { name: "Review changes" });
     await user.click(trigger);
-    const dialog = screen.getByRole("dialog", { name: "TreatmentCard · v12" });
+    const dialog = screen.getByRole("dialog", { name: "Semantic tokens · v12" });
     expect(dialog).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Close" })).toHaveFocus();
 
@@ -131,6 +140,18 @@ describe("Aster UI component review flow", () => {
     await user.keyboard("{Escape}");
     expect(dialog).not.toBeInTheDocument();
     expect(trigger).toHaveFocus();
+  });
+
+  it("keeps workspace token review scope independent from the selected component", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: /^Button$/ }));
+    expect(screen.getByRole("heading", { name: /^Button$/ })).toBeInTheDocument();
+    expect(screen.getByText("3 semantic token changes ready for review")).toBeInTheDocument();
+    await user.click(screen.getAllByRole("button", { name: "Review changes" })[0]!);
+    expect(screen.getByRole("dialog", { name: "Semantic tokens · v12" })).toBeInTheDocument();
+    expect(screen.getByText("Workspace scope")).toBeInTheDocument();
   });
 
   it("shows a copy failure without losing the active workspace", async () => {
@@ -156,8 +177,11 @@ describe("Aster UI component review flow", () => {
 
     await user.click(screen.getByRole("button", { name: "Run rehearsal" }));
     expect(screen.getByRole("alert")).toHaveTextContent("Review required");
+    expect(screen.getByRole("dialog", { name: /Release rehearsal/ })).toHaveTextContent(
+      "@aster-ui/tokens, @aster-ui/react, and @aster-ui/figma-bridge",
+    );
     await user.click(screen.getByRole("button", { name: "Review Figma changes" }));
-    expect(screen.getByRole("dialog", { name: "TreatmentCard · v12" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Semantic tokens · v12" })).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Complete review" }));
     expect(screen.getByRole("status")).toHaveTextContent("Review completed by");
@@ -204,5 +228,43 @@ describe("Aster UI component review flow", () => {
 
     await user.click(screen.getByRole("button", { name: "Run rehearsal" }));
     await expectNoWcagAxeViolations(container);
+  });
+
+  it("exposes mobile navigation as a modal and disables background regions", async () => {
+    vi.spyOn(window, "matchMedia").mockImplementation((query: string) => ({
+      matches: query === "(max-width: 1060px)",
+      media: query,
+      onchange: null,
+      addListener: () => undefined,
+      removeListener: () => undefined,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+      dispatchEvent: () => false,
+    }));
+    const user = userEvent.setup();
+    const { container } = render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Open component browser" }));
+    const componentDialog = screen.getByRole("dialog", { name: "Component browser" });
+    expect(componentDialog).toHaveAttribute(
+      "aria-modal",
+      "true",
+    );
+    expect(container.querySelector("main")).toHaveAttribute("inert");
+    expect(container.querySelector("main")).toHaveAttribute("aria-hidden", "true");
+    expect(container.querySelector(".inspector")).toHaveAttribute("inert");
+    expect(container.querySelector(".topbar__brand")).toHaveAttribute("inert");
+    expect(container.querySelector(".topbar__nav")).toHaveAttribute("inert");
+    expect(container.querySelector(".topbar__actions")).toHaveAttribute("inert");
+    expect(within(componentDialog).getByRole("button", {
+      name: "Close component browser",
+    })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Close component browser" })).toHaveLength(1);
+    expect(screen.getByRole("searchbox", { name: "Search components" })).toHaveFocus();
+
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog", { name: "Component browser" })).not.toBeInTheDocument();
+    expect(container.querySelector("main")).not.toHaveAttribute("inert");
+    expect(screen.getByRole("button", { name: "Open component browser" })).toHaveFocus();
   });
 });

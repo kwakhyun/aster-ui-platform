@@ -33,10 +33,10 @@ export function SyncStrip({
       timeZone: "Asia/Seoul",
     }).format(syncDate);
   return (
-    <div className="sync-strip" aria-label="Figma sync status">
+    <div className="sync-strip" aria-label="Workspace Figma sync status">
       <span>
         <Sparkle size={17} weight="fill" aria-hidden="true" />
-        {changeCount} Figma changes ready for review
+        {changeCount} semantic token changes ready for review
       </span>
       <i />
       <span className={reviewed ? "sync-strip__reviewed" : "sync-strip__warning"}>

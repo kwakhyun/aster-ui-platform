@@ -7,7 +7,8 @@ import { getSourceRevision } from "../../scripts/lib/provenance.mjs";
 export default defineConfig(async () => {
   const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
   const visualFixtureRevision = process.env.ASTER_VISUAL_FIXTURE_REVISION;
-  if (visualFixtureRevision && process.env.ASTER_VISUAL_FIXTURE_MODE !== "true") {
+  const visualFixtureMode = process.env.ASTER_VISUAL_FIXTURE_MODE === "true";
+  if (visualFixtureRevision && !visualFixtureMode) {
     throw new Error("ASTER_VISUAL_FIXTURE_REVISION is restricted to the visual-test build.");
   }
   const sourceRevision = visualFixtureRevision ?? await getSourceRevision(projectRoot);
@@ -16,6 +17,7 @@ export default defineConfig(async () => {
     publicDir: "public-prod",
     define: {
       __ASTER_SOURCE_REVISION__: JSON.stringify(sourceRevision),
+      __ASTER_VISUAL_FIXTURE_MODE__: JSON.stringify(visualFixtureMode),
     },
     build: {
       outDir: "dist/client",

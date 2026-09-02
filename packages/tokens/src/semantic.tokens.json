@@ -27,7 +27,7 @@
         "surface": { "$value": "{color.blue.100}" }
       },
       "status": {
-        "success": { "$value": "{color.green.600}" },
+        "success": { "$value": "{color.green.700}" },
         "successSurface": { "$value": "{color.green.50}" }
       }
     }

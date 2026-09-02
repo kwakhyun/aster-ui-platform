@@ -76,8 +76,12 @@ test("renders the ocean theme from the same semantic contract", async ({ page },
 });
 
 test("captures the Figma review and local rehearsal states", async ({ page }, testInfo) => {
-  await page.getByRole("button", { name: "Review changes" }).click();
-  await expect(page.getByRole("dialog", { name: "TreatmentCard · v12" })).toBeVisible();
+  await page.getByRole("complementary", { name: "Component browser" })
+    .getByRole("button", { name: "Button", exact: true })
+    .click();
+  await expect(page.getByRole("heading", { name: "Button", exact: true })).toBeVisible();
+  await page.locator(".sync-strip").getByRole("button", { name: "Review changes" }).click();
+  await expect(page.getByRole("dialog", { name: "Semantic tokens · v12" })).toBeVisible();
   testInfo.annotations.push({ type: "snapshot", description: "figma diff" });
   await expect(page).toHaveScreenshot("figma-diff-1440x1024.png", stableScreenshotOptions(page));
   await assertBrowserAxe(page, testInfo);
@@ -88,6 +92,26 @@ test("captures the Figma review and local rehearsal states", async ({ page }, te
   testInfo.annotations.push({ type: "snapshot", description: "local rehearsal" });
   await expect(page).toHaveScreenshot("release-rehearsal-1440x1024.png", stableScreenshotOptions(page));
   await assertBrowserAxe(page, testInfo);
+});
+
+test("covers every shipped component preview in Chrome", async ({ page }, testInfo) => {
+  await assertBrowserAxe(page, testInfo);
+
+  for (const componentName of ["Alert", "Badge", "Button", "Tabs", "TextField"] as const) {
+    await page.getByRole("complementary", { name: "Component browser" })
+      .getByRole("button", { name: componentName, exact: true })
+      .click();
+    await expect(page.getByRole("heading", { name: componentName, exact: true })).toBeVisible();
+    testInfo.annotations.push({
+      type: "snapshot",
+      description: `${componentName} component preview`,
+    });
+    await expect(page).toHaveScreenshot(
+      `component-${componentName.toLowerCase()}-1440x1024.png`,
+      stableScreenshotOptions(page),
+    );
+    await assertBrowserAxe(page, testInfo);
+  }
 });
 
 test("keeps tab semantics live only for the visible preview", async ({ page }) => {
@@ -110,8 +134,16 @@ test("survives a 200 percent equivalent viewport and mobile flow", async ({ page
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "Open component browser" }).click();
-  await expect(page.getByRole("complementary", { name: "Component browser" })).toHaveClass(/is-open/);
-  await page.getByRole("banner").getByRole("button", { name: "Close component browser" }).click();
+  const componentDialog = page.getByRole("dialog", { name: "Component browser" });
+  await expect(componentDialog).toHaveClass(/is-open/);
+  await expect(componentDialog).toHaveAttribute("aria-modal", "true");
+  await expect(page.locator("main")).toHaveAttribute("inert", "");
+  await expect(page.locator(".inspector")).toHaveAttribute("inert", "");
+  await expect(page.locator(".topbar__brand")).toHaveAttribute("inert", "");
+  await expect(page.locator(".topbar__nav")).toHaveAttribute("inert", "");
+  await expect(page.locator(".topbar__actions")).toHaveAttribute("inert", "");
+  await assertBrowserAxe(page, test.info());
+  await componentDialog.getByRole("button", { name: "Close component browser" }).click();
   test.info().annotations.push({ type: "snapshot", description: "mobile component lab" });
   await expect(page).toHaveScreenshot("studio-mobile-390x844.png", stableScreenshotOptions(page));
   await assertBrowserAxe(page, test.info());

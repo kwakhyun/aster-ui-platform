@@ -5,6 +5,7 @@ import {
   Cube,
   Folder,
   MagnifyingGlass,
+  X,
 } from "@phosphor-icons/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { componentTree } from "../data/catalog";
@@ -71,13 +72,17 @@ export function Sidebar({
         <button
           type="button"
           className="sidebar-scrim"
-          aria-label="Close component browser"
+          aria-hidden="true"
+          tabIndex={-1}
           onClick={onClose}
         />
       ) : null}
       <aside
+        id="component-browser"
         ref={sidebarRef}
         className={`sidebar${open ? " is-open" : ""}`}
+        role={overlayNavigation && open ? "dialog" : undefined}
+        aria-modal={overlayNavigation && open ? "true" : undefined}
         aria-label="Component browser"
         aria-hidden={overlayNavigation && !open ? "true" : undefined}
         inert={overlayNavigation && !open ? true : undefined}
@@ -96,7 +101,19 @@ export function Sidebar({
           <kbd>⌘ K</kbd>
         </label>
 
-        <div className="sidebar__label">Components</div>
+        <div className="sidebar__heading">
+          <div className="sidebar__label">Components</div>
+          {overlayNavigation && open ? (
+            <button
+              type="button"
+              className="sidebar__close"
+              aria-label="Close component browser"
+              onClick={onClose}
+            >
+              <X size={18} aria-hidden="true" />
+            </button>
+          ) : null}
+        </div>
         <div className="sidebar__tree">
           {groups.map((group) => (
             <section key={group.label} aria-labelledby={`group-${group.label}`}>
@@ -148,7 +165,7 @@ export function Sidebar({
           <hr />
           <span>Platform support</span>
           <p className="sidebar__compatibility">
-            Web · evergreen browsers
+            Web · verified in Chrome
             <i aria-hidden="true" />
           </p>
           <small>Native token outputs: Swift and Compose</small>

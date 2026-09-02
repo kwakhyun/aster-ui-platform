@@ -6,7 +6,7 @@
 - 최종 구현: `design/implementation-desktop-final.png`
 - 통합 비교 입력: `design/qa-comparison-final.png`
 - 상태: Preview, Web, Coral, Focus, Tokens 패널, 사람 검토 대기
-- 크기: 양쪽 모두 1440 × 1024 CSS px, device pixel ratio 1
+- 크기: 양쪽 모두 1440 × 1024 CSS px이며, 구현 캡처는 선명한 문서 출력을 위해 device pixel ratio 2로 생성
 
 두 화면을 같은 크기로 나란히 배치한 통합 비교 이미지에서 레이아웃, 타이포그래피, 여백, 테두리, 모서리 반경, 이미지 자르기, 상태 표현을 다시 검토했습니다.
 
