@@ -7,7 +7,7 @@ Figma Variables의 별칭을 W3C DTCG 토큰과 React 공개 API에 대조하고
 
 [![CI](https://github.com/kwakhyun/aster-ui-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/kwakhyun/aster-ui-platform/actions/workflows/ci.yml)
 
-[라이브 데모](https://kwakhyun.github.io/aster-ui-platform/) | [포트폴리오 PDF](output/pdf/aster-ui-platform-portfolio.pdf) | [케이스 스터디](docs/case-study.md) | [자동 생성 검증 보고서](reports/verification.md) | [디자인 QA](design-qa.md)
+[라이브 데모](https://kwakhyun.github.io/aster-ui-platform/) | [케이스 스터디](docs/case-study.md) | [자동 생성 검증 보고서](reports/verification.md) | [디자인 QA](design-qa.md)
 
 ![Aster UI Studio 데스크톱 구현 화면](design/implementation-desktop-final.png)
 

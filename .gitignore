@@ -6,7 +6,9 @@ playwright-report/
 test-results/
 reports/ai-approvals/
 reports/ai-proposals/
-output/pdf/*.pdf
+# Local-only submission artifacts
+portfolio/
+output/pdf/
 *.log
 .DS_Store
 .env
