@@ -78,7 +78,7 @@ pnpm verify
 - 토큰 및 네이티브 산출물, Figma 테스트 픽스처, AI 제안 및 승인 E2E
 - 매니페스트와 문서, 도입률, 코드 변환 도구, API 호환성
 - 릴리스, 성능, 패키지 내용, Kubernetes, 공급망, Sites 런타임
-- 브라우저 시각 회귀와 axe 검사. 로컬에서는 Google Chrome, CI에서는 Playwright Chromium을 사용하며 macOS와 Linux의 글꼴 렌더링 차이를 분리한 승인 기준으로 검증합니다.
+- 브라우저 시각 회귀와 axe 검사. 로컬에서는 Google Chrome, CI에서는 Ubuntu 24.04의 Playwright Chromium을 사용하며 macOS와 Linux의 글꼴 렌더링 차이를 분리한 승인 기준으로 검증합니다. Linux 기준 이미지는 수동 워크플로가 전체 세트를 생성하고 사람이 검토한 뒤에만 반영합니다.
 
 마지막에는 구조화된 검증 결과에서 보고서를 다시 만들고 최신성을 확인합니다.
 
