@@ -1,6 +1,6 @@
 {
   "name": "@aster-ui/react",
-  "version": "3.1.0-beta.2",
+  "version": "3.2.0-beta.2",
   "description": "Accessible React components with generated public API contracts.",
   "license": "MIT",
   "repository": {
@@ -9,8 +9,12 @@
     "directory": "packages/react"
   },
   "type": "module",
-  "sideEffects": ["**/*.css"],
-  "files": ["dist"],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
