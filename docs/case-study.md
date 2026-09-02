@@ -74,7 +74,7 @@ Claude Code 경로는 도구 사용을 비활성화한 비대화형 프로세스
 - Swift와 Compose 산출물은 공유 토큰입니다. 네이티브 컴포넌트를 구현했다고 표현하지 않습니다.
 - npm 레지스트리 배포와 실제 조직 도입 지표는 범위 밖입니다. `Run rehearsal`은 외부 상태를 바꾸지 않는 로컬 리허설입니다.
 - Claude Code 라이브 실행에는 해당 환경의 로그인이 필요합니다. CI는 동일한 계약을 오프라인 테스트 픽스처로 검증합니다.
-- GitHub Actions와 Pages의 공개 실행 이력은 저장소를 공개한 뒤 생성됩니다. 로컬 통과 결과를 CI 성공으로 표현하지 않습니다.
+- 저장소에 커밋한 JSON 근거는 로컬 최종 검증 결과입니다. 공개 CI와 Pages 배포 상태는 [GitHub Actions](https://github.com/kwakhyun/aster-ui-platform/actions)에서 별도로 확인합니다.
 
 ## 5분 검토 순서
 

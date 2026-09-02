@@ -562,11 +562,21 @@ def page_cover(c: canvas.Canvas) -> None:
     draw_text(c, "곽현 / Frontend Engineer", 42, 516, 8.7, "Korean", HexColor("#D9DBE0"))
     draw_link_text(
         c,
-        "github.com/kwakhyun",
-        "https://github.com/kwakhyun",
+        "github.com/kwakhyun/aster-ui-platform",
+        "https://github.com/kwakhyun/aster-ui-platform",
         42,
-        535,
-        7.8,
+        531,
+        7.4,
+        "Latin",
+        HexColor("#AEBFEF"),
+    )
+    draw_link_text(
+        c,
+        "kwakhyun.github.io/aster-ui-platform",
+        "https://kwakhyun.github.io/aster-ui-platform/",
+        42,
+        547,
+        7.2,
         "Latin",
         HexColor("#AEBFEF"),
     )
@@ -575,12 +585,12 @@ def page_cover(c: canvas.Canvas) -> None:
         "linkedin.com/in/hyun-kwak-598a49250",
         "https://www.linkedin.com/in/hyun-kwak-598a49250/",
         42,
-        551,
-        7.4,
+        563,
+        7.1,
         "Latin",
         HexColor("#AEBFEF"),
     )
-    draw_text(c, "개인 PoC / 검증 기준 2026.09.02", 42, 568, 7.4, "Korean", HexColor("#A3A8B0"))
+    draw_text(c, "개인 PoC / 검증 기준 2026.09.02", 42, 580, 7.2, "Korean", HexColor("#A3A8B0"))
 
 
 def page_problem(c: canvas.Canvas) -> None:
@@ -635,7 +645,7 @@ def page_problem(c: canvas.Canvas) -> None:
     draw_text(c, "프로젝트 상태", MARGIN + 18, y + 296, 10.5, "Korean", INK)
     status = [
         ("개인 PoC", "실제 회사 코드와 사용자 데이터를 사용하지 않음"),
-        ("검증 환경", "로컬 실행과 생성 근거로 현재 상태를 확인"),
+        ("검증 환경", "로컬 근거, 공개 CI, Pages 데모로 상태를 구분해 확인"),
         ("외부 쓰기", "Figma에 쓰기 작업과 npm 배포는 실행하지 않음"),
         ("구현 범위", "UI, API, 토큰, AI, 품질, 릴리스 자동화"),
     ]
@@ -969,7 +979,7 @@ def page_quality(c: canvas.Canvas) -> None:
     metrics = [
         ("6", "패키지 검증 스위트"),
         ("8", "브라우저 시나리오"),
-        ("11", "시각 기준 이미지"),
+        ("11 x 2", "macOS / Linux 시각 기준"),
         ("11", "실제 브라우저 axe 검사"),
         ("0", "알려진 프로덕션 취약점"),
     ]
@@ -1151,7 +1161,7 @@ def page_summary(c: canvas.Canvas) -> None:
         "Figma에 쓰기 작업과 npm 배포는 범위 밖",
         "네이티브 산출물은 토큰이며 UI 컴포넌트가 아님",
         "도입 현황은 저장소 내부 근거이며 조직 성과 지표가 아님",
-        "공개 CI와 Pages 실행 이력은 아직 연결하지 않음",
+        "커밋 검증 근거와 공개 CI 결과를 구분",
     ]
     ly = y + 309
     for item in limits:
