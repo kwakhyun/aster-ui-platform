@@ -73,7 +73,7 @@ export function App({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [toastTone, setToastTone] = useState<"success" | "info">("info");
-  const overlayNavigation = useMediaQuery("(max-width: 1060px)");
+  const overlayNavigation = useMediaQuery("(max-width: 1100px)");
   const navigationModalOpen = sidebarOpen && overlayNavigation;
   const evidenceCurrent = evidence.sourceRevision === buildSourceRevision;
   const displayedEvidence = useMemo<QualityEvidence>(() => evidenceCurrent ? evidence : {

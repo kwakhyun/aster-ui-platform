@@ -302,8 +302,8 @@
 }
 
 .aster-treatment-card {
-  display: grid;
-  grid-template-columns: clamp(180px, 28.5%, 204px) 1fr;
+  container: treatment-card / inline-size;
+  display: block;
   width: 100%;
   overflow: hidden;
   border: 1px solid var(--semantic-color-border-default);
@@ -316,6 +316,12 @@
     box-shadow 160ms ease,
     transform 160ms ease,
     opacity 160ms ease;
+}
+
+.aster-treatment-card__layout {
+  display: grid;
+  grid-template-columns: clamp(180px, 28.5%, 204px) minmax(0, 1fr);
+  min-height: 100%;
 }
 
 .aster-treatment-card:hover:not([aria-disabled="true"]) {
@@ -504,8 +510,11 @@ span.aster-treatment-card__action {
   background: var(--semantic-color-background-subtle);
 }
 
-.aster-treatment-card--compact {
+.aster-treatment-card--compact .aster-treatment-card__layout {
   grid-template-columns: 36% 1fr;
+}
+
+.aster-treatment-card--compact {
   border-radius: 10px;
   box-shadow: 0 4px 12px rgb(17 18 20 / 4%);
 }
@@ -590,8 +599,34 @@ span.aster-treatment-card__action {
   height: 10px;
 }
 
+@container treatment-card (max-width: 560px) {
+  .aster-treatment-card:not(.aster-treatment-card--compact) > .aster-treatment-card__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .aster-treatment-card:not(.aster-treatment-card--compact) .aster-treatment-card__content {
+    padding: 32px 24px 20px;
+  }
+
+  .aster-treatment-card:not(.aster-treatment-card--compact) .aster-treatment-card__media {
+    max-height: 280px;
+  }
+
+  .aster-treatment-card:not(.aster-treatment-card--compact) .aster-treatment-card__footer {
+    gap: 12px;
+  }
+
+  .aster-treatment-card__facts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .aster-treatment-card__result {
+    display: none !important;
+  }
+}
+
 @media (max-width: 720px) {
-  .aster-treatment-card:not(.aster-treatment-card--compact) {
+  .aster-treatment-card:not(.aster-treatment-card--compact) > .aster-treatment-card__layout {
     grid-template-columns: 1fr;
   }
 

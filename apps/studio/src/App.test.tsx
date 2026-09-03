@@ -251,7 +251,7 @@ describe("Aster UI component review flow", () => {
   it("exposes mobile navigation as a modal and disables background regions", async () => {
     const addMediaListener = vi.fn();
     const matchMedia = vi.spyOn(window, "matchMedia").mockImplementation((query: string) => ({
-      matches: query === "(max-width: 1060px)",
+      matches: query === "(max-width: 1100px)",
       media: query,
       onchange: null,
       addListener: () => undefined,

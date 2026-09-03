@@ -38,6 +38,42 @@ function stableScreenshotOptions(page: Page) {
   };
 }
 
+async function assertNoHorizontalOverflow(
+  page: Page,
+  label: string,
+  selectors: readonly string[],
+) {
+  const overflows = await page.evaluate((selectorsToCheck) => {
+    const isVisible = (element: Element) => {
+      const style = getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      return style.display !== "none"
+        && style.visibility !== "hidden"
+        && rect.width > 0
+        && rect.height > 0;
+    };
+    const measurements = selectorsToCheck.flatMap((selector) => (
+      [...document.querySelectorAll<HTMLElement>(selector)]
+        .filter(isVisible)
+        .flatMap((element) => {
+          const overflow = element.scrollWidth - element.clientWidth;
+          return overflow > 1 ? [{ selector, overflow }] : [];
+        })
+    ));
+    const documentOverflow = Math.max(
+      document.documentElement.scrollWidth,
+      document.body.scrollWidth,
+    ) - document.documentElement.clientWidth;
+
+    if (documentOverflow > 1) {
+      measurements.unshift({ selector: "document", overflow: documentOverflow });
+    }
+    return measurements;
+  }, selectors);
+
+  expect(overflows, label).toEqual([]);
+}
+
 test.beforeEach(async ({ page }) => {
   const failures: string[] = [];
   browserRuntimeFailures.set(page, failures);
@@ -149,21 +185,95 @@ test("survives a 200 percent equivalent viewport and mobile flow", async ({ page
   await assertBrowserAxe(page, test.info());
 });
 
-test("keeps status content inside the workspace at a common 1280 desktop width", async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 720 });
-  const measurements = await page.evaluate(() => {
-    const main = document.querySelector("main");
-    const strip = document.querySelector(".sync-strip");
-    if (!main || !strip) throw new Error("Workspace status strip was not rendered.");
-    const mainRect = main.getBoundingClientRect();
-    const stripRect = strip.getBoundingClientRect();
-    return {
-      documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      stripRightOverflow: stripRect.right - mainRect.right,
-    };
-  });
-  expect(measurements.documentOverflow).toBeLessThanOrEqual(1);
-  expect(measurements.stripRightOverflow).toBeLessThanOrEqual(1);
+test("keeps every status item inside the workspace across desktop breakpoints", async ({ page }) => {
+  const viewportWidths = [
+    821, 900, 1060, 1061, 1099, 1100, 1101, 1280, 1360, 1361, 1440, 1536, 1600,
+  ];
+
+  for (const width of viewportWidths) {
+    await page.setViewportSize({ width, height: 720 });
+    const measurements = await page.evaluate(() => {
+      const main = document.querySelector("main");
+      const strip = document.querySelector<HTMLElement>(".sync-strip");
+      if (!main || !strip) throw new Error("Workspace status strip was not rendered.");
+      const mainRect = main.getBoundingClientRect();
+      const stripRect = strip.getBoundingClientRect();
+      const visibleChildren = [...strip.children].filter((child) => {
+        const style = getComputedStyle(child);
+        return style.display !== "none" && style.visibility !== "hidden";
+      });
+      const childRightOverflow = Math.max(
+        0,
+        ...visibleChildren.map((child) => child.getBoundingClientRect().right - stripRect.right),
+      );
+      const childLeftOverflow = Math.max(
+        0,
+        ...visibleChildren.map((child) => stripRect.left - child.getBoundingClientRect().left),
+      );
+
+      return {
+        documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        stripRightOverflow: stripRect.right - mainRect.right,
+        stripContentOverflow: strip.scrollWidth - strip.clientWidth,
+        childRightOverflow,
+        childLeftOverflow,
+      };
+    });
+
+    for (const [name, overflow] of Object.entries(measurements)) {
+      expect(overflow, `${name} at ${width}px`).toBeLessThanOrEqual(1);
+    }
+  }
+});
+
+test("keeps component and reference panels inside every responsive workspace", async ({ page }) => {
+  const viewportWidths = [320, 390, 720, 820, 821, 900, 1024, 1100, 1101, 1280, 1361, 1440];
+  const workspaceTabs = page.locator(".workspace__tabs");
+  const platformTabs = page.locator(".workspace__platforms");
+
+  for (const width of viewportWidths) {
+    await page.setViewportSize({ width, height: width <= 720 ? 844 : 900 });
+    await workspaceTabs.getByRole("tab", { name: "Preview", exact: true }).click();
+    await platformTabs.getByRole("tab", { name: "Web", exact: true }).click();
+    await page.getByRole("button", { name: "Preview default state" }).click();
+    await assertNoHorizontalOverflow(page, `web preview at ${width}px`, [
+      ".main",
+      ".workspace__toolbar",
+      ".workspace__toolbar-actions",
+      ".workspace__platforms",
+      ".preview-canvas",
+      ".preview-canvas__state-preview > .aster-treatment-card",
+    ]);
+
+    await workspaceTabs.getByRole("tab", { name: "API", exact: true }).click();
+    await assertNoHorizontalOverflow(page, `API panel at ${width}px`, [
+      ".main",
+      ".api-panel",
+      ".api-panel__grid",
+    ]);
+
+    await workspaceTabs.getByRole("tab", { name: "Tokens", exact: true }).click();
+    await assertNoHorizontalOverflow(page, `token panel at ${width}px`, [
+      ".main",
+      ".token-map",
+    ]);
+
+    await workspaceTabs.getByRole("tab", { name: "Quality", exact: true }).click();
+    await assertNoHorizontalOverflow(page, `quality panel at ${width}px`, [
+      ".main",
+      ".quality-panel",
+    ]);
+
+    await workspaceTabs.getByRole("tab", { name: "Preview", exact: true }).click();
+    await platformTabs.getByRole("tab", { name: "iOS", exact: true }).click();
+    await assertNoHorizontalOverflow(page, `native preview at ${width}px`, [
+      ".main",
+      ".workspace__toolbar",
+      ".workspace__platforms",
+      ".preview-canvas",
+      ".native-artifact",
+    ]);
+  }
 });
 
 test("retains visible selection and focus in forced colors", async ({ page }) => {

@@ -132,81 +132,83 @@ export const TreatmentCard = forwardRef<HTMLElement, TreatmentCardProps>(functio
       aria-disabled={disabled || undefined}
       className={cardClassName}
     >
-      <div className="aster-treatment-card__media">
-        <img
-          {...imageProps}
-          src={imageUrl}
-          alt={imageAlt}
-          loading={imageProps?.loading ?? "lazy"}
-          decoding={imageProps?.decoding ?? "async"}
-        />
-      </div>
-
-      <div className="aster-treatment-card__content">
-        <div className="aster-treatment-card__heading">
-          <div>
-            <Heading>{title}</Heading>
-            <p>{category}</p>
-          </div>
-          {onSavedChange ? (
-            <button
-              type="button"
-              className="aster-treatment-card__save"
-              aria-label={saved ? resolvedLabels.unsave(title) : resolvedLabels.save(title)}
-              aria-pressed={saved}
-              disabled={disabled}
-              onClick={(event) => onSavedChange(!saved, event)}
-            >
-              <BookmarkSimple size={compact ? 14 : 22} weight={saved ? "fill" : "regular"} />
-            </button>
-          ) : null}
+      <div className="aster-treatment-card__layout">
+        <div className="aster-treatment-card__media">
+          <img
+            {...imageProps}
+            src={imageUrl}
+            alt={imageAlt}
+            loading={imageProps?.loading ?? "lazy"}
+            decoding={imageProps?.decoding ?? "async"}
+          />
         </div>
 
-        <div className="aster-treatment-card__facts" aria-label={resolvedLabels.treatmentInfo}>
-          <div>
-            <Clock aria-hidden="true" />
-            <span>
-              <small>{resolvedLabels.downtime}</small>
-              {downtime}
-            </span>
-          </div>
-          <div>
-            <Clock aria-hidden="true" />
-            <span>
-              <small>{resolvedLabels.sessions}</small>
-              {sessions}
-            </span>
-          </div>
-          <div
-            className={`aster-treatment-card__result${results ? "" : " aster-treatment-card__result--icon-only"}`}
-            aria-hidden={results ? undefined : "true"}
-          >
-            <Sparkle aria-hidden="true" />
-            {results ? (
-              <span>
-                <small>{resolvedLabels.results}</small>
-                {results}
-              </span>
+        <div className="aster-treatment-card__content">
+          <div className="aster-treatment-card__heading">
+            <div>
+              <Heading>{title}</Heading>
+              <p>{category}</p>
+            </div>
+            {onSavedChange ? (
+              <button
+                type="button"
+                className="aster-treatment-card__save"
+                aria-label={saved ? resolvedLabels.unsave(title) : resolvedLabels.save(title)}
+                aria-pressed={saved}
+                disabled={disabled}
+                onClick={(event) => onSavedChange(!saved, event)}
+              >
+                <BookmarkSimple size={compact ? 14 : 22} weight={saved ? "fill" : "regular"} />
+              </button>
             ) : null}
           </div>
-        </div>
 
-        <div className="aster-treatment-card__footer">
-          <p>
-            <span>{resolvedLabels.priceFrom}</span>
-            <strong>{formatCurrency(price, locale, currency)}</strong>
-          </p>
-          {onSelect ? (
-            <button
-              type="button"
-              className="aster-treatment-card__action"
-              aria-label={resolvedLabels.details(title)}
-              disabled={disabled}
-              onClick={onSelect}
+          <div className="aster-treatment-card__facts" aria-label={resolvedLabels.treatmentInfo}>
+            <div>
+              <Clock aria-hidden="true" />
+              <span>
+                <small>{resolvedLabels.downtime}</small>
+                {downtime}
+              </span>
+            </div>
+            <div>
+              <Clock aria-hidden="true" />
+              <span>
+                <small>{resolvedLabels.sessions}</small>
+                {sessions}
+              </span>
+            </div>
+            <div
+              className={`aster-treatment-card__result${results ? "" : " aster-treatment-card__result--icon-only"}`}
+              aria-hidden={results ? undefined : "true"}
             >
-              <ArrowRight weight="bold" />
-            </button>
-          ) : null}
+              <Sparkle aria-hidden="true" />
+              {results ? (
+                <span>
+                  <small>{resolvedLabels.results}</small>
+                  {results}
+                </span>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="aster-treatment-card__footer">
+            <p>
+              <span>{resolvedLabels.priceFrom}</span>
+              <strong>{formatCurrency(price, locale, currency)}</strong>
+            </p>
+            {onSelect ? (
+              <button
+                type="button"
+                className="aster-treatment-card__action"
+                aria-label={resolvedLabels.details(title)}
+                disabled={disabled}
+                onClick={onSelect}
+              >
+                <ArrowRight weight="bold" />
+              </button>
+            ) : null}
+          </div>
         </div>
       </div>
     </article>

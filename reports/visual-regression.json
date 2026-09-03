@@ -2,15 +2,15 @@
   "schemaVersion": 3,
   "command": "pnpm test:visual",
   "browser": "Installed Google Chrome",
-  "passed": 8,
+  "passed": 9,
   "failed": 0,
   "skipped": 0,
   "snapshots": 11,
   "accessibilityChecks": 11,
   "status": "passed",
-  "generatedAt": "2026-09-03T09:48:14.951Z",
-  "sourceRevision": "workspace:4f2fe03810d307baa45d",
-  "gitCommit": "d4145f1afac92b82d5a7a06ba493a96af20c993d",
-  "runId": "local:74057",
-  "artifactDigest": "sha256:2720ec004b4c642e03c0e06de26b4d23c9ed13b5d9894639a7674cf03745bc53"
+  "generatedAt": "2026-09-03T23:23:30.279Z",
+  "sourceRevision": "workspace:3a8887aec435b0bb3781",
+  "gitCommit": "b2c12fead9b95c241b2e514f675bd31bc00caa75",
+  "runId": "local:10663",
+  "artifactDigest": "sha256:8e5452b3855939fb5bc5ff3ace00227864c3a75317e59c91a3c48c3bcf1ac9c9"
 }

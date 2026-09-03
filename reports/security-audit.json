@@ -4,9 +4,9 @@
   "scope": "Production dependency graph",
   "knownVulnerabilities": 0,
   "status": "passed",
-  "generatedAt": "2026-09-03T09:47:13.031Z",
-  "sourceRevision": "workspace:4f2fe03810d307baa45d",
-  "gitCommit": "d4145f1afac92b82d5a7a06ba493a96af20c993d",
-  "runId": "local:71777",
-  "artifactDigest": "sha256:6969ff4610287e9dd72bcaf9845e9d744837f6ff5be846656e7cc832b8cfe5c6"
+  "generatedAt": "2026-09-03T23:23:00.919Z",
+  "sourceRevision": "workspace:3a8887aec435b0bb3781",
+  "gitCommit": "b2c12fead9b95c241b2e514f675bd31bc00caa75",
+  "runId": "local:8952",
+  "artifactDigest": "sha256:c88cb06f071353a8fc5f77267384218a38c880e381ba017084e7622610f39850"
 }

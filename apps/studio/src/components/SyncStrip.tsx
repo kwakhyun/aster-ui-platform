@@ -36,12 +36,14 @@ export function SyncStrip({
     : syncDateFormatter.format(syncDate);
   return (
     <div className="sync-strip" aria-label="Workspace Figma sync status">
-      <span>
+      <span className="sync-strip__summary">
         <Sparkle size={17} weight="fill" aria-hidden="true" />
         {changeCount} semantic token changes ready for review
       </span>
-      <i />
-      <span className={reviewed ? "sync-strip__reviewed" : "sync-strip__warning"}>
+      <i className="sync-strip__divider" aria-hidden="true" />
+      <span
+        className={`sync-strip__review-state ${reviewed ? "sync-strip__reviewed" : "sync-strip__warning"}`}
+      >
         {reviewed ? (
           <ArrowsClockwise size={17} aria-hidden="true" />
         ) : (
@@ -51,11 +53,15 @@ export function SyncStrip({
           ? `Review completed by ${reviewReceipt.reviewer.label}`
           : "Review required"}
       </span>
-      <i />
-      <span>
+      <i
+        className="sync-strip__divider sync-strip__meta-divider"
+        aria-hidden="true"
+      />
+      <span className="sync-strip__meta">
         <ArrowsClockwise size={17} aria-hidden="true" />
         <time dateTime={syncedAt}>
-          {sourceTheme.charAt(0).toUpperCase()}{sourceTheme.slice(1)} test data · {formattedSync} KST
+          {sourceTheme.charAt(0).toUpperCase()}
+          {sourceTheme.slice(1)} test data · {formattedSync} KST
         </time>
       </span>
       <Button
