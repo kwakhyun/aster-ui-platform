@@ -129,6 +129,19 @@ export function App({
     }
   }, [showToast]);
 
+  const openSidebar = useCallback(() => setSidebarOpen(true), []);
+  const closeSidebar = useCallback(() => setSidebarOpen(false), []);
+  const toggleSidebar = useCallback(() => setSidebarOpen((open) => !open), []);
+  const copyPackageName = useCallback(
+    () => void handleCopy("@aster-ui/react", "Package name"),
+    [handleCopy],
+  );
+  const selectComponent = useCallback((name: string) => {
+    setSelectedComponent(name);
+    setWorkspaceTab("preview");
+    setInspectorTab("api");
+  }, []);
+
   const handlePublish = async () => {
     const receipt = await release.publish();
     if (!receipt) return;
@@ -153,7 +166,7 @@ export function App({
         running={release.status === "running"}
         rehearsed={release.status === "rehearsed"}
         evidenceGeneratedAt={displayedEvidence.generatedAt}
-        onToggleSidebar={() => setSidebarOpen((open) => !open)}
+        onToggleSidebar={toggleSidebar}
         onNavigate={handleWorkspaceTab}
         onHelp={() => showToast("Tip: Press ⌘K or Ctrl+K to search components.")}
         onPublish={() => setReleaseOpen(true)}
@@ -162,15 +175,12 @@ export function App({
       <div className="app-layout">
         <Sidebar
           open={sidebarOpen}
+          overlayNavigation={overlayNavigation}
           selectedComponent={selectedComponent}
-          onRequestOpen={() => setSidebarOpen(true)}
-          onClose={() => setSidebarOpen(false)}
-          onCopyPackage={() => void handleCopy("@aster-ui/react", "Package name")}
-          onSelectComponent={(name) => {
-            setSelectedComponent(name);
-            setWorkspaceTab("preview");
-            setInspectorTab("api");
-          }}
+          onRequestOpen={openSidebar}
+          onClose={closeSidebar}
+          onCopyPackage={copyPackageName}
+          onSelectComponent={selectComponent}
         />
 
         <main

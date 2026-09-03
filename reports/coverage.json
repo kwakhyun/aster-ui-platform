@@ -165,16 +165,16 @@
     },
     "Studio": {
       "lines": {
-        "total": 369,
-        "covered": 355,
+        "total": 374,
+        "covered": 360,
         "skipped": 0,
-        "pct": 96.2
+        "pct": 96.25
       },
       "statements": {
-        "total": 410,
-        "covered": 383,
+        "total": 418,
+        "covered": 391,
         "skipped": 0,
-        "pct": 93.41
+        "pct": 93.54
       },
       "functions": {
         "total": 148,
@@ -183,10 +183,10 @@
         "pct": 92.56
       },
       "branches": {
-        "total": 440,
-        "covered": 397,
+        "total": 442,
+        "covered": 398,
         "skipped": 0,
-        "pct": 90.22
+        "pct": 90.04
       },
       "branchesTrue": {
         "total": 0,
@@ -196,9 +196,9 @@
       }
     }
   },
-  "generatedAt": "2026-09-02T21:15:41.718Z",
-  "sourceRevision": "workspace:1ae7fb10b171e3c8f77c",
+  "generatedAt": "2026-09-03T09:47:50.917Z",
+  "sourceRevision": "workspace:4f2fe03810d307baa45d",
   "gitCommit": "d4145f1afac92b82d5a7a06ba493a96af20c993d",
-  "runId": "local:40537",
-  "artifactDigest": "sha256:b4b30479034c56bea23307212e61bfe95dbfb16778f68b191679ed46846cc617"
+  "runId": "local:73118",
+  "artifactDigest": "sha256:fe5ef7cf07b423e08052b4ca9728796b16a468b8313ddcd80287471b9e4d687e"
 }

@@ -5,6 +5,19 @@ interface EvidenceProvenanceProps {
   readonly compact?: boolean;
 }
 
+const evidenceTimeFormatters = {
+  compact: new Intl.DateTimeFormat("en-US", {
+    dateStyle: "short",
+    timeStyle: "short",
+    timeZone: "Asia/Seoul",
+  }),
+  full: new Intl.DateTimeFormat("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "Asia/Seoul",
+  }),
+} as const;
+
 function shorten(value: string, visible = 18): string {
   return value.length <= visible ? value : `${value.slice(0, visible)}…`;
 }
@@ -13,11 +26,7 @@ export function EvidenceProvenance({ evidence, compact = false }: EvidenceProven
   const generatedAt = new Date(evidence.generatedAt);
   const formattedTime = Number.isNaN(generatedAt.getTime())
     ? "Timestamp unavailable"
-    : new Intl.DateTimeFormat("en-US", {
-      dateStyle: compact ? "short" : "medium",
-      timeStyle: "short",
-      timeZone: "Asia/Seoul",
-    }).format(generatedAt);
+    : evidenceTimeFormatters[compact ? "compact" : "full"].format(generatedAt);
 
   return (
     <dl className={`evidence-provenance${compact ? " evidence-provenance--compact" : ""}`}>

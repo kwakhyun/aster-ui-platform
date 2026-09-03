@@ -7,13 +7,13 @@ import {
   MagnifyingGlass,
   X,
 } from "@phosphor-icons/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import { componentTree } from "../data/catalog";
-import { useMediaQuery } from "../hooks/useMediaQuery";
 import { useModalFocus } from "../hooks/useModalFocus";
 
 interface SidebarProps {
   readonly open: boolean;
+  readonly overlayNavigation: boolean;
   readonly selectedComponent: string;
   readonly onRequestOpen: () => void;
   readonly onClose: () => void;
@@ -23,6 +23,7 @@ interface SidebarProps {
 
 export function Sidebar({
   open,
+  overlayNavigation,
   selectedComponent,
   onRequestOpen,
   onClose,
@@ -31,27 +32,26 @@ export function Sidebar({
 }: SidebarProps) {
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
-  const overlayNavigation = useMediaQuery("(max-width: 1060px)");
   const sidebarRef = useModalFocus<HTMLElement>(open && overlayNavigation, onClose);
   const normalizedQuery = query.trim().toLocaleLowerCase();
 
+  const handleShortcut = useEffectEvent((event: KeyboardEvent) => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLocaleLowerCase() === "k") {
+      event.preventDefault();
+      onRequestOpen();
+      window.requestAnimationFrame(() => searchRef.current?.focus());
+    }
+
+    if (event.key === "Escape" && open) {
+      event.preventDefault();
+      onClose();
+    }
+  });
+
   useEffect(() => {
-    const handleShortcut = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLocaleLowerCase() === "k") {
-        event.preventDefault();
-        onRequestOpen();
-        window.requestAnimationFrame(() => searchRef.current?.focus());
-      }
-
-      if (event.key === "Escape" && open) {
-        event.preventDefault();
-        onClose();
-      }
-    };
-
     document.addEventListener("keydown", handleShortcut);
     return () => document.removeEventListener("keydown", handleShortcut);
-  }, [onClose, onRequestOpen, open]);
+  }, []);
 
   const groups = useMemo(
     () =>

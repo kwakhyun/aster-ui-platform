@@ -27,6 +27,13 @@ const navigation: readonly { label: string; tab: WorkspaceTab }[] = [
   { label: "Quality", tab: "quality" },
 ] as const;
 
+const evidenceDateFormatter = new Intl.DateTimeFormat("en-CA", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  timeZone: "Asia/Seoul",
+});
+
 export function TopBar({
   activeTab,
   sidebarOpen,
@@ -42,12 +49,7 @@ export function TopBar({
   const evidenceDate = new Date(evidenceGeneratedAt);
   const evidenceDateAvailable = Number.isFinite(evidenceDate.getTime());
   const formattedEvidenceDate = evidenceDateAvailable
-    ? new Intl.DateTimeFormat("en-CA", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      timeZone: "Asia/Seoul",
-    }).formatToParts(evidenceDate)
+    ? evidenceDateFormatter.formatToParts(evidenceDate)
       .filter((part) => part.type === "year" || part.type === "month" || part.type === "day")
       .map((part) => part.value)
       .join(".")

@@ -16,6 +16,12 @@ interface SyncStripProps {
   readonly onReview: () => void;
 }
 
+const syncDateFormatter = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "short",
+  timeStyle: "short",
+  timeZone: "Asia/Seoul",
+});
+
 export function SyncStrip({
   reviewReceipt,
   changeCount,
@@ -27,11 +33,7 @@ export function SyncStrip({
   const syncDate = new Date(syncedAt);
   const formattedSync = Number.isNaN(syncDate.getTime())
     ? "Sync time unavailable"
-    : new Intl.DateTimeFormat("en-US", {
-      dateStyle: "short",
-      timeStyle: "short",
-      timeZone: "Asia/Seoul",
-    }).format(syncDate);
+    : syncDateFormatter.format(syncDate);
   return (
     <div className="sync-strip" aria-label="Workspace Figma sync status">
       <span>

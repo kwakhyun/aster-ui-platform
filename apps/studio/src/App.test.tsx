@@ -230,19 +230,41 @@ describe("Aster UI component review flow", () => {
     await expectNoWcagAxeViolations(container);
   });
 
+  it("keeps one global shortcut listener across application renders", () => {
+    const addEventListener = vi.spyOn(document, "addEventListener");
+    const removeEventListener = vi.spyOn(document, "removeEventListener");
+    const { rerender, unmount } = render(<App />);
+    const keydownSubscriptions = () => addEventListener.mock.calls
+      .filter(([type]) => type === "keydown");
+    const keydownUnsubscriptions = () => removeEventListener.mock.calls
+      .filter(([type]) => type === "keydown");
+
+    expect(keydownSubscriptions()).toHaveLength(1);
+    fireEvent.click(screen.getByRole("button", { name: "Help" }));
+    rerender(<App />);
+    expect(keydownSubscriptions()).toHaveLength(1);
+
+    unmount();
+    expect(keydownUnsubscriptions()).toHaveLength(1);
+  });
+
   it("exposes mobile navigation as a modal and disables background regions", async () => {
-    vi.spyOn(window, "matchMedia").mockImplementation((query: string) => ({
+    const addMediaListener = vi.fn();
+    const matchMedia = vi.spyOn(window, "matchMedia").mockImplementation((query: string) => ({
       matches: query === "(max-width: 1060px)",
       media: query,
       onchange: null,
       addListener: () => undefined,
       removeListener: () => undefined,
-      addEventListener: () => undefined,
+      addEventListener: addMediaListener,
       removeEventListener: () => undefined,
       dispatchEvent: () => false,
     }));
     const user = userEvent.setup();
     const { container } = render(<App />);
+
+    expect(matchMedia).toHaveBeenCalledTimes(1);
+    expect(addMediaListener).toHaveBeenCalledTimes(1);
 
     await user.click(screen.getByRole("button", { name: "Open component browser" }));
     const componentDialog = screen.getByRole("dialog", { name: "Component browser" });

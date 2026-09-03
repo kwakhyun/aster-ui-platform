@@ -8,9 +8,9 @@
   "snapshots": 11,
   "accessibilityChecks": 11,
   "status": "passed",
-  "generatedAt": "2026-09-02T21:15:58.616Z",
-  "sourceRevision": "workspace:1ae7fb10b171e3c8f77c",
+  "generatedAt": "2026-09-03T09:48:14.951Z",
+  "sourceRevision": "workspace:4f2fe03810d307baa45d",
   "gitCommit": "d4145f1afac92b82d5a7a06ba493a96af20c993d",
-  "runId": "local:41104",
-  "artifactDigest": "sha256:7a0cd8f50c2bd59439208e2409d0c856b3b62f911e767c561bd0a4b5ad5ed52f"
+  "runId": "local:74057",
+  "artifactDigest": "sha256:2720ec004b4c642e03c0e06de26b4d23c9ed13b5d9894639a7674cf03745bc53"
 }
