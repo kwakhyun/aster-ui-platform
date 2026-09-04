@@ -39,7 +39,7 @@ export function EvidenceProvenance({ evidence, compact = false }: EvidenceProven
         <dd><code title={evidence.sourceRevision}>{shorten(evidence.sourceRevision)}</code></dd>
       </div>
       <div>
-        <dt>Commit</dt>
+        <dt>Source commit</dt>
         <dd><code title={evidence.gitCommit ?? "No Git commit"}>{shorten(evidence.gitCommit ?? "uncommitted")}</code></dd>
       </div>
       <div>

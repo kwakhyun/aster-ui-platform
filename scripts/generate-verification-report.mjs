@@ -164,11 +164,11 @@ const gitCommit = sourceGitCommit;
 
 const markdown = `# 저장소 자동 검증 보고서
 
-이 문서는 출처 정보가 결합된 저장소의 JSON 근거에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 \`pnpm verification:check\`가 현재 소스 상태와 기준 Git 커밋, Studio 품질 근거가 서로 일치하는지 검사합니다.
+이 문서는 출처 정보가 결합된 저장소의 JSON 근거에서 자동 생성됩니다. 수치를 직접 편집하지 않으며 \`pnpm verification:check\`가 현재 소스 상태와 소스 기준 커밋, Studio 품질 근거가 서로 일치하는지 검사합니다.
 
 - 생성 기준: ${formatKoreanDate(latestGeneratedAt)} KST
 - 소스 리비전: \`${sourceRevision}\`
-- Git 커밋: ${gitCommit ? `\`${gitCommit}\`` : "아직 커밋되지 않은 작업 트리"}
+- 소스 기준 커밋: ${gitCommit ? `\`${gitCommit}\`` : "아직 커밋되지 않은 작업 트리"}
 
 ## 결과
 
@@ -190,7 +190,7 @@ const markdown = `# 저장소 자동 검증 보고서
 | AI 제안부터 승인까지의 전체 흐름 | 제안 검사 ${evidence.ai.proposalChecks}개, 검증 실패 시 중단하는 조건 ${evidence.ai.failClosedBoundaries}개, AI 제공자 호출 제한 시간과 출력 상한 적용, 검증 단계의 소스 수정 없음 |
 | 브라우저 시각 및 접근성 | 시나리오 ${evidence.visual.passed}개, 기준 이미지 ${evidence.visual.snapshots}개, axe 검사 ${evidence.visual.accessibilityChecks}회 통과 |
 | 프로덕션 의존성 감사 | 알려진 취약점 ${evidence.security.knownVulnerabilities}건 |
-| 검증 근거 출처 | 리비전, 실행 ID, Git 커밋, 산출물 해시 확인 |
+| 검증 근거 출처 | 리비전, 실행 ID, 소스 기준 커밋, 산출물 해시 확인 |
 
 ## 테스트 커버리지
 
