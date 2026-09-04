@@ -10,7 +10,7 @@ reports/ai-proposals/
 portfolio/
 output/pdf/
 tmp/
-audits/*portfolio-review*/
+audits/*portfolio-*/
 *.log
 .DS_Store
 .env

@@ -28,6 +28,19 @@ for (const [index, workflow] of workflows.entries()) {
   }
 }
 
+const ciWorkflow = workflows[0];
+const qualityJob = ciWorkflow.match(/^ {2}quality:\n([\s\S]*?)(?=^ {2}container:)/m)?.[1] ?? "";
+const pagesJob = ciWorkflow.match(/^ {2}pages:\n([\s\S]*)$/m)?.[1] ?? "";
+if (!qualityJob.includes("pnpm verify")
+  || !qualityJob.includes("actions/upload-pages-artifact@")) {
+  errors.push("The quality job must verify and upload the GitHub Pages artifact.");
+}
+if (!pagesJob.includes("actions/deploy-pages@")
+  || pagesJob.includes("pnpm build")
+  || pagesJob.includes("actions/upload-pages-artifact@")) {
+  errors.push("The Pages job must deploy the artifact from quality without rebuilding it.");
+}
+
 if (!deployment.includes("automountServiceAccountToken: false")) {
   errors.push("The Kubernetes pod must disable service account token mounting.");
 }
