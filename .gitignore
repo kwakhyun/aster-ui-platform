@@ -9,6 +9,8 @@ reports/ai-proposals/
 # Local-only submission artifacts
 portfolio/
 output/pdf/
+tmp/
+audits/*portfolio-review*/
 *.log
 .DS_Store
 .env

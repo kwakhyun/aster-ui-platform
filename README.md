@@ -1,7 +1,7 @@
 # Aster UI Platform
 
-의료미용 제품군을 가정해 디자인 변경이 토큰, 공용 React API, 세 소비 앱에 전달되는 과정을 구현한 개인 PoC입니다.
-Figma 데이터를 변경하거나 npm에 배포하지 않고도 별칭 변경, 소비 앱 사용 현황, 릴리스 준비 근거를 확인할 수 있습니다.
+의료미용 제품군을 가정해 디자인 변경이 토큰, 공용 React API, Studio와 두 개의 검증용 소비 예제에 전달되는 과정을 구현한 개인 PoC입니다.
+Figma 데이터를 변경하거나 npm에 배포하지 않고도 별칭 변경, 저장소 표본의 사용 현황, 릴리스 준비 근거를 확인할 수 있습니다.
 
 Figma Variables의 별칭을 W3C DTCG 토큰과 React 공개 API에 대조하고, AI 제안은 사람의 검토와 승인을 거치도록 구성했습니다.
 
@@ -17,7 +17,7 @@ Figma Variables의 별칭을 W3C DTCG 토큰과 React 공개 API에 대조하고
 
 - Figma의 시맨틱 별칭 변경을 코드 계약과 어떻게 일치시킬 것인가
 - 여러 개발자가 쓰는 API의 하위 호환성과 문서를 어떻게 자동으로 유지할 것인가
-- 도입률의 분모와 지원 중단 예정 API 사용을 어떻게 재현 가능하게 계산할 것인가
+- 작은 검증용 앱에서도 과장 없이 소비 현황과 지원 중단 예정 API 사용을 어떻게 계산할 것인가
 - AI가 만든 변경안을 어디까지 자동화하고 어느 단계에서 사람 검토로 전환할 것인가
 - 로컬 통과, CI 통과, 실제 배포를 어떻게 구분해 근거로 남길 것인가
 
@@ -29,11 +29,11 @@ Figma Variables의 별칭을 W3C DTCG 토큰과 React 공개 API에 대조하고
 | --- | --- |
 | Studio | React, Vite, Tailwind CSS로 구현한 반응형 컴포넌트 변경 검토 및 릴리스 준비 도구 |
 | React 패키지 | Button, Badge, Alert, Tabs, TextField, TreatmentCard의 HTML 속성 전달과 ref 계약 |
-| API 자동화 | 레지스트리와 TypeScript AST를 바탕으로 6개 컴포넌트의 공개 prop 38개를 추출하고 매니페스트 및 문서 생성 |
-| 토큰 | W3C DTCG 경로 31개, Coral 및 Ocean 테마, CSS, JSON, Swift, Compose 산출물 |
+| API 자동화 | 레지스트리와 TypeScript AST로 6개 컴포넌트의 공개 prop 38개를 추출하고, 타입 체커로 공개 export 23개를 비교 |
+| 토큰 | 색상, 간격, 모서리 반경을 다루는 W3C DTCG 핵심 경로 31개와 Coral 및 Ocean 테마, CSS, JSON, Swift, Compose 산출물 |
 | Figma | Figma Variables REST API 어댑터, PAT 및 OAuth 인증, 비식별 테스트 픽스처, 사람 검토 모델 |
 | AI | JSON Schema로 제한한 Claude Code 제안, SemVer, 테스트와 위험 검증, 제한 시간과 경로 격리, 제안부터 승인까지의 전체 흐름 검증 |
-| 도입률 | Studio, 클리닉 탐색 웹, 운영 백오피스의 실제 import와 JSX 사용 분석 |
+| 소비 표본 | Studio와 두 개의 작은 검증용 소비 앱이 선언한 대상의 실제 import와 JSX 사용 분석 |
 | 마이그레이션 | `PrimaryButton`을 `Button`으로 바꾸는 TypeScript AST 코드 변환 도구와 테스트 픽스처 |
 | 배포 | release-please, 커밋 SHA로 고정한 GitHub Actions, 비루트 컨테이너, 전체 검증 뒤 GitHub Pages를 배포하는 워크플로 |
 
@@ -45,8 +45,8 @@ React 컴포넌트는 웹 전용입니다. Swift와 Compose 파일은 같은 토
 Figma Variables REST API / 비식별 테스트 픽스처
   → 시맨틱 별칭 비교 및 DTCG 검증
   → CSS, JSON, Swift, Compose 토큰 빌드
-  → React 컴포넌트 6개 빌드 및 API 문서 생성
-  → 소비 앱 3개의 도입률 및 마이그레이션 검사
+  → React 컴포넌트 6개 빌드, 공개 export 및 API 문서 검사
+  → 저장소의 검증용 소비 앱 3개에서 선언 표본과 마이그레이션 검사
   → Claude Code 제안, 결정론적 검증, 사람 검토
   → 단위 및 상호작용, axe, 브라우저 시각, 성능, 보안 검증
   → 로컬 릴리스 리허설 또는 release-please
@@ -76,7 +76,7 @@ pnpm verify
 - 의존성 감사, 린트, 엄격한 TypeScript 검사, 단위 및 상호작용 테스트
 - 소스 리비전과 해시를 포함한 커버리지 근거 기록 및 프로덕션 빌드
 - 토큰 및 네이티브 산출물, Figma 테스트 픽스처, AI 제안부터 승인까지의 전체 흐름 검증
-- 매니페스트와 문서, 도입률, 코드 변환 도구, API 호환성
+- 매니페스트와 문서, 저장소 표본 커버리지, 코드 변환 도구, API 호환성
 - 릴리스, 성능, 패키지 내용, Kubernetes, 공급망, Sites 런타임
 - 브라우저 시각 회귀와 axe 검사. 로컬에서는 Google Chrome, CI에서는 Ubuntu 24.04의 Playwright Chromium을 사용합니다.
 - macOS와 Linux의 글꼴 렌더링 차이는 플랫폼별 승인 이미지로 분리합니다. Linux 기준 이미지는 수동 워크플로로 전체 세트를 생성하고 사람이 검토한 뒤에만 반영합니다.
@@ -112,10 +112,10 @@ CI에서는 `pnpm ai:check`가 결정론적 제안 검증과 사람 승인 기�
 ## 검증 가능한 계약
 
 - 컴포넌트 레지스트리와 소스 인터페이스가 다르면 매니페스트 및 문서 검사가 실패합니다.
-- 컴포넌트 또는 prop 제거, 타입과 기본값 변경, 선택적 prop의 필수 전환, ref와 DOM 계약 변경을 차단합니다.
+- TypeScript 진입점의 공개 export 23개와 컴포넌트 prop 38개를 기준 계약과 비교합니다. export 또는 컴포넌트 제거, 타입과 기본값 변경, 선택적 prop의 필수 전환, ref와 DOM 계약 변경을 차단합니다.
 - Figma 컬렉션, 모드, 별칭 대상 또는 DTCG 경로가 없으면 검토 모델을 만들지 않습니다.
 - AI가 필수 prop 추가, prop 제거 또는 타입 변경을 제안하면 메이저 변경으로 분류되지 않은 경우 차단합니다. 승인 단계에서는 현재 매니페스트와 요청 및 프롬프트 해시를 다시 검증합니다.
-- 소비 앱이 선언한 대상 컴포넌트를 사용하지 않거나 지원 중단 예정 API를 사용하면 도입률 검사가 실패합니다.
+- 검증용 소비 앱이 스스로 선언한 대상 컴포넌트를 사용하지 않거나 지원 중단 예정 API를 사용하면 저장소 표본 검사가 실패합니다.
 - JavaScript, CSS, 글꼴, 반응형 이미지 예산을 초과하거나 배포 산출물에 PNG가 포함되면 실패합니다.
 - 소스 리비전과 근거 해시가 맞지 않으면 릴리스 리허설을 차단합니다.
 - Docker 기본 이미지, GitHub Actions, Kubernetes 이미지에 변경 가능한 참조를 사용하면 실패합니다.
@@ -130,16 +130,17 @@ CI에서는 `pnpm ai:check`가 결정론적 제안 검증과 사람 승인 기�
 - [`packages/tokens`](packages/tokens): DTCG 토큰의 다중 플랫폼 빌드
 - [`packages/figma-bridge`](packages/figma-bridge): Figma REST 어댑터와 검토 계약
 - [`ai`](ai): Claude Code 요청, 프롬프트, 스키마, 테스트 픽스처
-- [`scripts`](scripts): 문서 생성, 계약 검사, 도입률 분석, 마이그레이션, 품질 근거 자동화
+- [`scripts`](scripts): 문서 생성, 계약 검사, 저장소 표본 분석, 마이그레이션, 품질 근거 자동화
 - [`.github/workflows`](.github/workflows): 전체 검증과 Pages 배포를 수행하는 CI, CI 성공 뒤 실행되는 release-please 워크플로
 
-접근성과 운영 세부 내용은 [아키텍처](docs/architecture.md), [접근성](docs/accessibility.md), [릴리스와 호환성](docs/release-and-compatibility.md)에서 확인할 수 있습니다.
+접근성과 운영 세부 내용은 [아키텍처](docs/architecture.md), [접근성](docs/accessibility.md), [릴리스와 호환성](docs/release-and-compatibility.md)에서 확인할 수 있습니다. 현재 범위를 넓힐 때의 순서와 완료 조건은 [확장 로드맵](docs/roadmap.md)에 정리했습니다.
 
 ## 현재 범위와 검증 경계
 
 - Figma 라이브 API는 파일과 계정 권한이 있는 환경에서만 실행할 수 있습니다.
 - Claude 라이브 제안은 실행 환경의 Claude Code 로그인이 필요합니다.
-- 저장소 내부 도입률은 실제 조직 도입률이나 사용자 성과 지표가 아닙니다.
+- `13/13`은 세 검증용 앱이 직접 선언한 대상의 저장소 표본 커버리지입니다. 실제 조직 도입률이나 사용자 성과 지표가 아닙니다.
+- 공개 API 자동 검사는 TypeScript 선언과 메타데이터 변화를 다룹니다. CSS의 시각적 의미와 런타임 상호작용은 각각 시각 회귀와 상호작용 테스트로 보완하지만, 모든 소비 환경의 호환성을 보장하지는 않습니다.
 - 저장소에 커밋한 JSON 검증 근거는 로컬 최종 검증 결과입니다. 공개 CI와 Pages 배포 상태는 [GitHub Actions](https://github.com/kwakhyun/aster-ui-platform/actions)에서 별도로 확인합니다.
 - 공개 저장소의 release-please 작업은 main 브랜치 CI가 통과한 뒤에만 실행됩니다. 릴리스 PR 생성은 저장소 소유자가 Actions의 PR 생성 권한과 `RELEASE_PLEASE_PR_ENABLED=true` 변수를 명시적으로 설정한 경우에만 활성화됩니다.
 

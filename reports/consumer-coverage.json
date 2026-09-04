@@ -1,20 +1,23 @@
 {
-  "schemaVersion": 3,
-  "denominator": "Components explicitly declared eligible by each consumer manifest",
+  "schemaVersion": 4,
+  "metric": "declared-repository-sample-coverage",
+  "scope": "repository-sample-only",
+  "organizationAdoptionMetric": false,
+  "denominator": "Component targets explicitly declared by each repository sample consumer",
   "consumerCount": 3,
-  "eligibleComponents": 13,
-  "adoptedComponents": 13,
-  "adoptionRate": 1,
+  "declaredTargets": 13,
+  "coveredTargets": 13,
+  "coverageRate": 1,
   "deprecatedUsageCount": 0,
-  "confidence": "multi-consumer repository scan",
+  "interpretation": "Scanner behavior evidence only; not an organization adoption or product outcome metric",
   "consumers": [
     {
       "consumer": "Clinic operations backoffice",
       "package": "@aster-ui/react",
       "filesScanned": 2,
-      "eligibleComponents": 4,
-      "adoptedComponents": 4,
-      "adoptionRate": 1,
+      "declaredTargets": 4,
+      "coveredTargets": 4,
+      "coverageRate": 1,
       "componentUsages": {
         "Alert": 1,
         "Badge": 1,
@@ -30,9 +33,9 @@
       "consumer": "Clinic discovery web",
       "package": "@aster-ui/react",
       "filesScanned": 2,
-      "eligibleComponents": 3,
-      "adoptedComponents": 3,
-      "adoptionRate": 1,
+      "declaredTargets": 3,
+      "coveredTargets": 3,
+      "coverageRate": 1,
       "componentUsages": {
         "Button": 1,
         "Tabs": 1,
@@ -47,9 +50,9 @@
       "consumer": "Aster UI Studio",
       "package": "@aster-ui/react",
       "filesScanned": 25,
-      "eligibleComponents": 6,
-      "adoptedComponents": 6,
-      "adoptionRate": 1,
+      "declaredTargets": 6,
+      "coveredTargets": 6,
+      "coverageRate": 1,
       "componentUsages": {
         "Alert": 1,
         "Badge": 1,
@@ -64,10 +67,10 @@
       }
     }
   ],
-  "status": "healthy",
-  "generatedAt": "2026-09-04T02:24:40.755Z",
-  "sourceRevision": "workspace:3f4a9fcd889d9811e813",
+  "status": "passed",
+  "generatedAt": "2026-09-04T03:22:32.569Z",
+  "sourceRevision": "workspace:f1f16c3b9d2c7bd9dd55",
   "gitCommit": "bb68471733428e4439ecc1eb071c09afd802b250",
-  "runId": "local:43445",
-  "artifactDigest": "sha256:ef2ac5e8f1a3bf579e5ca68795c3b6b64ce993ca196c634fd88ae171ff85b2bb"
+  "runId": "local:97065",
+  "artifactDigest": "sha256:c2cfa08caa86deca98524ecb7b6e81443d4f15c7482f0a8f1d188c5454ef4634"
 }

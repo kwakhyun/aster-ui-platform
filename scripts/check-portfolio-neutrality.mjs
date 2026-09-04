@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import process from "node:process";
 
 const repositoryRoot = process.cwd();
@@ -34,6 +34,10 @@ const findings = [];
 let scannedFileCount = 0;
 
 for (const relativePath of trackedFiles) {
+  // `git ls-files` includes paths deleted in the worktree until the rename or
+  // deletion is staged. Verification must still work before a commit exists.
+  if (!existsSync(relativePath)) continue;
+
   const pathFinding = employerBrandPatterns.find(({ pattern }) => pattern.test(relativePath));
   if (pathFinding) {
     findings.push(`${relativePath}: filename contains ${pathFinding.label}`);

@@ -28,4 +28,4 @@ assert.deepEqual(
   { TreatmentCard: 0 },
 );
 
-console.log("Adoption scanner fixtures passed: imports, aliases, namespaces, strings, comments, and local names.");
+console.log("Consumer coverage scanner fixtures passed: imports, aliases, namespaces, strings, comments, and local names.");

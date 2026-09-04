@@ -1,16 +1,18 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "baselineVersion": "3.1.0-beta.2",
   "currentVersion": "3.1.0-beta.2",
   "checkedComponents": 6,
   "checkedProps": 38,
+  "checkedExports": 23,
+  "exportAdditions": [],
   "additions": [],
   "breakingChanges": [],
   "status": "passed",
   "command": "pnpm api:check",
-  "generatedAt": "2026-09-04T02:24:40.400Z",
-  "sourceRevision": "workspace:3f4a9fcd889d9811e813",
+  "generatedAt": "2026-09-04T03:22:34.974Z",
+  "sourceRevision": "workspace:f1f16c3b9d2c7bd9dd55",
   "gitCommit": "bb68471733428e4439ecc1eb071c09afd802b250",
-  "runId": "local:43437",
-  "artifactDigest": "sha256:4d8060cae12aa5b6d2bc7f9ef0c630bc20bda16bee17bb32c7d81fe24e420884"
+  "runId": "local:97047",
+  "artifactDigest": "sha256:858d1fc3bd3278e2369580ffb9e3c7310c44bd1a1922efcb84fb948dc046d48c"
 }

@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "consumer": "Clinic discovery web",
   "sourceRoots": ["src"],
   "package": "@aster-ui/react",
-  "eligibleComponents": ["Button", "Tabs", "TreatmentCard"],
+  "targetComponents": ["Button", "Tabs", "TreatmentCard"],
   "deprecatedComponents": ["LegacyClinicCard", "PrimaryButton"]
 }

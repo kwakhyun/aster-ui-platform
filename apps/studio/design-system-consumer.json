@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "consumer": "Aster UI Studio",
   "sourceRoots": ["src"],
   "package": "@aster-ui/react",
-  "eligibleComponents": ["Alert", "Badge", "Button", "Tabs", "TextField", "TreatmentCard"],
+  "targetComponents": ["Alert", "Badge", "Button", "Tabs", "TextField", "TreatmentCard"],
   "deprecatedComponents": ["LegacyClinicCard", "PrimaryButton"]
 }

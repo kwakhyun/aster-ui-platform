@@ -6,7 +6,7 @@ import { scanJsxUsages } from "./lib/scan-jsx-usage.mjs";
 
 const projectRoot = process.cwd();
 const appsRoot = path.join(projectRoot, "apps");
-const outputPath = path.join(projectRoot, "reports/adoption.json");
+const outputPath = path.join(projectRoot, "reports/consumer-coverage.json");
 
 async function walk(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -34,9 +34,9 @@ for (const appDirectory of appDirectories) {
   const sourceFiles = (await Promise.all(
     manifest.sourceRoots.map((sourceRoot) => walk(path.join(appDirectory, sourceRoot))),
   )).flat();
-  const componentsToScan = [...manifest.eligibleComponents, ...manifest.deprecatedComponents];
+  const componentsToScan = [...manifest.targetComponents, ...manifest.deprecatedComponents];
   const componentUsages = Object.fromEntries(
-    manifest.eligibleComponents.map((component) => [component, 0]),
+    manifest.targetComponents.map((component) => [component, 0]),
   );
   const deprecatedUsages = Object.fromEntries(
     manifest.deprecatedComponents.map((component) => [component, 0]),
@@ -48,51 +48,52 @@ for (const appDirectory of appDirectories) {
       manifest.package,
       componentsToScan,
     );
-    for (const component of manifest.eligibleComponents) {
+    for (const component of manifest.targetComponents) {
       componentUsages[component] += counts[component] ?? 0;
     }
     for (const component of manifest.deprecatedComponents) {
       deprecatedUsages[component] += counts[component] ?? 0;
     }
   }
-  const adoptedComponents = Object.values(componentUsages).filter((count) => count > 0).length;
+  const coveredTargets = Object.values(componentUsages).filter((count) => count > 0).length;
   consumers.push({
     consumer: manifest.consumer,
     package: manifest.package,
     filesScanned: sourceFiles.length,
-    eligibleComponents: manifest.eligibleComponents.length,
-    adoptedComponents,
-    adoptionRate: manifest.eligibleComponents.length === 0
+    declaredTargets: manifest.targetComponents.length,
+    coveredTargets,
+    coverageRate: manifest.targetComponents.length === 0
       ? 0
-      : adoptedComponents / manifest.eligibleComponents.length,
+      : coveredTargets / manifest.targetComponents.length,
     componentUsages,
     deprecatedUsages,
   });
 }
 
-const eligibleComponents = consumers.reduce((sum, consumer) => sum + consumer.eligibleComponents, 0);
-const adoptedComponents = consumers.reduce((sum, consumer) => sum + consumer.adoptedComponents, 0);
+const declaredTargets = consumers.reduce((sum, consumer) => sum + consumer.declaredTargets, 0);
+const coveredTargets = consumers.reduce((sum, consumer) => sum + consumer.coveredTargets, 0);
 const deprecatedUsageCount = consumers.reduce(
   (sum, consumer) => sum + Object.values(consumer.deprecatedUsages).reduce((subtotal, count) => subtotal + count, 0),
   0,
 );
 const status = consumers.length > 0
-  && eligibleComponents > 0
-  && eligibleComponents === adoptedComponents
+  && declaredTargets > 0
+  && declaredTargets === coveredTargets
   && deprecatedUsageCount === 0
-  ? "healthy"
+  ? "passed"
   : "action-required";
 const report = await createEvidenceReport({
-  schemaVersion: 3,
-  denominator: "Components explicitly declared eligible by each consumer manifest",
+  schemaVersion: 4,
+  metric: "declared-repository-sample-coverage",
+  scope: "repository-sample-only",
+  organizationAdoptionMetric: false,
+  denominator: "Component targets explicitly declared by each repository sample consumer",
   consumerCount: consumers.length,
-  eligibleComponents,
-  adoptedComponents,
-  adoptionRate: eligibleComponents === 0 ? 0 : adoptedComponents / eligibleComponents,
+  declaredTargets,
+  coveredTargets,
+  coverageRate: declaredTargets === 0 ? 0 : coveredTargets / declaredTargets,
   deprecatedUsageCount,
-  confidence: consumers.length === 1
-    ? "single-declared-consumer; portfolio signal only"
-    : "multi-consumer repository scan",
+  interpretation: "Scanner behavior evidence only; not an organization adoption or product outcome metric",
   consumers,
   status,
 });
@@ -100,9 +101,9 @@ const serialized = `${JSON.stringify(report, null, 2)}\n`;
 
 await mkdir(path.dirname(outputPath), { recursive: true });
 await writeFile(outputPath, serialized);
-if (process.argv.includes("--check") && status !== "healthy") {
+if (process.argv.includes("--check") && status !== "passed") {
   console.error(serialized);
   process.exitCode = 1;
 } else {
-  console.log(`Adoption ${status}: ${adoptedComponents}/${eligibleComponents} eligible components across ${consumers.length} declared consumer(s).`);
+  console.log(`Repository sample coverage ${status}: ${coveredTargets}/${declaredTargets} declared targets across ${consumers.length} sample consumer(s); not an organization adoption metric.`);
 }

@@ -2,20 +2,31 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { createEvidenceReport } from "./lib/provenance.mjs";
+import {
+  comparePublicApiSurface,
+  readPublicApiSurface,
+} from "./lib/public-api-surface.mjs";
 
 const projectRoot = process.cwd();
 const baselinePath = path.join(projectRoot, "packages/react/api-baseline.json");
+const publicApiBaselinePath = path.join(projectRoot, "packages/react/public-api-baseline.json");
 const manifestPath = path.join(projectRoot, "packages/react/component-manifest.json");
 const reportPath = path.join(projectRoot, "reports/api-compatibility.json");
-const [baseline, manifest] = await Promise.all([
+const [baseline, publicApiBaseline, manifest] = await Promise.all([
   readFile(baselinePath, "utf8").then(JSON.parse),
+  readFile(publicApiBaselinePath, "utf8").then(JSON.parse),
   readFile(manifestPath, "utf8").then(JSON.parse),
 ]);
 const currentComponents = new Map(manifest.components.map((component) => [component.name, component]));
 const breakingChanges = [];
+const currentExports = readPublicApiSurface(projectRoot);
+const exportComparison = comparePublicApiSurface(publicApiBaseline.exports, currentExports);
+breakingChanges.push(...exportComparison.breakingChanges);
 
 const scalarContracts = [
   ["package name", baseline.package, manifest.package],
+  ["public API package name", baseline.package, publicApiBaseline.package],
+  ["public API baseline schema", 1, publicApiBaseline.schemaVersion],
 ];
 for (const [label, expected, current] of scalarContracts) {
   if (current !== expected) breakingChanges.push(`${label}: ${String(expected)} -> ${String(current)}`);
@@ -66,11 +77,13 @@ for (const component of manifest.components) {
   }
 }
 const report = await createEvidenceReport({
-  schemaVersion: 4,
+  schemaVersion: 5,
   baselineVersion: baseline.version,
   currentVersion: manifest.version,
   checkedComponents: baseline.components.length,
   checkedProps,
+  checkedExports: publicApiBaseline.exports.length,
+  exportAdditions: exportComparison.additions,
   additions,
   breakingChanges,
   status: breakingChanges.length === 0 ? "passed" : "failed",
@@ -83,5 +96,5 @@ if (breakingChanges.length > 0) {
   console.error(`API compatibility failed:\n${breakingChanges.join("\n")}`);
   process.exitCode = 1;
 } else {
-  console.log(`API compatibility passed against ${baseline.version}: ${baseline.components.length} components and ${checkedProps} props checked.`);
+  console.log(`API compatibility passed against ${baseline.version}: ${baseline.components.length} components, ${checkedProps} props, and ${publicApiBaseline.exports.length} public exports checked.`);
 }

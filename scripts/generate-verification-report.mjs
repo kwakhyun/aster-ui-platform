@@ -53,7 +53,7 @@ function formatKoreanDate(isoDate) {
 const evidenceReportPaths = {
   unit: "reports/unit-tests.json",
   api: "reports/api-compatibility.json",
-  adoption: "reports/adoption.json",
+  consumerCoverage: "reports/consumer-coverage.json",
   visual: "reports/visual-regression.json",
   performance: "reports/performance-budget.json",
   security: "reports/security-audit.json",
@@ -108,7 +108,7 @@ if (evidence.unit.status !== "passed"
   || evidence.coverage.status !== "passed"
   || evidence.ai.status !== "passed"
   || evidence.figma.status !== "passed"
-  || evidence.adoption.status !== "healthy") {
+  || evidence.consumerCoverage.status !== "passed") {
   throw new Error("Verification report refused a non-passing repository report.");
 }
 const qualityReports = {
@@ -184,8 +184,8 @@ const markdown = `# 저장소 자동 검증 보고서
 | 워크스페이스 단위 및 상호작용 테스트 | 패키지 검증 스위트 ${testSuiteCount}개 통과 |
 | 소비 앱 계약 테스트 | 클리닉과 백오피스 렌더링 및 WCAG 태그 기반 axe 검사 통과 |
 | Sites 워커 | 런타임 경로 사례 4개 통과 |
-| API 호환성 | 컴포넌트 ${evidence.api.checkedComponents}개, 공개 prop ${evidence.api.checkedProps}개 검사, 하위 호환성이 깨지는 변경 ${evidence.api.breakingChanges.length}건 |
-| 도입률 | 소비 앱 ${evidence.adoption.consumerCount}개에서 대상 컴포넌트 ${evidence.adoption.adoptedComponents}/${evidence.adoption.eligibleComponents}개 사용, 지원 중단 예정 API 사용 ${evidence.adoption.deprecatedUsageCount}건 |
+| API 호환성 | TypeScript 공개 export ${evidence.api.checkedExports}개와 컴포넌트 ${evidence.api.checkedComponents}개의 공개 prop ${evidence.api.checkedProps}개 검사, 계약 변경 ${evidence.api.breakingChanges.length}건 |
+| 저장소 표본 커버리지 | 검증용 소비 앱 ${evidence.consumerCoverage.consumerCount}개에서 선언한 대상 ${evidence.consumerCoverage.coveredTargets}/${evidence.consumerCoverage.declaredTargets}개 사용, 지원 중단 예정 API 사용 ${evidence.consumerCoverage.deprecatedUsageCount}건. 실제 조직 도입률이 아님 |
 | Figma 검토 테스트 픽스처 | 별칭 ${evidence.figma.changeCount}개 해석, 사람 검토 필수, 검증 단계의 소스 수정 없음 |
 | AI 제안부터 승인까지의 전체 흐름 | 제안 검사 ${evidence.ai.proposalChecks}개, 검증 실패 시 중단하는 조건 ${evidence.ai.failClosedBoundaries}개, AI 제공자 호출 제한 시간과 출력 상한 적용, 검증 단계의 소스 수정 없음 |
 | 브라우저 시각 및 접근성 | 시나리오 ${evidence.visual.passed}개, 기준 이미지 ${evidence.visual.snapshots}개, axe 검사 ${evidence.visual.accessibilityChecks}회 통과 |
@@ -213,6 +213,8 @@ ${coverageRows}
 - 각 브라우저 시나리오에서 페이지 오류, 콘솔 오류, HTTP 4xx 및 5xx 응답, WCAG 태그가 있는 axe 위반이 발생하면 실패 처리합니다.
 - Figma REST 연동과 Claude Code 기반 AI 워크플로우는 실행할 수 있지만 라이브 호출에는 각 서비스의 권한과 로그인이 필요합니다. CI는 비식별 테스트 픽스처를 같은 계약으로 재생합니다.
 - Swift와 Compose는 공유 토큰 산출물입니다. 네이티브 컴포넌트 구현이나 실제 앱 배포를 주장하지 않습니다.
+- 공개 API 검사는 TypeScript export와 선언된 컴포넌트 계약을 비교합니다. CSS의 시각적 의미와 런타임 상호작용은 각각 시각 회귀와 상호작용 테스트가 맡으며, 모든 소비 코드의 호환성을 증명하지는 않습니다.
+- 저장소 표본 커버리지는 세 검증용 앱이 스스로 선언한 대상을 AST로 확인한 결과입니다. 실제 조직의 채택률이나 제품 성과로 해석할 수 없습니다.
 - VoiceOver와 NVDA 수동 검증, npm 배포, 클러스터 스모크 테스트는 자동 근거에 포함하지 않습니다.
 
 자동 검사 결과: 통과

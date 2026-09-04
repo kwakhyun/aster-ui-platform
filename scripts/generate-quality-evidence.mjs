@@ -58,7 +58,7 @@ const checks = [
     label: "API compatibility",
     status: isPassingCurrentReport(api) ? "passed" : "attention",
     detail: isPassingCurrentReport(api)
-      ? `${api.checkedProps} public API props checked; no breaking changes found.`
+      ? `${api.checkedExports} public TypeScript exports and ${api.checkedProps} component props checked; no contract removals or signature changes found.`
       : "The API comparison is missing, failed, or out of date for this source revision.",
     command: "pnpm api:check",
     ...evidenceFields(api),

@@ -11,7 +11,9 @@
 - 메이저: prop 제거, 필수 prop 추가, 타입이나 상호작용 의미 변경
 - 프리릴리스: 실제 소비 앱 검증을 위한 베타 계약
 
-지원 중단 예정 API에는 대체 API, 이전 지침, 최소 한 번의 마이너 버전 유예 기간이 필요합니다. `packages/react/api-baseline.json`과 생성 매니페스트 비교는 제거, 타입 변경, 필수 전환, 기본값 변경을 차단합니다.
+지원 중단 예정 API에는 대체 API, 이전 지침, 최소 한 번의 마이너 버전 유예 기간이 필요합니다. `packages/react/api-baseline.json`과 생성 매니페스트 비교는 컴포넌트 prop, 기본값, ref 및 DOM 계약을 확인합니다. `packages/react/public-api-baseline.json`은 TypeScript 타입 체커가 읽은 패키지 진입점의 공개 값과 타입 export 전체를 비교합니다. 기준 갱신은 변경 영향과 SemVer를 사람이 검토한 뒤에만 수행합니다.
+
+두 비교는 TypeScript 선언 계약을 다루며 CSS의 의미 변화나 모든 런타임 동작을 자동으로 증명하지 않습니다. CSS는 브라우저 시각 회귀로, 키보드와 ARIA 및 이벤트 동작은 상호작용 테스트로 보완합니다.
 
 ## 로컬 리허설과 실제 배포
 
