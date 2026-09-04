@@ -7,11 +7,11 @@
       "status": "passed",
       "detail": "All workspace unit tests and axe UI-state checks passed.",
       "command": "pnpm test",
-      "generatedAt": "2026-09-04T03:22:28.156Z",
-      "sourceRevision": "workspace:f1f16c3b9d2c7bd9dd55",
-      "gitCommit": "bb68471733428e4439ecc1eb071c09afd802b250",
-      "runId": "local:96394",
-      "evidenceDigest": "sha256:f2a2a4950ef72fb298313ec8112c10627c2907c42e3c8fdc235b83f59c0390a1"
+      "generatedAt": "2026-09-04T05:20:21.028Z",
+      "sourceRevision": "workspace:626889fe80d84e8b00fc",
+      "gitCommit": "dcf52a7636980295b433eb6891947b3431f463a0",
+      "runId": "local:94417",
+      "evidenceDigest": "sha256:4cd587a6b6f05656b05efd9561186fe3f12e9277395602b713adbf610f61dcf7"
     },
     {
       "id": "api",
@@ -19,11 +19,11 @@
       "status": "passed",
       "detail": "23 public TypeScript exports and 38 component props checked; no contract removals or signature changes found.",
       "command": "pnpm api:check",
-      "generatedAt": "2026-09-04T03:22:34.974Z",
-      "sourceRevision": "workspace:f1f16c3b9d2c7bd9dd55",
-      "gitCommit": "bb68471733428e4439ecc1eb071c09afd802b250",
-      "runId": "local:97047",
-      "evidenceDigest": "sha256:858d1fc3bd3278e2369580ffb9e3c7310c44bd1a1922efcb84fb948dc046d48c"
+      "generatedAt": "2026-09-04T05:20:24.930Z",
+      "sourceRevision": "workspace:626889fe80d84e8b00fc",
+      "gitCommit": "dcf52a7636980295b433eb6891947b3431f463a0",
+      "runId": "local:95065",
+      "evidenceDigest": "sha256:da05cfea6f597911a555d41f629065ede3ba4c035c53114cf7875d8c90c29d3d"
     },
     {
       "id": "visual",
@@ -31,11 +31,11 @@
       "status": "passed",
       "detail": "9 browser scenarios and 11 visual snapshots passed, including axe checks in Chrome.",
       "command": "pnpm test:visual",
-      "generatedAt": "2026-09-04T03:23:08.687Z",
-      "sourceRevision": "workspace:f1f16c3b9d2c7bd9dd55",
-      "gitCommit": "bb68471733428e4439ecc1eb071c09afd802b250",
-      "runId": "local:98415",
-      "evidenceDigest": "sha256:9117929f755ec4a86bc09bc227c9fddab7aa040197a1525d08f65939d97a5ebd"
+      "generatedAt": "2026-09-04T05:20:41.162Z",
+      "sourceRevision": "workspace:626889fe80d84e8b00fc",
+      "gitCommit": "dcf52a7636980295b433eb6891947b3431f463a0",
+      "runId": "local:95691",
+      "evidenceDigest": "sha256:acdabb6e9ccb163e02764ab33091df72903c04b12e525a5988a7f111d0555e94"
     },
     {
       "id": "performance",
@@ -43,11 +43,11 @@
       "status": "passed",
       "detail": "Production JavaScript, CSS, font, and responsive image sizes are within budget.",
       "command": "pnpm perf:check",
-      "generatedAt": "2026-09-04T03:22:33.075Z",
-      "sourceRevision": "workspace:f1f16c3b9d2c7bd9dd55",
-      "gitCommit": "bb68471733428e4439ecc1eb071c09afd802b250",
-      "runId": "local:97159",
-      "evidenceDigest": "sha256:0383bb75ec189a4573a75df6cd57c6f9593de3536315f72b7f1a27ce0ce63653"
+      "generatedAt": "2026-09-04T05:20:24.170Z",
+      "sourceRevision": "workspace:626889fe80d84e8b00fc",
+      "gitCommit": "dcf52a7636980295b433eb6891947b3431f463a0",
+      "runId": "local:95160",
+      "evidenceDigest": "sha256:87f86e74536cd52226138cceda72b55cd8c24e968cb5324b390cc5107cd1fd6a"
     },
     {
       "id": "security",
@@ -62,9 +62,9 @@
       "evidenceDigest": "sha256:8eafb30b8029c725de9a720cf7af2caf13c2c5284f56776bd2fa12242bb56435"
     }
   ],
-  "generatedAt": "2026-09-04T03:23:09.032Z",
-  "sourceRevision": "workspace:f1f16c3b9d2c7bd9dd55",
-  "gitCommit": "bb68471733428e4439ecc1eb071c09afd802b250",
-  "runId": "local:98978",
-  "artifactDigest": "sha256:b2ce5abce02666a1e08a78de70ed51e2deafff25fa0b62a75eaeb3c2ed4e998a"
+  "generatedAt": "2026-09-04T05:20:41.475Z",
+  "sourceRevision": "workspace:626889fe80d84e8b00fc",
+  "gitCommit": "dcf52a7636980295b433eb6891947b3431f463a0",
+  "runId": "local:95832",
+  "artifactDigest": "sha256:e3a0df27ea832ab61191e72149f6b308613d7f7cb0bf614d2d2cbae9455f2121"
 }
