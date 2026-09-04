@@ -71,6 +71,7 @@ pnpm verify
 ```
 
 `pnpm verify`는 선행 관계가 있는 단계를 순서대로 실행하고, 프로덕션 빌드 이후 서로 독립적인 검사는 최대 4개씩 병렬 실행합니다.
+의존성 감사 API가 일시적으로 응답하지 않으면 제한적으로 재시도합니다. 계속 실패할 때는 `pnpm-lock.yaml`이 같고 24시간이 지나지 않은 성공 기록만 재사용하며, 그 외에는 검증을 중단합니다.
 
 - 의존성 감사, 린트, 엄격한 TypeScript 검사, 단위 및 상호작용 테스트
 - 소스 리비전과 해시를 포함한 커버리지 근거 기록 및 프로덕션 빌드
@@ -130,7 +131,7 @@ CI에서는 `pnpm ai:check`가 결정론적 제안 검증과 사람 승인 기�
 - [`packages/figma-bridge`](packages/figma-bridge): Figma REST 어댑터와 검토 계약
 - [`ai`](ai): Claude Code 요청, 프롬프트, 스키마, 테스트 픽스처
 - [`scripts`](scripts): 문서 생성, 계약 검사, 도입률 분석, 마이그레이션, 품질 근거 자동화
-- [`.github/workflows`](.github/workflows): CI, Pages, release-please 워크플로
+- [`.github/workflows`](.github/workflows): 전체 검증과 Pages 배포를 수행하는 CI, CI 성공 뒤 실행되는 release-please 워크플로
 
 접근성과 운영 세부 내용은 [아키텍처](docs/architecture.md), [접근성](docs/accessibility.md), [릴리스와 호환성](docs/release-and-compatibility.md)에서 확인할 수 있습니다.
 
@@ -140,6 +141,6 @@ CI에서는 `pnpm ai:check`가 결정론적 제안 검증과 사람 승인 기�
 - Claude 라이브 제안은 실행 환경의 Claude Code 로그인이 필요합니다.
 - 저장소 내부 도입률은 실제 조직 도입률이나 사용자 성과 지표가 아닙니다.
 - 저장소에 커밋한 JSON 검증 근거는 로컬 최종 검증 결과입니다. 공개 CI와 Pages 배포 상태는 [GitHub Actions](https://github.com/kwakhyun/aster-ui-platform/actions)에서 별도로 확인합니다.
-- 공개 저장소의 release-please 작업은 전체 검증까지 자동 실행합니다. 릴리스 PR 생성은 저장소 소유자가 Actions의 PR 생성 권한과 `RELEASE_PLEASE_PR_ENABLED=true` 변수를 명시적으로 설정한 경우에만 활성화됩니다.
+- 공개 저장소의 release-please 작업은 main 브랜치 CI가 통과한 뒤에만 실행됩니다. 릴리스 PR 생성은 저장소 소유자가 Actions의 PR 생성 권한과 `RELEASE_PLEASE_PR_ENABLED=true` 변수를 명시적으로 설정한 경우에만 활성화됩니다.
 
 [MIT License](LICENSE)

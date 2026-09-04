@@ -65,7 +65,7 @@ Claude Code는 도구 사용을 비활성화한 비대화형 프로세스로 실
 - Docker 기본 이미지와 GitHub Action은 해시 또는 커밋 SHA로 고정합니다.
 - Kubernetes는 변경 불가능한 이미지 해시만 입력받는 렌더러를 사용합니다. UID/GID 101, 서비스 계정 토큰 미탑재, capability 제거, seccomp, 권한 상승 차단을 적용합니다.
 - 상태 검사 엔드포인트인 `/healthz`는 실제 빌드된 `index.html`의 존재를 확인합니다. CI는 문서가 참조하는 정적 자산까지 요청합니다.
-- release-please 실행 전 `pnpm verify`를 수행합니다. 검증 보고서 생성 뒤 Studio를 다시 빌드하므로 배포 파일과 화면의 품질 근거가 같은 source revision을 가리킵니다.
+- main 브랜치의 `pnpm verify`와 컨테이너 검증이 모두 통과한 뒤 release-please를 실행합니다. 검증 보고서 생성 뒤 Studio를 다시 빌드하므로 배포 파일과 화면의 품질 근거가 같은 source revision을 가리킵니다.
 - 시각 회귀 빌드는 저장소에 포함된 통과 상태의 검증 근거 픽스처와 고정된 생성 시각을 사용합니다. 리포터는 현재 소스 리비전으로 결과를 기록합니다.
 - macOS와 Linux의 글꼴 안티앨리어싱 차이는 플랫폼별 승인 이미지로 분리하고 0.3% 픽셀 차이 기준을 적용합니다.
 - Linux 기준 이미지는 Ubuntu 24.04에서만 실행되는 `Refresh Linux visual baselines` 수동 워크플로로 전체 세트를 생성합니다. 사람이 검토한 이미지에 한해 저장소에 반영합니다.

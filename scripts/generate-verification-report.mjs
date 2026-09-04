@@ -7,6 +7,7 @@ import {
   getSourceRevision,
   verifyEvidenceReport,
 } from "./lib/provenance.mjs";
+import { inspectReusableSecurityEvidence } from "./record-security-evidence.mjs";
 
 const projectRoot = process.cwd();
 const outputPath = path.join(projectRoot, "reports/verification.md");
@@ -87,8 +88,14 @@ const evidenceEntries = await Promise.all(
   Object.entries(evidenceReportPaths).map(async ([name, reportPath]) => [name, await readJson(reportPath)]),
 );
 const evidence = Object.fromEntries(evidenceEntries);
+const securityEvidence = await inspectReusableSecurityEvidence({
+  projectRoot,
+  report: evidence.security,
+});
 const staleEvidence = evidenceEntries
-  .filter(([, report]) => !verifyEvidenceReport(report, sourceRevision, sourceGitCommit))
+  .filter(([name, report]) => name === "security"
+    ? !securityEvidence.reusable
+    : !verifyEvidenceReport(report, sourceRevision, sourceGitCommit))
   .map(([name]) => name);
 if (staleEvidence.length > 0) {
   throw new Error(`Verification report refused stale or invalid evidence: ${staleEvidence.join(", ")}`);

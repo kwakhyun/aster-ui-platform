@@ -7,11 +7,11 @@
       "status": "passed",
       "detail": "All workspace unit tests and axe UI-state checks passed.",
       "command": "pnpm test",
-      "generatedAt": "2026-09-03T23:23:04.280Z",
-      "sourceRevision": "workspace:3a8887aec435b0bb3781",
-      "gitCommit": "b2c12fead9b95c241b2e514f675bd31bc00caa75",
-      "runId": "local:9114",
-      "evidenceDigest": "sha256:de6af33e1590c58ab2ad4f2c28e4c2ff7fc25224feaeff9e1692c7683d4e6c03"
+      "generatedAt": "2026-09-04T01:39:14.420Z",
+      "sourceRevision": "workspace:3f7a7dd096b1a8976eee",
+      "gitCommit": "2a122159d6550fd96baa4a471db2cac8528a20fb",
+      "runId": "local:25462",
+      "evidenceDigest": "sha256:c9fe681d50d8dcf1bd5459f43fc58e8a7498e481be5e6bfb1316e5d91fdc0c66"
     },
     {
       "id": "api",
@@ -19,11 +19,11 @@
       "status": "passed",
       "detail": "38 public API props checked; no breaking changes found.",
       "command": "pnpm api:check",
-      "generatedAt": "2026-09-03T23:23:06.658Z",
-      "sourceRevision": "workspace:3a8887aec435b0bb3781",
-      "gitCommit": "b2c12fead9b95c241b2e514f675bd31bc00caa75",
-      "runId": "local:9796",
-      "evidenceDigest": "sha256:76b97c534fa9e90a6d198e3443109e2ace3994f2086e6b27496a260978605f31"
+      "generatedAt": "2026-09-04T01:39:16.588Z",
+      "sourceRevision": "workspace:3f7a7dd096b1a8976eee",
+      "gitCommit": "2a122159d6550fd96baa4a471db2cac8528a20fb",
+      "runId": "local:26111",
+      "evidenceDigest": "sha256:77e31112d179f5e63769c84bca08049298fe5eed161bb2dfd4e9687c13d26b9f"
     },
     {
       "id": "visual",
@@ -31,11 +31,11 @@
       "status": "passed",
       "detail": "9 browser scenarios and 11 visual snapshots passed, including axe checks in Chrome.",
       "command": "pnpm test:visual",
-      "generatedAt": "2026-09-03T23:23:30.279Z",
-      "sourceRevision": "workspace:3a8887aec435b0bb3781",
-      "gitCommit": "b2c12fead9b95c241b2e514f675bd31bc00caa75",
-      "runId": "local:10663",
-      "evidenceDigest": "sha256:8e5452b3855939fb5bc5ff3ace00227864c3a75317e59c91a3c48c3bcf1ac9c9"
+      "generatedAt": "2026-09-04T01:39:33.907Z",
+      "sourceRevision": "workspace:3f7a7dd096b1a8976eee",
+      "gitCommit": "2a122159d6550fd96baa4a471db2cac8528a20fb",
+      "runId": "local:26736",
+      "evidenceDigest": "sha256:8710ff7a244e1b204ee6141ef5205f6234c6ce46ca8218158bfe18608537c02c"
     },
     {
       "id": "performance",
@@ -43,28 +43,28 @@
       "status": "passed",
       "detail": "Production JavaScript, CSS, font, and responsive image sizes are within budget.",
       "command": "pnpm perf:check",
-      "generatedAt": "2026-09-03T23:23:07.169Z",
-      "sourceRevision": "workspace:3a8887aec435b0bb3781",
-      "gitCommit": "b2c12fead9b95c241b2e514f675bd31bc00caa75",
-      "runId": "local:9921",
-      "evidenceDigest": "sha256:8935d0d3036218981d0669a63d9f72279639ccf84d591d70ff9784fbd01662b2"
+      "generatedAt": "2026-09-04T01:39:17.072Z",
+      "sourceRevision": "workspace:3f7a7dd096b1a8976eee",
+      "gitCommit": "2a122159d6550fd96baa4a471db2cac8528a20fb",
+      "runId": "local:26236",
+      "evidenceDigest": "sha256:b7ab86fce9964c11446f4e6faf07b9b78c14505797825b3ab1040a38a41bb4d2"
     },
     {
       "id": "security",
       "label": "Production dependency audit",
       "status": "passed",
-      "detail": "The production dependency audit found no known vulnerabilities.",
+      "detail": "The audited production dependency snapshot has no known vulnerabilities.",
       "command": "pnpm audit --prod --audit-level high",
-      "generatedAt": "2026-09-03T23:23:00.919Z",
-      "sourceRevision": "workspace:3a8887aec435b0bb3781",
-      "gitCommit": "b2c12fead9b95c241b2e514f675bd31bc00caa75",
-      "runId": "local:8952",
-      "evidenceDigest": "sha256:c88cb06f071353a8fc5f77267384218a38c880e381ba017084e7622610f39850"
+      "generatedAt": "2026-09-04T00:44:24.909Z",
+      "sourceRevision": "workspace:3f7a7dd096b1a8976eee",
+      "gitCommit": "2a122159d6550fd96baa4a471db2cac8528a20fb",
+      "runId": "local:87746",
+      "evidenceDigest": "sha256:d1dbbe21e61528ab4fad1793b2559e41905526f9eb39dc5c5c285551c80dbcbd"
     }
   ],
-  "generatedAt": "2026-09-03T23:23:30.610Z",
-  "sourceRevision": "workspace:3a8887aec435b0bb3781",
-  "gitCommit": "b2c12fead9b95c241b2e514f675bd31bc00caa75",
-  "runId": "local:10806",
-  "artifactDigest": "sha256:5687df07fe8dd2fabfeee5ece800b56ef1e5239be928a382f1b4754073b3d430"
+  "generatedAt": "2026-09-04T01:39:34.244Z",
+  "sourceRevision": "workspace:3f7a7dd096b1a8976eee",
+  "gitCommit": "2a122159d6550fd96baa4a471db2cac8528a20fb",
+  "runId": "local:27270",
+  "artifactDigest": "sha256:a348d9700b421b7f198f51f175552fdcfc3ab8c834aae458de0e0661eb2ebc38"
 }
