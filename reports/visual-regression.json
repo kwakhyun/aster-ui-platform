@@ -32,24 +32,24 @@
     },
     "samples": [
       {
-        "fcpMs": 588,
-        "lcpMs": 588,
+        "fcpMs": 552,
+        "lcpMs": 552,
         "cls": 0
       },
       {
-        "fcpMs": 564,
-        "lcpMs": 564,
+        "fcpMs": 520,
+        "lcpMs": 520,
         "cls": 0
       },
       {
-        "fcpMs": 540,
-        "lcpMs": 540,
+        "fcpMs": 500,
+        "lcpMs": 500,
         "cls": 0
       }
     ],
     "actual": {
-      "medianFcpMs": 564,
-      "medianLcpMs": 564,
+      "medianFcpMs": 520,
+      "medianLcpMs": 520,
       "maxCls": 0
     },
     "status": "passed"
@@ -58,148 +58,148 @@
     {
       "title": "measures cold-load rendering under a fixed desktop profile",
       "status": "passed",
-      "durationMs": 5803
+      "durationMs": 5611
     },
     {
       "title": "matches the approved coral desktop composition",
       "status": "passed",
-      "durationMs": 601
+      "durationMs": 487
     },
     {
       "title": "resolves swatches and compares pending changes independently of the preview theme",
       "status": "passed",
-      "durationMs": 924
+      "durationMs": 805
     },
     {
       "title": "keeps component browsing available when browser storage access is denied",
       "status": "passed",
-      "durationMs": 793
+      "durationMs": 731
     },
     {
       "title": "renders the ocean theme from the same semantic contract",
       "status": "passed",
-      "durationMs": 598
+      "durationMs": 527
     },
     {
       "title": "captures the Figma review and local rehearsal states",
       "status": "passed",
-      "durationMs": 1021
+      "durationMs": 926
     },
     {
       "title": "covers every shipped component preview in the browser",
       "status": "passed",
-      "durationMs": 2008
+      "durationMs": 1840
     },
     {
       "title": "keeps tab semantics live only for the visible preview",
       "status": "passed",
-      "durationMs": 706
+      "durationMs": 564
     },
     {
       "title": "survives a 200 percent equivalent viewport and mobile flow",
       "status": "passed",
-      "durationMs": 1104
+      "durationMs": 942
     },
     {
       "title": "keeps every status item inside the workspace across desktop breakpoints",
       "status": "passed",
-      "durationMs": 1022
+      "durationMs": 762
     },
     {
       "title": "keeps component and reference panels inside a 320px workspace",
       "status": "passed",
-      "durationMs": 806
+      "durationMs": 679
     },
     {
       "title": "keeps component and reference panels inside a 390px workspace",
       "status": "passed",
-      "durationMs": 897
+      "durationMs": 657
     },
     {
       "title": "keeps component and reference panels inside a 720px workspace",
       "status": "passed",
-      "durationMs": 955
+      "durationMs": 669
     },
     {
       "title": "keeps component and reference panels inside a 820px workspace",
       "status": "passed",
-      "durationMs": 901
+      "durationMs": 665
     },
     {
       "title": "keeps component and reference panels inside a 821px workspace",
       "status": "passed",
-      "durationMs": 797
+      "durationMs": 673
     },
     {
       "title": "keeps component and reference panels inside a 900px workspace",
       "status": "passed",
-      "durationMs": 934
+      "durationMs": 682
     },
     {
       "title": "keeps component and reference panels inside a 1024px workspace",
       "status": "passed",
-      "durationMs": 826
+      "durationMs": 646
     },
     {
       "title": "keeps component and reference panels inside a 1100px workspace",
       "status": "passed",
-      "durationMs": 877
+      "durationMs": 753
     },
     {
       "title": "keeps component and reference panels inside a 1101px workspace",
       "status": "passed",
-      "durationMs": 880
+      "durationMs": 760
     },
     {
       "title": "keeps component and reference panels inside a 1280px workspace",
       "status": "passed",
-      "durationMs": 856
+      "durationMs": 741
     },
     {
       "title": "keeps component and reference panels inside a 1361px workspace",
       "status": "passed",
-      "durationMs": 837
+      "durationMs": 658
     },
     {
       "title": "keeps component and reference panels inside a 1440px workspace",
       "status": "passed",
-      "durationMs": 890
+      "durationMs": 688
     },
     {
       "title": "retains visible selection and focus in forced colors",
       "status": "passed",
-      "durationMs": 561
+      "durationMs": 405
     },
     {
       "title": "workspace deep links survive reload and browser history",
       "status": "passed",
-      "durationMs": 829
+      "durationMs": 529
     },
     {
       "title": "overlays keep shortcuts and focus contained at 390px",
       "status": "passed",
-      "durationMs": 1145
+      "durationMs": 808
     },
     {
       "title": "overlays keep shortcuts and focus contained at 780px",
       "status": "passed",
-      "durationMs": 1369
+      "durationMs": 851
     },
     {
       "title": "overlays keep shortcuts and focus contained at 1440px",
       "status": "passed",
-      "durationMs": 1204
+      "durationMs": 796
     },
     {
       "title": "quality details exposes inspectable evidence and downloads",
       "status": "passed",
-      "durationMs": 909
+      "durationMs": 558
     }
   ],
   "status": "passed",
-  "generatedAt": "2026-09-05T05:33:20.200Z",
-  "sourceRevision": "workspace:3219c6369745f6484001",
-  "gitCommit": "40b657efbeb6bc784bc4429147faccbcec6cd57c",
-  "runId": "local:9043",
-  "artifactDigest": "sha256:dbb1bbbf5f27d3db7f46a0f1fed4a35512ec9ac3c0b03ecbcc7635d661f50507"
+  "generatedAt": "2026-09-05T08:47:14.627Z",
+  "sourceRevision": "workspace:2d483ca0848ebe9a875e",
+  "gitCommit": "e696468b2d7e3ce217fba27f207a509ff2c2441a",
+  "runId": "local:40655",
+  "artifactDigest": "sha256:d2341520668267f7e8be45c708c3f93e24d97fe1feff35313748d8f52b5748be"
 }
