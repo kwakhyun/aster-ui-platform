@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "command": "pnpm perf:check",
+  "command": "pnpm perf:final",
   "budgets": {
     "javascriptGzipBytes": 190000,
     "cssGzipBytes": 35000,
@@ -8,7 +8,7 @@
     "fontBytes": 120000
   },
   "actual": {
-    "javascriptGzipBytes": 96983,
+    "javascriptGzipBytes": 96937,
     "cssGzipBytes": 11308,
     "largestImageBytes": 33812,
     "fontBytes": 48256
@@ -25,9 +25,9 @@
   ],
   "failures": [],
   "status": "passed",
-  "generatedAt": "2026-09-05T05:32:33.454Z",
+  "generatedAt": "2026-09-05T05:33:29.699Z",
   "sourceRevision": "workspace:3219c6369745f6484001",
   "gitCommit": "40b657efbeb6bc784bc4429147faccbcec6cd57c",
-  "runId": "local:7979",
-  "artifactDigest": "sha256:942366464d9ce6a289f16a71a4cb20f280f15a2194c3c4c88cd26d34d8fd7fa7"
+  "runId": "local:10992",
+  "artifactDigest": "sha256:baea0036efa5debfae928666da09d0a3868fb8576e8510b7857b492beef6a249"
 }

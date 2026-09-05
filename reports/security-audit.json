@@ -5,9 +5,9 @@
   "dependencySnapshot": "sha256:1c7688f3822ab1d23627e4d243887b2affe3c60f0366af04bc2617840c404804",
   "knownVulnerabilities": 0,
   "status": "passed",
-  "generatedAt": "2026-09-04T03:01:52.332Z",
-  "sourceRevision": "workspace:c160d794f5d315cd73e4",
-  "gitCommit": "bb68471733428e4439ecc1eb071c09afd802b250",
-  "runId": "local:31021",
-  "artifactDigest": "sha256:8eafb30b8029c725de9a720cf7af2caf13c2c5284f56776bd2fa12242bb56435"
+  "generatedAt": "2026-09-05T05:31:56.392Z",
+  "sourceRevision": "workspace:3219c6369745f6484001",
+  "gitCommit": "40b657efbeb6bc784bc4429147faccbcec6cd57c",
+  "runId": "local:6033",
+  "artifactDigest": "sha256:ec0d05b1bfc7e3a999fd0df210c16d645ab7b815ecf785f8d4d58265ddbf3866"
 }

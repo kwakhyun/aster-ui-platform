@@ -49,14 +49,14 @@
     {
       "consumer": "Aster UI Studio",
       "package": "@aster-ui/react",
-      "filesScanned": 25,
+      "filesScanned": 31,
       "declaredTargets": 6,
       "coveredTargets": 6,
       "coverageRate": 1,
       "componentUsages": {
         "Alert": 1,
         "Badge": 1,
-        "Button": 7,
+        "Button": 8,
         "Tabs": 1,
         "TextField": 1,
         "TreatmentCard": 2
@@ -68,9 +68,9 @@
     }
   ],
   "status": "passed",
-  "generatedAt": "2026-09-04T05:37:59.662Z",
-  "sourceRevision": "workspace:bc86aadc0cd1342a680e",
-  "gitCommit": "afb86deef429303fc45ec667c3a9cb719f0a6df1",
-  "runId": "local:10344",
-  "artifactDigest": "sha256:bc3e3f4bd70f62f85c57e9d3c5e3ead21b8e2c4c3451b7fc2e69b686ac2f103e"
+  "generatedAt": "2026-09-05T05:32:32.992Z",
+  "sourceRevision": "workspace:3219c6369745f6484001",
+  "gitCommit": "40b657efbeb6bc784bc4429147faccbcec6cd57c",
+  "runId": "local:7903",
+  "artifactDigest": "sha256:008fbabce417f55ccfbe1e71682f4c43b20019db5b0c5c4e11a87fdee4513483"
 }
