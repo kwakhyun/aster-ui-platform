@@ -13,6 +13,7 @@ import { useModalFocus } from "../hooks/useModalFocus";
 
 interface SidebarProps {
   readonly open: boolean;
+  readonly blocked: boolean;
   readonly overlayNavigation: boolean;
   readonly selectedComponent: string;
   readonly onRequestOpen: () => void;
@@ -23,6 +24,7 @@ interface SidebarProps {
 
 export function Sidebar({
   open,
+  blocked,
   overlayNavigation,
   selectedComponent,
   onRequestOpen,
@@ -38,8 +40,13 @@ export function Sidebar({
   const handleShortcut = useEffectEvent((event: KeyboardEvent) => {
     if ((event.metaKey || event.ctrlKey) && event.key.toLocaleLowerCase() === "k") {
       event.preventDefault();
+      if (blocked) return;
       onRequestOpen();
-      window.requestAnimationFrame(() => searchRef.current?.focus());
+      window.requestAnimationFrame(() => {
+        const search = searchRef.current;
+        const modal = document.querySelector('[aria-modal="true"]');
+        if (search && (!modal || modal.contains(search))) search.focus();
+      });
     }
 
     if (event.key === "Escape" && open) {
@@ -84,8 +91,8 @@ export function Sidebar({
         role={overlayNavigation && open ? "dialog" : undefined}
         aria-modal={overlayNavigation && open ? "true" : undefined}
         aria-label="Component browser"
-        aria-hidden={overlayNavigation && !open ? "true" : undefined}
-        inert={overlayNavigation && !open ? true : undefined}
+        aria-hidden={blocked || (overlayNavigation && !open) ? "true" : undefined}
+        inert={blocked || (overlayNavigation && !open) ? true : undefined}
       >
         <label className="sidebar__search">
           <MagnifyingGlass aria-hidden="true" />

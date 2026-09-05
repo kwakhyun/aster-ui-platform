@@ -1,6 +1,7 @@
 import { isThemeName, tokenVersion } from "@aster-ui/tokens";
 import type { QualityEvidence } from "../types";
 import type { ReviewReceipt } from "./reviewService";
+import { getBrowserStorage } from "./browserStorage";
 
 export const releaseStorageKey = "aster-ui:release:v3";
 
@@ -50,7 +51,7 @@ export interface ReleasePublisher {
 }
 
 interface LocalPublisherOptions {
-  readonly storage: Storage;
+  readonly storage: Storage | null;
   readonly delayMs?: number;
   readonly now?: () => Date;
 }
@@ -122,9 +123,9 @@ function matchesContext(receipt: ReleaseReceipt, context: ReleaseContext): boole
     && receipt.evidence.artifactDigest === context.evidence.artifactDigest;
 }
 
-function readStoredReceipt(storage: Storage): ReleaseReceipt | null {
+function readStoredReceipt(storage: Storage | null): ReleaseReceipt | null {
   try {
-    const value = storage.getItem(releaseStorageKey);
+    const value = storage?.getItem(releaseStorageKey);
     if (!value) return null;
     const parsed: unknown = JSON.parse(value);
     return isReleaseReceipt(parsed) ? parsed : null;
@@ -134,7 +135,7 @@ function readStoredReceipt(storage: Storage): ReleaseReceipt | null {
 }
 
 export class LocalReleaseRehearsalPublisher implements ReleasePublisher {
-  readonly #storage: Storage;
+  readonly #storage: Storage | null;
   readonly #delayMs: number;
   readonly #now: () => Date;
 
@@ -150,6 +151,7 @@ export class LocalReleaseRehearsalPublisher implements ReleasePublisher {
   }
 
   async publish({ signal, idempotencyKey, context }: ReleaseRequest): Promise<ReleaseReceipt> {
+    signal?.throwIfAborted();
     if (!isReleaseContext(context) || idempotencyKey.trim().length === 0) {
       throw new Error("The release rehearsal is missing valid review or quality evidence.");
     }
@@ -159,15 +161,17 @@ export class LocalReleaseRehearsalPublisher implements ReleasePublisher {
     }
 
     await new Promise<void>((resolve, reject) => {
-      const timer = window.setTimeout(resolve, this.#delayMs);
-      signal?.addEventListener(
-        "abort",
-        () => {
-          window.clearTimeout(timer);
-          reject(new DOMException("Release rehearsal was stopped", "AbortError"));
-        },
-        { once: true },
-      );
+      const onAbort = () => {
+        window.clearTimeout(timer);
+        signal?.removeEventListener("abort", onAbort);
+        reject(new DOMException("Release rehearsal was stopped", "AbortError"));
+      };
+      const timer = window.setTimeout(() => {
+        signal?.removeEventListener("abort", onAbort);
+        resolve();
+      }, this.#delayMs);
+      signal?.addEventListener("abort", onAbort, { once: true });
+      if (signal?.aborted) onAbort();
     });
 
     const receipt: ReleaseReceipt = {
@@ -191,8 +195,11 @@ export class LocalReleaseRehearsalPublisher implements ReleasePublisher {
     };
 
     try {
+      signal?.throwIfAborted();
+      if (!this.#storage) throw new Error("Browser storage is unavailable.");
       this.#storage.setItem(releaseStorageKey, JSON.stringify(receipt));
     } catch (error) {
+      if (signal?.aborted) throw error;
       throw new Error("The local rehearsal record could not be saved.", { cause: error });
     }
     return receipt;
@@ -200,5 +207,5 @@ export class LocalReleaseRehearsalPublisher implements ReleasePublisher {
 }
 
 export function createLocalReleasePublisher(): ReleasePublisher {
-  return new LocalReleaseRehearsalPublisher({ storage: window.localStorage });
+  return new LocalReleaseRehearsalPublisher({ storage: getBrowserStorage() });
 }

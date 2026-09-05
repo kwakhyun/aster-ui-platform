@@ -67,11 +67,11 @@ function isReviewReceipt(value: unknown): value is ReviewReceipt {
 }
 
 export function readStoredReviewReceipt(
-  storage: Storage,
+  storage: Storage | null,
   review: FigmaSyncReview,
 ): ReviewReceipt | null {
   try {
-    const stored = storage.getItem(reviewStorageKey);
+    const stored = storage?.getItem(reviewStorageKey);
     if (!stored) return null;
     const parsed: unknown = JSON.parse(stored);
     if (!isReviewReceipt(parsed)) return null;
@@ -87,7 +87,7 @@ export function readStoredReviewReceipt(
 }
 
 export function storeReviewReceipt(
-  storage: Storage,
+  storage: Storage | null,
   review: FigmaSyncReview,
   reviewer: ReviewIdentity = localReviewIdentity,
   now: () => Date = () => new Date(),
@@ -103,6 +103,7 @@ export function storeReviewReceipt(
     reviewer,
   };
   try {
+    if (!storage) throw new Error("Browser storage is unavailable.");
     storage.setItem(reviewStorageKey, JSON.stringify(receipt));
   } catch (error) {
     throw new Error("The local review record could not be saved.", { cause: error });

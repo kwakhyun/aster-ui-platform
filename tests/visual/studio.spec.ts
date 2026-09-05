@@ -104,6 +104,47 @@ test("matches the approved coral desktop composition", async ({ page }, testInfo
   await expect(page).toHaveScreenshot("studio-coral-1440x1024.png", stableScreenshotOptions(page));
 });
 
+test("resolves swatches and compares pending changes independently of the preview theme", async ({ page }, testInfo) => {
+  const focusChange = page.locator(".token-changes__list > button").filter({ hasText: "color.focus.ring" });
+  await expect(focusChange.locator(".token-swatch").nth(0)).toHaveCSS("background-color", "rgb(255, 170, 161)");
+  await expect(focusChange.locator(".token-swatch").nth(1)).toHaveCSS("background-color", "rgb(37, 99, 235)");
+  await focusChange.click();
+  const drawerChange = page.locator(".diff-drawer__changes article").filter({ hasText: "color.focus.ring" });
+  await expect(drawerChange.locator(".token-swatch").nth(1)).toHaveCSS("background-color", "rgb(37, 99, 235)");
+  await page.getByRole("button", { name: "Close", exact: true }).click();
+  await page.getByRole("tab", { name: "Tokens", exact: true }).click();
+  await page.getByRole("combobox", { name: "Preview theme" }).selectOption("ocean");
+  const before = page.locator('[data-phase="before"] .token-comparison__sample');
+  const after = page.locator('[data-phase="after"] .token-comparison__sample');
+  await expect(before.locator("button")).toHaveCSS("background-color", "rgb(255, 98, 87)");
+  await expect(after.locator("button")).toHaveCSS("background-color", "rgb(190, 51, 45)");
+  await expect(before.locator("button")).toHaveCSS("outline-color", "rgb(255, 170, 161)");
+  await expect(after.locator("button")).toHaveCSS("outline-color", "rgb(37, 99, 235)");
+  await expect(before).toHaveAttribute("inert", "");
+  await assertBrowserAxe(page, testInfo);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await assertNoHorizontalOverflow(page, "mobile comparison", [".token-comparison", ".token-comparison__phase"]);
+  await testInfo.attach("token-comparison-mobile", { body: await page.screenshot({ fullPage: true }), contentType: "image/png" });
+});
+
+test("keeps component browsing available when browser storage access is denied", async ({ page }, testInfo) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, "localStorage", {
+      configurable: true,
+      get() { throw new DOMException("Access denied", "SecurityError"); },
+    });
+  });
+  await page.reload();
+  await expect(page.getByText(/Browser storage is unavailable/)).toBeVisible();
+  await page.getByRole("button", { name: "TextField", exact: true }).click();
+  await expect(page.getByRole("textbox", { name: "Search clinics" })).toBeVisible();
+  await page.getByRole("button", { name: "Review changes", exact: true }).click();
+  await page.getByRole("button", { name: "Complete review" }).click();
+  await expect(page.getByText("The Figma review could not be saved.")).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Semantic tokens · v12" })).toBeVisible();
+  await assertBrowserAxe(page, testInfo);
+});
+
 test("renders the ocean theme from the same semantic contract", async ({ page }, testInfo) => {
   await page.getByRole("combobox", { name: "Preview theme" }).selectOption("ocean");
   await expect(page.locator(".app-shell")).toHaveAttribute("data-theme", "ocean");
@@ -176,7 +217,6 @@ test("survives a 200 percent equivalent viewport and mobile flow", async ({ page
   await expect(page.locator("main")).toHaveAttribute("inert", "");
   await expect(page.locator(".inspector")).toHaveAttribute("inert", "");
   await expect(page.locator(".topbar__brand")).toHaveAttribute("inert", "");
-  await expect(page.locator(".topbar__nav")).toHaveAttribute("inert", "");
   await expect(page.locator(".topbar__actions")).toHaveAttribute("inert", "");
   await assertBrowserAxe(page, test.info());
   await componentDialog.getByRole("button", { name: "Close component browser" }).click();
@@ -226,12 +266,11 @@ test("keeps every status item inside the workspace across desktop breakpoints", 
   }
 });
 
-test("keeps component and reference panels inside every responsive workspace", async ({ page }) => {
-  const viewportWidths = [320, 390, 720, 820, 821, 900, 1024, 1100, 1101, 1280, 1361, 1440];
-  const workspaceTabs = page.locator(".workspace__tabs");
-  const platformTabs = page.locator(".workspace__platforms");
+for (const width of [320, 390, 720, 820, 821, 900, 1024, 1100, 1101, 1280, 1361, 1440]) {
+  test(`keeps component and reference panels inside a ${width}px workspace`, async ({ page }) => {
+    const workspaceTabs = page.locator(".workspace__tabs");
+    const platformTabs = page.locator(".workspace__platforms");
 
-  for (const width of viewportWidths) {
     await page.setViewportSize({ width, height: width <= 720 ? 844 : 900 });
     await workspaceTabs.getByRole("tab", { name: "Preview", exact: true }).click();
     await platformTabs.getByRole("tab", { name: "Web", exact: true }).click();
@@ -273,8 +312,8 @@ test("keeps component and reference panels inside every responsive workspace", a
       ".preview-canvas",
       ".native-artifact",
     ]);
-  }
-});
+  });
+}
 
 test("retains visible selection and focus in forced colors", async ({ page }) => {
   await page.emulateMedia({ forcedColors: "active" });
@@ -282,4 +321,58 @@ test("retains visible selection and focus in forced colors", async ({ page }) =>
   await previewTab.focus();
   await expect(previewTab).toBeFocused();
   await expect(previewTab).toHaveCSS("outline-style", "solid");
+});
+
+test("workspace deep links survive reload and browser history", async ({ page }) => {
+  await page.goto("/?component=Button&tab=tokens&theme=ocean&platform=ios");
+  await expect(page.getByRole("heading", { name: "Button", exact: true })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Tokens", exact: true })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("combobox", { name: "Preview theme" })).toHaveValue("ocean");
+  await page.getByRole("tab", { name: "Preview", exact: true }).click();
+  await expect(page.getByRole("tab", { name: "iOS", exact: true })).toHaveAttribute("aria-selected", "true");
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Button", exact: true })).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "Preview theme" })).toHaveValue("ocean");
+  await page.goBack();
+  await expect(page.getByRole("tab", { name: "Tokens", exact: true })).toHaveAttribute("aria-selected", "true");
+  await page.goForward();
+  await expect(page.getByRole("tab", { name: "Preview", exact: true })).toHaveAttribute("aria-selected", "true");
+});
+
+for (const width of [390, 780, 1440]) {
+  test(`overlays keep shortcuts and focus contained at ${width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 1024 });
+    for (const name of ["Review changes", "Run rehearsal", "View details"]) {
+      const trigger = page.getByRole("button", { name, exact: true });
+      await trigger.click();
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toHaveCount(1);
+      await page.keyboard.press("Meta+k");
+      await page.keyboard.press("Control+k");
+      await expect(dialog.getByRole("button", { name: "Close", exact: true })).toBeFocused();
+      await page.keyboard.press("Shift+Tab");
+      expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
+      await page.keyboard.press("Tab");
+      expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
+      await assertNoHorizontalOverflow(page, `${name} at ${width}px`, ["[role=dialog]"]);
+      if (name === "View details") await assertBrowserAxe(page, testInfo);
+      await page.keyboard.press("Escape");
+      await expect(dialog).toHaveCount(0);
+      await expect(trigger).toBeFocused();
+    }
+  });
+}
+
+test("quality details exposes inspectable evidence and downloads", async ({ page }) => {
+  await page.getByRole("button", { name: "View details", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Quality details" });
+  await expect(dialog.getByRole("heading", { name: "Recorded checks" })).toBeVisible();
+  await dialog.getByText("Full evidence identifiers", { exact: true }).click();
+  await expect(dialog.locator(".quality-details__identifiers dd").first()).toContainText("workspace:");
+  const [download] = await Promise.all([
+    page.waitForEvent("download"),
+    dialog.getByRole("link", { name: "Download all quality evidence (JSON)" }).click(),
+  ]);
+  expect(download.suggestedFilename()).toBe("aster-quality-evidence.json");
+  expect(await download.failure()).toBeNull();
 });

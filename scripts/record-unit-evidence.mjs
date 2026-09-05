@@ -6,7 +6,7 @@ import { createEvidenceReport } from "./lib/provenance.mjs";
 const outputPath = path.join(process.cwd(), "reports/unit-tests.json");
 const report = await createEvidenceReport({
   schemaVersion: 3,
-  command: "pnpm test",
+  command: process.argv.includes("--coverage") ? "pnpm test:coverage && pnpm test:scripts" : "pnpm test",
   scope: "All Turborepo workspace unit suites, including axe state tests",
   status: "passed",
 });

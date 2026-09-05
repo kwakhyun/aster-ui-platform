@@ -56,6 +56,7 @@ const evidenceReportPaths = {
   consumerCoverage: "reports/consumer-coverage.json",
   visual: "reports/visual-regression.json",
   performance: "reports/performance-budget.json",
+  finalAssets: "reports/final-assets.json",
   security: "reports/security-audit.json",
   coverage: "reports/coverage.json",
   ai: "reports/ai-verification.json",
@@ -103,7 +104,9 @@ if (staleEvidence.length > 0) {
 if (evidence.unit.status !== "passed"
   || evidence.api.status !== "passed"
   || evidence.visual.status !== "passed"
+  || evidence.visual.browserPerformance?.status !== "passed"
   || evidence.performance.status !== "passed"
+  || evidence.finalAssets.status !== "passed"
   || evidence.security.status !== "passed"
   || evidence.coverage.status !== "passed"
   || evidence.ai.status !== "passed"
@@ -202,10 +205,22 @@ ${coverageRows}
 
 | 자산 | 실제 크기 | 예산 |
 | --- | ---: | ---: |
-| JavaScript gzip | ${formatBytes(evidence.performance.actual.javascriptGzipBytes)} B | ${formatBytes(evidence.performance.budgets.javascriptGzipBytes)} B |
-| CSS gzip | ${formatBytes(evidence.performance.actual.cssGzipBytes)} B | ${formatBytes(evidence.performance.budgets.cssGzipBytes)} B |
-| 가장 큰 반응형 이미지 | ${formatBytes(evidence.performance.actual.largestImageBytes)} B | ${formatBytes(evidence.performance.budgets.largestImageBytes)} B |
-| 프로젝트에 포함된 글꼴 | ${formatBytes(evidence.performance.actual.fontBytes)} B | ${formatBytes(evidence.performance.budgets.fontBytes)} B |
+| JavaScript gzip | ${formatBytes(evidence.finalAssets.actual.javascriptGzipBytes)} B | ${formatBytes(evidence.finalAssets.budgets.javascriptGzipBytes)} B |
+| CSS gzip | ${formatBytes(evidence.finalAssets.actual.cssGzipBytes)} B | ${formatBytes(evidence.finalAssets.budgets.cssGzipBytes)} B |
+| 가장 큰 반응형 이미지 | ${formatBytes(evidence.finalAssets.actual.largestImageBytes)} B | ${formatBytes(evidence.finalAssets.budgets.largestImageBytes)} B |
+| 프로젝트에 포함된 글꼴 | ${formatBytes(evidence.finalAssets.actual.fontBytes)} B | ${formatBytes(evidence.finalAssets.budgets.fontBytes)} B |
+
+## 브라우저 초기 로드 측정
+
+1440 × 1024, 캐시 비활성화, CPU 4배 감속, 다운로드 10 Mbps, 지연 40 ms 조건으로 새 브라우저 컨텍스트에서 3회 측정합니다. 글꼴과 이미지 로드 후 1초까지 관찰하며, CLS는 세 실행 중 최대 세션 값을 사용합니다.
+
+| 지표 | 측정 | 예산 |
+| --- | ---: | ---: |
+| FCP 중앙값 | ${Math.round(evidence.visual.browserPerformance.actual.medianFcpMs)} ms | ${evidence.visual.browserPerformance.budgets.medianFcpMs} ms |
+| LCP 중앙값 | ${Math.round(evidence.visual.browserPerformance.actual.medianLcpMs)} ms | ${evidence.visual.browserPerformance.budgets.medianLcpMs} ms |
+| CLS 최댓값 | ${evidence.visual.browserPerformance.actual.maxCls.toFixed(3)} | ${evidence.visual.browserPerformance.budgets.maxCls} |
+
+로컬 프로덕션 미리보기의 실험실 측정입니다. 실제 사용자 분포, 배포 서버 지연, 전체 세션의 CLS나 INP를 대신하지 않습니다. 원시 표본과 브라우저 버전은 \`reports/visual-regression.json\`에 기록합니다.
 
 ## 검증 범위와 한계
 

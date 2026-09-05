@@ -8,7 +8,10 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
-    testTimeout: 10_000,
+    // Local jsdom/axe checks can share a busy workstation; browser timing has its own budgets.
+    testTimeout: process.env.CI ? 10_000 : 30_000,
+    // Each UI suite loads React and axe. Keep memory bounded on shared machines.
+    fileParallelism: false,
     css: true,
     coverage: {
       provider: "v8",

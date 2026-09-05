@@ -42,10 +42,10 @@ try {
     animations: "disabled",
   });
 
-  const inspectorApiTab = page.getByRole("tab", { name: "API", exact: true }).last();
+  const inspectorApiTab = page.getByRole("tab", { name: "Props", exact: true });
   await inspectorApiTab.focus();
   await inspectorApiTab.press("ArrowRight");
-  await page.getByRole("tab", { name: "Tokens", exact: true }).last().press("ArrowLeft");
+  await page.getByRole("tab", { name: "Changes", exact: true }).press("ArrowLeft");
   await page.screenshot({
     path: path.join(projectRoot, "design/qa-focus-inspector-final.png"),
     animations: "disabled",

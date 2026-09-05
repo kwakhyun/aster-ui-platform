@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
+import { collectComponentDefaults } from "./lib/component-defaults.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const registryPath = path.join(projectRoot, "packages/react/component-registry.json");
@@ -28,14 +29,7 @@ async function generateComponent(entry) {
     throw new Error(`${entry.propsInterface} interface was not found in ${entry.source}.`);
   }
 
-  const defaults = new Map();
-  function collectDefaults(node) {
-    if (ts.isBindingElement(node) && ts.isIdentifier(node.name) && node.initializer) {
-      defaults.set(node.name.text, node.initializer.getText(sourceFile));
-    }
-    ts.forEachChild(node, collectDefaults);
-  }
-  collectDefaults(sourceFile);
+  const defaults = collectComponentDefaults(sourceFile, entry.name);
 
   const props = contract.members.flatMap((member) => {
     if (!ts.isPropertySignature(member) || !member.type || !member.name || !ts.isIdentifier(member.name)) {

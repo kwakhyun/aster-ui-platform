@@ -8,6 +8,7 @@ import { getApiProperties } from "../data/catalog";
 import { handleHorizontalTabKeyDown } from "../lib/tabs";
 import type { InspectorTab, QualityEvidence } from "../types";
 import { EvidenceProvenance } from "./EvidenceProvenance";
+import { TokenSwatch } from "./TokenSwatch";
 
 interface InspectorProps {
   readonly tab: InspectorTab;
@@ -21,9 +22,9 @@ interface InspectorProps {
 }
 
 const tabs: readonly { id: InspectorTab; label: string }[] = [
-  { id: "api", label: "API" },
-  { id: "tokens", label: "Tokens" },
-  { id: "quality", label: "Quality" },
+  { id: "api", label: "Props" },
+  { id: "tokens", label: "Changes" },
+  { id: "quality", label: "Checks" },
 ] as const;
 
 export function Inspector({
@@ -47,6 +48,7 @@ export function Inspector({
       aria-hidden={blocked ? "true" : undefined}
       inert={blocked ? true : undefined}
     >
+      <p className="inspector__scope">Review summary</p>
       <div className="inspector__tabs" role="tablist" aria-label="Inspector views">
         {tabs.map((item) => (
           <button
@@ -94,12 +96,12 @@ export function Inspector({
                   <CaretRight aria-hidden="true" />
                   <span className="token-change__values">
                     <span>
-                      <span className={`token-swatch token-swatch--${index + 1}`} aria-hidden="true" />
+                      <TokenSwatch alias={change.before} theme={review.sourceTheme} />
                       <code>{change.before}</code>
                     </span>
                     <span aria-hidden="true">→</span>
                     <span>
-                      <span className={`token-swatch token-swatch--${index + 1}`} aria-hidden="true" />
+                      <TokenSwatch alias={change.after} theme={review.sourceTheme} />
                       <code>{change.after}</code>
                     </span>
                   </span>
@@ -179,7 +181,7 @@ function EvidenceList({ evidence, onViewVisualTests }: QualitySummaryProps) {
             <span>{check.detail}</span>
           </div>
           {check.id === "visual" ? (
-            <button type="button" onClick={onViewVisualTests}>View details</button>
+            <button type="button" className="text-action" onClick={onViewVisualTests}>View details</button>
           ) : null}
         </li>
       ))}

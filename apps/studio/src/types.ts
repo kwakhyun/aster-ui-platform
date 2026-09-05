@@ -26,6 +26,7 @@ export interface QualityCheckEvidence {
 }
 
 export interface QualityEvidence {
+  readonly browserReport?: BrowserEvidenceReport | null;
   readonly schemaVersion: 3;
   readonly generatedAt: string;
   readonly sourceRevision: string;
@@ -33,4 +34,18 @@ export interface QualityEvidence {
   readonly runId: string;
   readonly artifactDigest: string;
   readonly checks: readonly QualityCheckEvidence[];
+}
+
+export interface BrowserEvidenceReport {
+  readonly sourceRevision: string;
+  readonly generatedAt: string;
+  readonly status: string;
+  readonly browser: string;
+  readonly snapshots: number;
+  readonly accessibilityChecks: number;
+  readonly scenarios?: readonly { title: string; status: string; durationMs: number }[];
+  readonly browserPerformance?: {
+    readonly actual: { medianFcpMs: number; medianLcpMs: number; maxCls: number };
+    readonly profile: { cpuSlowdown: number; latencyMs: number; samples: number };
+  } | null;
 }

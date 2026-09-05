@@ -48,6 +48,25 @@ const receipt: ReleaseReceipt = {
 };
 
 describe("useReleaseWorkflow", () => {
+  it("ignores a cancelled publisher's late response while a new request is running", async () => {
+    const completions: Array<(value: ReleaseReceipt) => void> = [];
+    const publisher: ReleasePublisher = {
+      read: () => null,
+      publish: () => new Promise((resolve) => completions.push(resolve)),
+    };
+    const { result } = renderHook(() => useReleaseWorkflow(context, publisher));
+    let first!: Promise<ReleaseReceipt | null>;
+    let second!: Promise<ReleaseReceipt | null>;
+    act(() => { first = result.current.publish(); });
+    act(() => result.current.cancel());
+    act(() => { second = result.current.publish(); });
+    await act(async () => { completions[0]!(receipt); expect(await first).toBeNull(); });
+    expect(result.current.status).toBe("running");
+    expect(result.current.receipt).toBeNull();
+    await act(async () => { completions[1]!(receipt); await second; });
+    expect(result.current.status).toBe("rehearsed");
+  });
+
   it("surfaces failure, retries with the same idempotency key, and resets", async () => {
     const publish = vi.fn<ReleasePublisher["publish"]>()
       .mockRejectedValueOnce(new Error("registry adapter unavailable"))

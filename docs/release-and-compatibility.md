@@ -32,3 +32,9 @@ main 브랜치 CI는 `pnpm verify`로 품질 검사, 실제 브라우저 시각 
 릴리스 PR은 저장소 소유자가 Actions의 PR 생성 권한을 허용하고 `RELEASE_PLEASE_PR_ENABLED=true` 저장소 변수를 설정한 경우에만 SHA로 고정된 Action에서 생성됩니다. 공개 포트폴리오 저장소는 이 외부 쓰기 권한을 기본적으로 열지 않습니다.
 
 Studio에 표시하는 근거는 최신 소스 변경 커밋과 결합한 로컬 검증 결과이며 GitHub Actions 성공을 대신하지 않습니다. 공개 CI와 Pages 배포 결과는 저장소의 Actions 이력에서 별도로 확인합니다.
+
+## 소스와 검증 근거 커밋 순서
+
+소스, 문서, 테스트와 시각 기준 이미지를 먼저 커밋한 뒤 `pnpm verify`를 실행합니다. 이어서 `reports/`와 `apps/studio/src/generated/quality-evidence.json`의 생성 결과를 별도 커밋합니다. 소스와 근거를 한 번에 커밋하면 근거에 기록된 소스 커밋이 직전 커밋을 가리킬 수 있습니다.
+
+근거 전용 커밋은 소스 리비전 계산에서 제외됩니다. 마지막으로 `pnpm evidence:check`, `pnpm verification:check`와 깨끗한 작업 트리를 확인하고 두 커밋을 함께 푸시합니다. 이때 화면의 Commit은 근거 전용 HEAD가 아니라 최신 소스 변경 커밋을 가리키는 것이 정상입니다.

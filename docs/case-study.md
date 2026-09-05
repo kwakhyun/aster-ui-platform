@@ -138,8 +138,8 @@ Typography, elevation, motion, density는 플랫폼별 의미와 접근성 완�
 ## 5분 검토 순서
 
 1. Studio에서 6개 컴포넌트를 선택해 미리보기와 생성 API가 함께 바뀌는지 확인합니다.
-2. `Review changes`에서 Figma 별칭 변경과 Web, iOS, Android 토큰 영향을 확인하고 사람 검토를 기록합니다.
-3. `Quality`에서 소스 리비전과 각 근거 해시를 확인합니다.
+2. `Tokens`에서 실제 Button의 변경 전후를 비교한 뒤, `Review changes`에서 Figma 별칭 변경과 Web, iOS, Android 토큰 영향을 확인하고 사람 검토를 기록합니다.
+3. `Quality`에서 소스 리비전과 각 근거 해시, 초기 로드 성능 측정 결과를 확인합니다.
 4. 검토와 품질 근거가 준비된 상태에서 외부 배포 없는 릴리스 리허설을 실행합니다.
 5. 코드에서는 `packages/figma-bridge`, `scripts/lib/public-api-surface.mjs`, `scripts/generate-ai-proposal.mjs`, `scripts/scan-consumer-coverage.mjs`, `.github/workflows/ci.yml` 순서로 확인합니다.
 

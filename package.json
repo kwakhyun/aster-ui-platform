@@ -23,9 +23,9 @@
     "test:unit": "vitest run",
     "test:coverage": "turbo run test:coverage",
     "test:sites": "pnpm --filter=@aster-ui/studio test:sites",
-    "check": "pnpm portfolio:neutrality:check && pnpm lint && pnpm typecheck && pnpm test && node scripts/record-unit-evidence.mjs && pnpm build && pnpm check:postbuild",
+    "check": "pnpm check:base && pnpm test && node scripts/record-unit-evidence.mjs && pnpm build && pnpm check:postbuild",
     "check:postbuild": "node scripts/run-parallel-checks.mjs --concurrency 4 tokens:contract:check native:check figma:check:built ai:check manifest:check docs:check consumer:coverage:check migration:check api:check release:check perf:check package:check k8s:check supply-chain:check provenance:check",
-    "verify": "pnpm security:audit && pnpm check && pnpm test:coverage && pnpm coverage:record && pnpm test:sites && pnpm test:visual && pnpm evidence:generate && pnpm --filter=@aster-ui/studio build && pnpm evidence:check && pnpm verification:generate && pnpm verification:check",
+    "verify": "pnpm security:audit && pnpm check:base && pnpm test:coverage && pnpm test:scripts && node scripts/record-unit-evidence.mjs --coverage && pnpm coverage:record && pnpm build && pnpm check:postbuild && pnpm test:sites && pnpm test:visual && pnpm evidence:generate && pnpm --filter=@aster-ui/studio build && pnpm perf:final && pnpm evidence:check && pnpm verification:generate && pnpm verification:check",
     "clean": "turbo run clean",
     "portfolio:neutrality:check": "node scripts/check-portfolio-neutrality.mjs",
     "tokens:build": "pnpm --filter=@aster-ui/tokens build",
@@ -64,7 +64,9 @@
     "test:visual": "node scripts/run-visual-tests.mjs",
     "test:visual:update": "node scripts/run-visual-tests.mjs --update-snapshots",
     "design:compare": "node scripts/capture-design-comparison.mjs",
-    "portfolio:capture": "pnpm build && node scripts/capture-portfolio-screenshots.mjs && pnpm design:compare"
+    "portfolio:capture": "pnpm build && node scripts/capture-portfolio-screenshots.mjs && pnpm design:compare",
+    "check:base": "pnpm portfolio:neutrality:check && pnpm lint && pnpm typecheck",
+    "perf:final": "node scripts/check-performance-budget.mjs --final"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

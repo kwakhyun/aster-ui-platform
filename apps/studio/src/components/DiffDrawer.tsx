@@ -6,6 +6,7 @@ import {
 import { Button } from "@aster-ui/react";
 import type { FigmaSyncReview } from "@aster-ui/figma-bridge";
 import { useModalFocus } from "../hooks/useModalFocus";
+import { TokenSwatch } from "./TokenSwatch";
 
 interface DiffDrawerProps {
   readonly open: boolean;
@@ -72,14 +73,14 @@ export function DiffDrawer({
                 <div>
                   <dt>Before</dt>
                   <dd>
-                    <span className={`token-swatch token-swatch--${index + 1}`} aria-hidden="true" />
+                    <TokenSwatch alias={change.before} theme={review.sourceTheme} />
                     <code>{change.before}</code>
                   </dd>
                 </div>
                 <div>
                   <dt>After</dt>
                   <dd>
-                    <span className={`token-swatch token-swatch--${index + 1}`} aria-hidden="true" />
+                    <TokenSwatch alias={change.after} theme={review.sourceTheme} />
                     <code>{change.after}</code>
                   </dd>
                 </div>

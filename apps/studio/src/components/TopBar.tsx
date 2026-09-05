@@ -5,27 +5,18 @@ import {
   Question,
 } from "@phosphor-icons/react";
 import { Button } from "@aster-ui/react";
-import type { WorkspaceTab } from "../types";
 
 interface TopBarProps {
-  readonly activeTab: WorkspaceTab;
+  readonly blocked: boolean;
   readonly sidebarOpen: boolean;
   readonly navigationModalOpen: boolean;
   readonly running: boolean;
   readonly rehearsed: boolean;
   readonly evidenceGeneratedAt: string;
   readonly onToggleSidebar: () => void;
-  readonly onNavigate: (tab: WorkspaceTab) => void;
   readonly onHelp: () => void;
   readonly onPublish: () => void;
 }
-
-const navigation: readonly { label: string; tab: WorkspaceTab }[] = [
-  { label: "Component Lab", tab: "preview" },
-  { label: "Foundations", tab: "tokens" },
-  { label: "Components", tab: "api" },
-  { label: "Quality", tab: "quality" },
-] as const;
 
 const evidenceDateFormatter = new Intl.DateTimeFormat("en-CA", {
   year: "numeric",
@@ -35,14 +26,13 @@ const evidenceDateFormatter = new Intl.DateTimeFormat("en-CA", {
 });
 
 export function TopBar({
-  activeTab,
+  blocked,
   sidebarOpen,
   navigationModalOpen,
   running,
   rehearsed,
   evidenceGeneratedAt,
   onToggleSidebar,
-  onNavigate,
   onHelp,
   onPublish,
 }: TopBarProps) {
@@ -56,7 +46,7 @@ export function TopBar({
     : "unavailable";
 
   return (
-    <header className="topbar">
+    <header className="topbar" inert={blocked || undefined} aria-hidden={blocked || undefined}>
       <div
         className="topbar__brand"
         aria-hidden={navigationModalOpen ? "true" : undefined}
@@ -76,24 +66,7 @@ export function TopBar({
         <span>Aster UI</span>
       </div>
 
-      <nav
-        className="topbar__nav"
-        aria-label="Primary sections"
-        aria-hidden={navigationModalOpen ? "true" : undefined}
-        inert={navigationModalOpen ? true : undefined}
-      >
-        {navigation.map((item) => (
-          <button
-            key={item.tab}
-            type="button"
-            className={activeTab === item.tab ? "is-active" : ""}
-            aria-current={activeTab === item.tab ? "page" : undefined}
-            onClick={() => onNavigate(item.tab)}
-          >
-            {item.label}
-          </button>
-        ))}
-      </nav>
+      <span className="topbar__location">Component Lab</span>
 
       <div
         className="topbar__actions"

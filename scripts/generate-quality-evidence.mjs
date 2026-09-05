@@ -42,6 +42,10 @@ function evidenceFields(report) {
   };
 }
 
+const performanceReady = isPassingCurrentReport(performance)
+  && isPassingCurrentReport(visual)
+  && visual.browserPerformance?.status === "passed";
+
 const checks = [
   {
     id: "unit",
@@ -50,7 +54,7 @@ const checks = [
     detail: isPassingCurrentReport(unit)
       ? "All workspace unit tests and axe UI-state checks passed."
       : "No current passing unit-test report is available for this source revision.",
-    command: "pnpm test",
+    command: unit?.command ?? "pnpm test",
     ...evidenceFields(unit),
   },
   {
@@ -76,11 +80,11 @@ const checks = [
   {
     id: "performance",
     label: "Performance budget",
-    status: isPassingCurrentReport(performance) ? "passed" : "attention",
-    detail: isPassingCurrentReport(performance)
-      ? "Production JavaScript, CSS, font, and responsive image sizes are within budget."
-      : "The performance report is missing, failed, or out of date for this source revision.",
-    command: "pnpm perf:check",
+    status: performanceReady ? "passed" : "attention",
+    detail: performanceReady
+      ? `Asset sizes passed. Cold-load lab medians: FCP ${Math.round(visual.browserPerformance.actual.medianFcpMs)} ms, LCP ${Math.round(visual.browserPerformance.actual.medianLcpMs)} ms; maximum CLS ${visual.browserPerformance.actual.maxCls.toFixed(3)}. These are not field metrics.`
+      : "Current passing asset-size and browser rendering reports are required.",
+    command: "pnpm perf:check && pnpm test:visual",
     ...evidenceFields(performance),
   },
   {
@@ -97,6 +101,7 @@ const checks = [
 const evidence = await createEvidenceReport({
   schemaVersion: 3,
   checks,
+  browserReport: visual,
 }, projectRoot);
 const serialized = `${JSON.stringify(evidence, null, 2)}\n`;
 
@@ -107,7 +112,8 @@ if (process.argv.includes("--check")) {
     && Number.isFinite(generatedAt)
     && typeof current.runId === "string"
     && verifyEvidenceReport(current, sourceRevision, sourceGitCommit)
-    && JSON.stringify(current.checks) === JSON.stringify(evidence.checks);
+    && JSON.stringify(current.checks) === JSON.stringify(evidence.checks)
+    && JSON.stringify(current.browserReport) === JSON.stringify(evidence.browserReport);
   if (!isCurrent) {
     console.error("Studio quality evidence is out of date.");
     process.exitCode = 1;

@@ -1,8 +1,9 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   LocalReleaseRehearsalPublisher,
   type ReleaseContext,
   releaseStorageKey,
+  createLocalReleasePublisher,
 } from "./releaseService";
 
 const context: ReleaseContext = {
@@ -27,6 +28,44 @@ const context: ReleaseContext = {
 
 describe("LocalReleaseRehearsalPublisher", () => {
   beforeEach(() => window.localStorage.clear());
+  afterEach(() => { vi.restoreAllMocks(); vi.useRealTimers(); });
+
+  it("rejects an already cancelled request, including an idempotent replay", async () => {
+    const publisher = new LocalReleaseRehearsalPublisher({ storage: window.localStorage, delayMs: 0 });
+    await publisher.publish({ idempotencyKey: "existing", context });
+    const stored = window.localStorage.getItem(releaseStorageKey);
+    const controller = new AbortController();
+    controller.abort();
+    for (const idempotencyKey of ["new", "existing"]) {
+      await expect(publisher.publish({ context, idempotencyKey, signal: controller.signal }))
+        .rejects.toMatchObject({ name: "AbortError" });
+    }
+    expect(window.localStorage.getItem(releaseStorageKey)).toBe(stored);
+  });
+
+  it("checks cancellation after the delay and removes the abort listener", async () => {
+    vi.useFakeTimers();
+    const controller = new AbortController();
+    const remove = vi.spyOn(controller.signal, "removeEventListener");
+    const publisher = new LocalReleaseRehearsalPublisher({ storage: window.localStorage, delayMs: 10 });
+    const pending = publisher.publish({ context, idempotencyKey: "late-abort", signal: controller.signal });
+    const rejection = expect(pending).rejects.toMatchObject({ name: "AbortError" });
+    vi.advanceTimersByTime(10);
+    controller.abort();
+    await rejection;
+    expect(window.localStorage.getItem(releaseStorageKey)).toBeNull();
+    expect(remove).toHaveBeenCalledWith("abort", expect.any(Function));
+  });
+
+  it("handles storage policy denial without failing publisher initialization", async () => {
+    vi.spyOn(window, "localStorage", "get").mockImplementation(() => {
+      throw new DOMException("Access denied", "SecurityError");
+    });
+    const publisher = createLocalReleasePublisher();
+    expect(publisher.read(context)).toBeNull();
+    await expect(publisher.publish({ context, idempotencyKey: "no-storage" }))
+      .rejects.toThrow("could not be saved");
+  });
 
   it("stores a versioned, explicitly local receipt", async () => {
     const publisher = new LocalReleaseRehearsalPublisher({

@@ -22,3 +22,10 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - Preserve the black top bar, porcelain workspace, coral primary accent, blue focus state, compact component tree, large TreatmentCard preview, and right-side inspector.
 - AI may draft documentation or migration output, but the UI must always show human review and must never imply automatic correctness or automatic merge.
 - Use Phosphor icons and real raster imagery. Do not replace visible assets with emoji, CSS drawings, or handcrafted SVGs.
+- Resolve every token swatch from the generated theme JSON. Unknown colors must be labeled, never guessed from list position.
+- Keep pending Before/After comparison in the Tokens workspace, using the review's source theme independently of the selected preview theme. Samples are inert visual references; expose their aliases and resolved values as accessible text.
+- Storage policy denial must preserve browsing and clearly indicate that review and rehearsal records cannot be saved.
+- The top bar identifies Component Lab; only workspace tabs navigate component views. Inspector tabs are Props, Changes, and Checks, under Review summary, and remain independent.
+- Use one active overlay for navigation, token review, release rehearsal, or quality details. Background shortcuts and focus must respect the active modal.
+- Share component, tab, theme, and platform through validated URL parameters. Preserve the hosting base path and unrelated query parameters.
+- Studio metadata uses at least 12px text. Evidence explanations use 13px text with generous line height. Full identifiers and downloadable reports are available in Quality details.

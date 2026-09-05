@@ -1,31 +1,81 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["tsconfig.base.json", "pnpm-lock.yaml"],
+  "globalDependencies": [
+    "tsconfig.base.json",
+    "pnpm-lock.yaml"
+  ],
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "env": ["ASTER_BASE_PATH", "ASTER_VISUAL_FIXTURE_MODE", "ASTER_VISUAL_FIXTURE_REVISION"],
-      "outputs": ["dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "env": [
+        "ASTER_BASE_PATH",
+        "ASTER_VISUAL_FIXTURE_MODE",
+        "ASTER_VISUAL_FIXTURE_REVISION"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "typecheck": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "outputs": []
     },
     "test": {
-      "dependsOn": ["build", "^build"],
+      "dependsOn": [
+        "build",
+        "^build"
+      ],
       "outputs": []
     },
     "test:coverage": {
-      "dependsOn": ["build", "^build"],
-      "outputs": ["coverage/**"]
+      "dependsOn": [
+        "build",
+        "^build"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
     },
     "dev": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "cache": false,
       "persistent": true
     },
     "clean": {
       "cache": false
+    },
+    "@aster-ui/studio#test": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": []
+    },
+    "@aster-ui/studio#test:coverage": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
+    },
+    "@aster-ui/react#build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/scripts/generate-component-manifest.mjs",
+        "$TURBO_ROOT$/scripts/lib/component-defaults.mjs"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     }
   }
 }

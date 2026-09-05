@@ -6,7 +6,8 @@ import { createEvidenceReport } from "./lib/provenance.mjs";
 
 const projectRoot = process.cwd();
 const buildRoot = path.join(projectRoot, "apps/studio/dist/client");
-const reportPath = path.join(projectRoot, "reports/performance-budget.json");
+const finalBuild = process.argv.includes("--final");
+const reportPath = path.join(projectRoot, finalBuild ? "reports/final-assets.json" : "reports/performance-budget.json");
 const budgets = {
   javascriptGzipBytes: 190_000,
   cssGzipBytes: 35_000,
@@ -50,7 +51,7 @@ const failures = Object.entries(budgets).flatMap(([metric, budget]) => {
 if (images.some((image) => image.file.endsWith(".png"))) failures.push("A PNG raster was shipped; responsive WebP is required.");
 const report = await createEvidenceReport({
   schemaVersion: 3,
-  command: "pnpm perf:check",
+  command: finalBuild ? "pnpm perf:final" : "pnpm perf:check",
   budgets,
   actual: { javascriptGzipBytes, cssGzipBytes, largestImageBytes, fontBytes },
   images,

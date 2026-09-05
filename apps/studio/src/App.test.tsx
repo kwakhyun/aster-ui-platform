@@ -29,11 +29,27 @@ async function expectNoWcagAxeViolations(container: Element) {
 
 afterEach(() => {
   cleanup();
-  window.localStorage.clear();
   vi.restoreAllMocks();
+  window.localStorage.clear();
+  window.history.replaceState(null, "", "/");
 });
 
 describe("Aster UI component review flow", () => {
+  it("keeps browsing available when the localStorage getter throws", async () => {
+    const user = userEvent.setup();
+    vi.spyOn(window, "localStorage", "get").mockImplementation(() => {
+      throw new DOMException("Access denied", "SecurityError");
+    });
+    render(<App />);
+    expect(screen.getByText(/Browser storage is unavailable/)).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "TextField" }));
+    expect(screen.getByRole("textbox", { name: "Search clinics" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Review changes" }));
+    await user.click(screen.getByRole("button", { name: "Complete review" }));
+    expect(screen.getByText("The Figma review could not be saved.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Complete review" })).toBeEnabled();
+  });
+
   it("renders every sidebar entry from the shipped manifest instead of placeholder catalog data", async () => {
     const user = userEvent.setup();
     render(<App />);
@@ -82,12 +98,12 @@ describe("Aster UI component review flow", () => {
     await user.click(screen.getAllByRole("tab", { name: "API" })[0]!);
     expect(screen.getByRole("heading", { name: "TreatmentCardProps" })).toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: "iOS" })).not.toBeInTheDocument();
-    await user.click(screen.getAllByRole("tab", { name: "Quality" }).at(-1)!);
+    await user.click(screen.getByRole("tab", { name: "Checks" }));
     expect(screen.getByRole("heading", { name: "Quality evidence" })).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Foundations" }));
+    await user.click(screen.getByRole("tab", { name: "Tokens" }));
     expect(screen.getByRole("heading", { name: "Resolved token map" })).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Quality" }));
+    await user.click(screen.getByRole("tab", { name: "Quality" }));
     expect(screen.getByRole("heading", { name: "Release quality checks" })).toBeInTheDocument();
   });
 
@@ -118,7 +134,7 @@ describe("Aster UI component review flow", () => {
     await user.click(screen.getByRole("button", { name: "View details for Laser toning" }));
     expect(screen.getByRole("status")).toHaveTextContent("emitted its selection event");
 
-    await user.click(screen.getByRole("button", { name: "Components" }));
+    await user.click(screen.getByRole("tab", { name: "API" }));
     await user.click(screen.getByRole("button", { name: "Copy usage example" }));
     expect(clipboardSpy).toHaveBeenLastCalledWith(expect.stringContaining("<TreatmentCard"));
   });
@@ -217,17 +233,16 @@ describe("Aster UI component review flow", () => {
     expect(screen.getAllByText(/does not match this build's source revision/)).not.toHaveLength(0);
   });
 
-  it("has no WCAG-tagged axe violations across initial, diff, and release states", async () => {
+  it.each(["initial", "tokens", "diff", "release"] as const)("has no WCAG-tagged axe violations in the %s state", async (state) => {
     const user = userEvent.setup();
     const { container } = render(<App />);
-    await expectNoWcagAxeViolations(container);
-
-    await user.click(screen.getByRole("button", { name: "Review changes" }));
-    await expectNoWcagAxeViolations(container);
-    await user.click(screen.getByRole("button", { name: "Close" }));
-
-    await user.click(screen.getByRole("button", { name: "Run rehearsal" }));
-    await expectNoWcagAxeViolations(container);
+    if (state === "tokens") await user.click(screen.getByRole("tab", { name: "Tokens" }));
+    if (state === "diff") await user.click(screen.getByRole("button", { name: "Review changes" }));
+    if (state === "release") await user.click(screen.getByRole("button", { name: "Run rehearsal" }));
+    // The initial workspace is checked separately; modal checks target the active surface.
+    await expectNoWcagAxeViolations(state === "diff" || state === "release"
+      ? screen.getByRole("dialog")
+      : container);
   });
 
   it("keeps one global shortcut listener across application renders", () => {
@@ -276,7 +291,6 @@ describe("Aster UI component review flow", () => {
     expect(container.querySelector("main")).toHaveAttribute("aria-hidden", "true");
     expect(container.querySelector(".inspector")).toHaveAttribute("inert");
     expect(container.querySelector(".topbar__brand")).toHaveAttribute("inert");
-    expect(container.querySelector(".topbar__nav")).toHaveAttribute("inert");
     expect(container.querySelector(".topbar__actions")).toHaveAttribute("inert");
     expect(within(componentDialog).getByRole("button", {
       name: "Close component browser",

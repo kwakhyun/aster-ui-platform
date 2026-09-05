@@ -9,6 +9,8 @@ Figma Variables의 별칭을 W3C DTCG 토큰과 React 공개 API에 대조하고
 
 [라이브 데모](https://kwakhyun.github.io/aster-ui-platform/) | [케이스 스터디](docs/case-study.md) | [자동 생성 검증 보고서](reports/verification.md) | [디자인 QA](design-qa.md)
 
+제출한 포트폴리오 PDF는 2026년 9월 4일 검증 기준의 고정된 기록입니다. 이후 개선한 화면과 검증 범위는 현재 저장소에 반영하며, 제출본과의 차이는 [제출본 정합성 확인](docs/submission-consistency.md)에 정리했습니다. 최신 수치는 자동 생성 검증 보고서를 기준으로 확인해 주세요.
+
 ![Aster UI Studio 데스크톱 구현 화면](design/implementation-desktop-final.png)
 
 ## 왜 이 프로젝트를 만들었나
@@ -55,6 +57,10 @@ Figma Variables REST API / 비식별 테스트 픽스처
 
 Studio의 `Run rehearsal`은 외부 레지스트리를 바꾸지 않는 로컬 리허설입니다. 실제 Figma 쓰기와 npm 배포는 이 PoC의 실행 범위에 포함하지 않았습니다.
 
+작업 영역의 `Tokens`에서는 선택한 테마의 실제 색상 값과 Figma 검토 대상의 변경 전후 Button을 확인할 수 있습니다. 견본은 빌드된 토큰 JSON에서 별칭을 해석합니다. 비교 영역은 검토 대상 테마를 따르며, 미리보기 테마를 바꿔도 승인할 변경의 의미가 바뀌지 않습니다. 변경 전후 표본은 조작할 수 없는 시각 참고 자료이고, 별칭과 색상 값은 별도 텍스트로 제공합니다.
+
+브라우저 정책이 저장소 접근을 차단해도 컴포넌트 탐색은 유지됩니다. 이때 화면에 저장 불가 상태를 표시하며, 검토나 리허설 기록을 저장했다고 처리하지 않습니다. 취소된 요청은 완료 기록을 남기지 않고, 취소 뒤 늦게 도착한 응답도 현재 작업 상태를 덮어쓰지 않습니다.
+
 ## 실행
 
 Node.js 22 이상과 pnpm 10.29.2가 필요합니다. 전체 검증의 로컬 시각 회귀 검사는 설치된 Google Chrome을 사용합니다.
@@ -79,9 +85,12 @@ pnpm verify
 - 매니페스트와 문서, 저장소 표본 커버리지, 코드 변환 도구, API 호환성
 - 릴리스, 성능, 패키지 내용, Kubernetes, 공급망, Sites 런타임
 - 브라우저 시각 회귀와 axe 검사. 로컬에서는 Google Chrome, CI에서는 Ubuntu 24.04의 Playwright Chromium을 사용합니다.
+- 초기 로드 FCP와 LCP, 관찰 구간의 CLS를 고정된 브라우저 조건에서 3회 측정합니다. 자산 용량과 렌더링 성능이 모두 예산 안에 있어야 품질 근거를 통과시킵니다.
 - macOS와 Linux의 글꼴 렌더링 차이는 플랫폼별 승인 이미지로 분리합니다. Linux 기준 이미지는 수동 워크플로로 전체 세트를 생성하고 사람이 검토한 뒤에만 반영합니다.
 
 마지막에는 구조화된 검증 결과에서 보고서를 다시 만들고 최신성을 확인합니다.
+
+성능 검사의 조건과 예산, 오류 재현을 막는 테스트는 [검토 후 개선 사항](docs/review-improvements.md)에 정리했습니다. 초기 화면, 토큰 비교, Figma 검토, 릴리스 대화상자의 단위 axe 검사는 상태별 테스트로 분리해 실패 원인과 실행 시간을 구분합니다.
 
 ## Figma 및 AI 워크플로 실행 범위
 
@@ -145,3 +154,17 @@ CI에서는 `pnpm ai:check`가 결정론적 제안 검증과 사람 승인 기�
 - 공개 저장소의 release-please 작업은 main 브랜치 CI가 통과한 뒤에만 실행됩니다. 릴리스 PR 생성은 저장소 소유자가 Actions의 PR 생성 권한과 `RELEASE_PLEASE_PR_ENABLED=true` 변수를 명시적으로 설정한 경우에만 활성화됩니다.
 
 [MIT License](LICENSE)
+
+### 화면 탐색과 검증 상세
+
+컴포넌트의 탭, 테마, 플랫폼 선택은 URL에 반영됩니다. 예를 들어
+`?component=Button&tab=tokens&theme=ocean&platform=web`으로 같은 화면을 다시 열 수 있습니다.
+상단은 Component Lab의 위치를 표시하고, 중앙 탭은 컴포넌트 화면을 전환합니다.
+오른쪽 Review summary의 Props, Changes, Checks는 속성, 변경점, 검증 상태를 요약합니다.
+
+`View details`에서 기록된 검증 명령과 출처, 브라우저 시나리오와 lab 성능 측정값을 확인하고
+JSON 보고서를 내려받을 수 있습니다. 현재 소스와 일치하지 않는 보고서는 성공 근거로 취급하지 않습니다.
+
+개발 중에는 `pnpm check`로 기본 검증을, 최종 확인에는 `pnpm verify`로 커버리지와 브라우저 검증까지 실행합니다.
+`verify`는 일반 단위 테스트를 다시 실행하지 않고 커버리지 실행에서 동일한 테스트를 검증합니다.
+Studio 소스 테스트는 Studio의 production 번들을 요구하지 않으며, 의존 패키지의 빌드는 유지합니다.

@@ -25,8 +25,13 @@ import type {
 import { StateStrip } from "./StateStrip";
 import { EvidenceProvenance } from "./EvidenceProvenance";
 import { NativeArtifactPreview } from "./NativeArtifactPreview";
+import type { FigmaSyncReview } from "@aster-ui/figma-bridge";
+import { TokenSwatch } from "./TokenSwatch";
+import { TokenComparison } from "./TokenComparison";
+import { resolveTokenColor } from "../lib/tokenColors";
 
 interface WorkspaceProps {
+  readonly review: FigmaSyncReview;
   readonly tab: WorkspaceTab;
   readonly componentName: string;
   readonly platform: Platform;
@@ -57,6 +62,7 @@ const platforms: readonly { id: Platform; label: string }[] = [
 ] as const;
 
 export function Workspace({
+  review,
   tab,
   componentName,
   platform,
@@ -216,12 +222,13 @@ export function Workspace({
             </div>
             {["color.action.primary", "color.focus.ring", "color.text.accent"].map((token) => (
               <div className="token-map__row" key={token}>
-                <span className="token-swatch" aria-hidden="true" />
+                <TokenSwatch alias={`{semantic.${token}}`} theme={theme} />
                 <strong>{token}</strong>
-                <code>{`{semantic.${token}}`}</code>
+                <code>{`{semantic.${token}}`} = {resolveTokenColor(`{semantic.${token}}`, theme) ?? "Unresolved"}</code>
                 <span>CSS · Swift · Compose</span>
               </div>
             ))}
+            <TokenComparison review={review} />
           </section>
         ) : null}
 

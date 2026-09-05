@@ -19,6 +19,7 @@ function getContextKey(context: ReleaseContext | null): string {
     context.review.sourceTheme,
     context.review.changeFingerprint,
     context.evidence.sourceRevision,
+    context.evidence.gitCommit,
     context.evidence.artifactDigest,
   ].join("\u0000");
 }
@@ -92,9 +93,11 @@ export function useReleaseWorkflow(
         idempotencyKey: idempotencyRef.current.value,
         context,
       });
+      if (controller.signal.aborted || controllerRef.current !== controller) return null;
       setWorkflow({ contextKey, receipt: nextReceipt, status: "rehearsed", errorMessage: null });
       return nextReceipt;
     } catch (error) {
+      if (controller.signal.aborted || controllerRef.current !== controller) return null;
       if (error instanceof DOMException && error.name === "AbortError") {
         setWorkflow({ ...current, contextKey, status: "idle", errorMessage: null });
         return null;
@@ -106,11 +109,14 @@ export function useReleaseWorkflow(
         errorMessage: error instanceof Error ? error.message : "The release rehearsal failed.",
       });
       return null;
+    } finally {
+      if (controllerRef.current === controller) controllerRef.current = null;
     }
   }, [activePublisher, context, contextKey, current, storedReceipt]);
 
   const cancel = useCallback(() => {
     controllerRef.current?.abort();
+    controllerRef.current = null;
     setWorkflow({ ...current, contextKey, status: "idle", errorMessage: null });
   }, [contextKey, current]);
 
