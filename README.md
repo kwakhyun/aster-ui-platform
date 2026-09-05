@@ -9,7 +9,7 @@ Figma Variables의 별칭을 W3C DTCG 토큰과 React 공개 API에 대조하고
 
 [라이브 데모](https://kwakhyun.github.io/aster-ui-platform/) | [케이스 스터디](docs/case-study.md) | [자동 생성 검증 보고서](reports/verification.md) | [디자인 QA](design-qa.md)
 
-제출한 포트폴리오 PDF는 2026년 9월 4일 검증 기준의 고정된 기록입니다. 이후 개선한 화면과 검증 범위는 현재 저장소에 반영하며, 제출본과의 차이는 [제출본 정합성 확인](docs/submission-consistency.md)에 정리했습니다. 최신 수치는 자동 생성 검증 보고서를 기준으로 확인해 주세요.
+최신 검증 수치는 [자동 생성 검증 보고서](reports/verification.md)에서, 기능과 검증 방식의 변경은 [검토 후 개선 사항](docs/review-improvements.md)에서 확인할 수 있습니다.
 
 ![Aster UI Studio 데스크톱 구현 화면](design/implementation-desktop-final.png)
 

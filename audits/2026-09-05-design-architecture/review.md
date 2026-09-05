@@ -16,7 +16,7 @@
 
    ![검토 창에서 검색 단축키 실행](02-review-shortcut-focus.png)
 
-3. **Inspector Quality → View details — 개선 필요.** 버튼을 눌러도 상세 근거나 스냅샷은 열리지 않고 이미 표시된 성공 요약을 알림으로 반복한다. 검증 결과가 중요한 포트폴리오에서 근거를 확인하는 흐름이 여기서 끝난다. 같은 버튼이 Tokens 요약과 Quality 화면에서 다른 글자 크기로 보인다.
+3. **Inspector Quality → View details — 개선 필요.** 버튼을 눌러도 상세 근거나 스냅샷은 열리지 않고 이미 표시된 성공 요약을 알림으로 반복한다. 사용자가 실제 검증 근거를 확인할 수 없다. 같은 버튼이 Tokens 요약과 Quality 화면에서 다른 글자 크기로 보인다.
 
    ![품질 상세 보기 결과](03-quality-details.png)
 

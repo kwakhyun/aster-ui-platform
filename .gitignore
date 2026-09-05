@@ -6,7 +6,7 @@ playwright-report/
 test-results/
 reports/ai-approvals/
 reports/ai-proposals/
-# Local-only submission artifacts
+# Local-only document artifacts
 portfolio/
 output/pdf/
 tmp/
