@@ -1,13 +1,21 @@
 {
-  "schemaVersion": 4,
-  "command": "pnpm audit --prod --audit-level high",
+  "schemaVersion": 5,
+  "command": "pnpm audit --prod --audit-level high --json",
   "scope": "Production dependency graph",
-  "dependencySnapshot": "sha256:1c7688f3822ab1d23627e4d243887b2affe3c60f0366af04bc2617840c404804",
+  "dependencySnapshot": "sha256:abf766c69ee76f17c6b421500f30c3bba998a6eb0cfbe2a9c3d3e7fdad8d7a62",
+  "auditLevel": "high",
+  "vulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0
+  },
   "knownVulnerabilities": 0,
   "status": "passed",
-  "generatedAt": "2026-09-05T08:46:01.196Z",
-  "sourceRevision": "workspace:2d483ca0848ebe9a875e",
-  "gitCommit": "e696468b2d7e3ce217fba27f207a509ff2c2441a",
-  "runId": "local:37124",
-  "artifactDigest": "sha256:88dd1a5c89c9dc4b54e232cd4d719096c7c9438bb4bfe3a70d124223522de145"
+  "generatedAt": "2026-10-21T20:41:43.659Z",
+  "sourceRevision": "workspace:db54a0ad7402a7746e02",
+  "gitCommit": "bb04e6751eb5781743ac2fde6ca34df10355a597",
+  "runId": "local:13016",
+  "artifactDigest": "sha256:e0b58b10ca259c2ffc4561ac0d559c8d866dc1b3d02401fed8c509c5bc92230c"
 }

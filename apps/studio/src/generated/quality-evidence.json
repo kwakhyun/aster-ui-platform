@@ -7,11 +7,11 @@
       "status": "passed",
       "detail": "All workspace unit tests and axe UI-state checks passed.",
       "command": "pnpm test:coverage && pnpm test:scripts",
-      "generatedAt": "2026-09-05T08:46:26.347Z",
-      "sourceRevision": "workspace:2d483ca0848ebe9a875e",
-      "gitCommit": "e696468b2d7e3ce217fba27f207a509ff2c2441a",
-      "runId": "local:38380",
-      "evidenceDigest": "sha256:82c4229021ebe1b65f1fe3fdfc5bb4bf1ea8df69297a7f00d5eee2ef23c21b74"
+      "generatedAt": "2026-10-21T20:44:59.763Z",
+      "sourceRevision": "workspace:db54a0ad7402a7746e02",
+      "gitCommit": "bb04e6751eb5781743ac2fde6ca34df10355a597",
+      "runId": "local:28719",
+      "evidenceDigest": "sha256:b565816c3f29d9fb5f108605bbc140fdf337d78fcb1f8d74aea2cdae5139ff12"
     },
     {
       "id": "api",
@@ -19,61 +19,61 @@
       "status": "passed",
       "detail": "23 public TypeScript exports and 38 component props checked; no contract removals or signature changes found.",
       "command": "pnpm api:check",
-      "generatedAt": "2026-09-05T08:46:35.489Z",
-      "sourceRevision": "workspace:2d483ca0848ebe9a875e",
-      "gitCommit": "e696468b2d7e3ce217fba27f207a509ff2c2441a",
-      "runId": "local:39056",
-      "evidenceDigest": "sha256:bb5269f10079aa66b3fc8a6b43dc26a930d54d386700d9634629d2227d16af73"
+      "generatedAt": "2026-10-21T20:45:56.500Z",
+      "sourceRevision": "workspace:db54a0ad7402a7746e02",
+      "gitCommit": "bb04e6751eb5781743ac2fde6ca34df10355a597",
+      "runId": "local:35626",
+      "evidenceDigest": "sha256:866c621b2176c90d8fccb8f6443c2f241df458de9f8dd97e395e50c5a2400dcd"
     },
     {
       "id": "visual",
       "label": "Browser visual and accessibility",
       "status": "passed",
-      "detail": "28 browser scenarios and 11 visual snapshots passed, including axe checks in Chrome.",
+      "detail": "31 browser scenarios and 11 visual snapshots passed, including axe checks in Chrome.",
       "command": "pnpm test:visual",
-      "generatedAt": "2026-09-05T08:47:14.627Z",
-      "sourceRevision": "workspace:2d483ca0848ebe9a875e",
-      "gitCommit": "e696468b2d7e3ce217fba27f207a509ff2c2441a",
-      "runId": "local:40655",
-      "evidenceDigest": "sha256:d2341520668267f7e8be45c708c3f93e24d97fe1feff35313748d8f52b5748be"
+      "generatedAt": "2026-10-21T20:48:28.443Z",
+      "sourceRevision": "workspace:db54a0ad7402a7746e02",
+      "gitCommit": "bb04e6751eb5781743ac2fde6ca34df10355a597",
+      "runId": "local:40339",
+      "evidenceDigest": "sha256:9408f538b280fcd21552f0003436681fb33770805aca1d3afd26a9bd7e668660"
     },
     {
       "id": "performance",
       "label": "Performance budget",
       "status": "passed",
-      "detail": "Asset sizes passed. Cold-load lab medians: FCP 520 ms, LCP 520 ms; maximum CLS 0.000. These are not field metrics.",
+      "detail": "Asset sizes passed. Cold-load lab medians: FCP 1444 ms, LCP 1488 ms; maximum CLS 0.000. These are not field metrics.",
       "command": "pnpm perf:check && pnpm test:visual",
-      "generatedAt": "2026-09-05T08:46:34.538Z",
-      "sourceRevision": "workspace:2d483ca0848ebe9a875e",
-      "gitCommit": "e696468b2d7e3ce217fba27f207a509ff2c2441a",
-      "runId": "local:39136",
-      "evidenceDigest": "sha256:5434b7c5d8457e4462b22d153f398623fa496f72e20d490ac6ef99053b03a16a"
+      "generatedAt": "2026-10-21T20:45:53.527Z",
+      "sourceRevision": "workspace:db54a0ad7402a7746e02",
+      "gitCommit": "bb04e6751eb5781743ac2fde6ca34df10355a597",
+      "runId": "local:36233",
+      "evidenceDigest": "sha256:dba6fc6e81361846fc8126c06301f56c3a21c1bb13bf63a7b34bec2317ef6ec2"
     },
     {
       "id": "security",
       "label": "Production dependency audit",
       "status": "passed",
-      "detail": "The audited production dependency snapshot has no known vulnerabilities.",
-      "command": "pnpm audit --prod --audit-level high",
-      "generatedAt": "2026-09-05T08:46:01.196Z",
-      "sourceRevision": "workspace:2d483ca0848ebe9a875e",
-      "gitCommit": "e696468b2d7e3ce217fba27f207a509ff2c2441a",
-      "runId": "local:37124",
-      "evidenceDigest": "sha256:88dd1a5c89c9dc4b54e232cd4d719096c7c9438bb4bfe3a70d124223522de145"
+      "detail": "0 known vulnerabilities: 0 informational, 0 low, 0 moderate, 0 high, 0 critical. The high/critical gate passed.",
+      "command": "pnpm audit --prod --audit-level high --json",
+      "generatedAt": "2026-10-21T20:41:43.659Z",
+      "sourceRevision": "workspace:db54a0ad7402a7746e02",
+      "gitCommit": "bb04e6751eb5781743ac2fde6ca34df10355a597",
+      "runId": "local:13016",
+      "evidenceDigest": "sha256:e0b58b10ca259c2ffc4561ac0d559c8d866dc1b3d02401fed8c509c5bc92230c"
     }
   ],
   "browserReport": {
     "schemaVersion": 3,
     "command": "pnpm test:visual",
     "browser": "Installed Google Chrome",
-    "passed": 28,
+    "passed": 31,
     "failed": 0,
     "skipped": 0,
     "snapshots": 11,
-    "accessibilityChecks": 16,
+    "accessibilityChecks": 18,
     "browserPerformance": {
       "mode": "lab-initial-load",
-      "browserVersion": "152.0.7977.76",
+      "browserVersion": "155.0.8059.85",
       "platform": "darwin",
       "profile": {
         "viewport": {
@@ -87,6 +87,7 @@
         "uploadBytesPerSecond": 625000,
         "cache": "disabled",
         "samples": 3,
+        "paintWaitTimeoutMs": 5000,
         "observationAfterAssetsMs": 1000
       },
       "budgets": {
@@ -96,25 +97,25 @@
       },
       "samples": [
         {
-          "fcpMs": 552,
-          "lcpMs": 552,
-          "cls": 0
+          "fcpMs": 1464,
+          "lcpMs": 1500,
+          "cls": 0.0003506780553747106
         },
         {
-          "fcpMs": 520,
-          "lcpMs": 520,
-          "cls": 0
+          "fcpMs": 1444,
+          "lcpMs": 1488,
+          "cls": 0.0003506780553747106
         },
         {
-          "fcpMs": 500,
-          "lcpMs": 500,
-          "cls": 0
+          "fcpMs": 1412,
+          "lcpMs": 1472,
+          "cls": 0.0003506780553747106
         }
       ],
       "actual": {
-        "medianFcpMs": 520,
-        "medianLcpMs": 520,
-        "maxCls": 0
+        "medianFcpMs": 1444,
+        "medianLcpMs": 1488,
+        "maxCls": 0.0003506780553747106
       },
       "status": "passed"
     },
@@ -122,154 +123,169 @@
       {
         "title": "measures cold-load rendering under a fixed desktop profile",
         "status": "passed",
-        "durationMs": 5611
+        "durationMs": 11573
       },
       {
         "title": "matches the approved coral desktop composition",
         "status": "passed",
-        "durationMs": 487
+        "durationMs": 2291
       },
       {
         "title": "resolves swatches and compares pending changes independently of the preview theme",
         "status": "passed",
-        "durationMs": 805
+        "durationMs": 2141
       },
       {
         "title": "keeps component browsing available when browser storage access is denied",
         "status": "passed",
-        "durationMs": 731
+        "durationMs": 2119
+      },
+      {
+        "title": "keeps other previews interactive after disabling TreatmentCard and navigating history",
+        "status": "passed",
+        "durationMs": 1504
+      },
+      {
+        "title": "shows storage write failures inside the review dialog and allows retry at 390px",
+        "status": "passed",
+        "durationMs": 2021
+      },
+      {
+        "title": "shows storage write failures inside the review dialog and allows retry at 1440px",
+        "status": "passed",
+        "durationMs": 2549
       },
       {
         "title": "renders the ocean theme from the same semantic contract",
         "status": "passed",
-        "durationMs": 527
+        "durationMs": 1576
       },
       {
         "title": "captures the Figma review and local rehearsal states",
         "status": "passed",
-        "durationMs": 926
+        "durationMs": 2692
       },
       {
         "title": "covers every shipped component preview in the browser",
         "status": "passed",
-        "durationMs": 1840
+        "durationMs": 10506
       },
       {
         "title": "keeps tab semantics live only for the visible preview",
         "status": "passed",
-        "durationMs": 564
+        "durationMs": 2312
       },
       {
         "title": "survives a 200 percent equivalent viewport and mobile flow",
         "status": "passed",
-        "durationMs": 942
+        "durationMs": 5989
       },
       {
         "title": "keeps every status item inside the workspace across desktop breakpoints",
         "status": "passed",
-        "durationMs": 762
+        "durationMs": 3435
       },
       {
         "title": "keeps component and reference panels inside a 320px workspace",
         "status": "passed",
-        "durationMs": 679
+        "durationMs": 2099
       },
       {
         "title": "keeps component and reference panels inside a 390px workspace",
         "status": "passed",
-        "durationMs": 657
+        "durationMs": 1664
       },
       {
         "title": "keeps component and reference panels inside a 720px workspace",
         "status": "passed",
-        "durationMs": 669
+        "durationMs": 2075
       },
       {
         "title": "keeps component and reference panels inside a 820px workspace",
         "status": "passed",
-        "durationMs": 665
+        "durationMs": 2227
       },
       {
         "title": "keeps component and reference panels inside a 821px workspace",
         "status": "passed",
-        "durationMs": 673
+        "durationMs": 2519
       },
       {
         "title": "keeps component and reference panels inside a 900px workspace",
         "status": "passed",
-        "durationMs": 682
+        "durationMs": 1865
       },
       {
         "title": "keeps component and reference panels inside a 1024px workspace",
         "status": "passed",
-        "durationMs": 646
+        "durationMs": 2274
       },
       {
         "title": "keeps component and reference panels inside a 1100px workspace",
         "status": "passed",
-        "durationMs": 753
+        "durationMs": 4046
       },
       {
         "title": "keeps component and reference panels inside a 1101px workspace",
         "status": "passed",
-        "durationMs": 760
+        "durationMs": 2929
       },
       {
         "title": "keeps component and reference panels inside a 1280px workspace",
         "status": "passed",
-        "durationMs": 741
+        "durationMs": 3966
       },
       {
         "title": "keeps component and reference panels inside a 1361px workspace",
         "status": "passed",
-        "durationMs": 658
+        "durationMs": 5882
       },
       {
         "title": "keeps component and reference panels inside a 1440px workspace",
         "status": "passed",
-        "durationMs": 688
+        "durationMs": 4534
       },
       {
         "title": "retains visible selection and focus in forced colors",
         "status": "passed",
-        "durationMs": 405
+        "durationMs": 5419
       },
       {
         "title": "workspace deep links survive reload and browser history",
         "status": "passed",
-        "durationMs": 529
+        "durationMs": 3103
       },
       {
         "title": "overlays keep shortcuts and focus contained at 390px",
         "status": "passed",
-        "durationMs": 808
+        "durationMs": 4260
       },
       {
         "title": "overlays keep shortcuts and focus contained at 780px",
         "status": "passed",
-        "durationMs": 851
+        "durationMs": 4527
       },
       {
         "title": "overlays keep shortcuts and focus contained at 1440px",
         "status": "passed",
-        "durationMs": 796
+        "durationMs": 2709
       },
       {
         "title": "quality details exposes inspectable evidence and downloads",
         "status": "passed",
-        "durationMs": 558
+        "durationMs": 2005
       }
     ],
     "status": "passed",
-    "generatedAt": "2026-09-05T08:47:14.627Z",
-    "sourceRevision": "workspace:2d483ca0848ebe9a875e",
-    "gitCommit": "e696468b2d7e3ce217fba27f207a509ff2c2441a",
-    "runId": "local:40655",
-    "artifactDigest": "sha256:d2341520668267f7e8be45c708c3f93e24d97fe1feff35313748d8f52b5748be"
+    "generatedAt": "2026-10-21T20:48:28.443Z",
+    "sourceRevision": "workspace:db54a0ad7402a7746e02",
+    "gitCommit": "bb04e6751eb5781743ac2fde6ca34df10355a597",
+    "runId": "local:40339",
+    "artifactDigest": "sha256:9408f538b280fcd21552f0003436681fb33770805aca1d3afd26a9bd7e668660"
   },
-  "generatedAt": "2026-09-05T08:47:14.963Z",
-  "sourceRevision": "workspace:2d483ca0848ebe9a875e",
-  "gitCommit": "e696468b2d7e3ce217fba27f207a509ff2c2441a",
-  "runId": "local:42271",
-  "artifactDigest": "sha256:0393b89b309636ad77540cfdf0a44ba00df532df004a8e40115b618129664b4b"
+  "generatedAt": "2026-10-21T20:48:29.494Z",
+  "sourceRevision": "workspace:db54a0ad7402a7746e02",
+  "gitCommit": "bb04e6751eb5781743ac2fde6ca34df10355a597",
+  "runId": "local:45472",
+  "artifactDigest": "sha256:284250a4b3ebb5a14d1b0c237f2312bf5336d2410cce53f8e0e2d5039af2adc8"
 }
