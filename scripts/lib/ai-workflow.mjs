@@ -62,10 +62,17 @@ export function validateProposal(proposal, manifest) {
         failures.push("API changes require prop, type, and rationale strings");
       }
       if (typeof change.required !== "boolean") failures.push(`API change ${String(change.prop)} needs a boolean required field`);
-      const existing = component?.props.some((prop) => prop.name === change.prop) ?? false;
+      const existing = component?.props.find((prop) => prop.name === change.prop);
       if (change.action === "add" && existing) failures.push(`${proposal.component}.${change.prop} already exists`);
       if (change.action !== "add" && !existing) failures.push(`${proposal.component}.${change.prop} does not exist`);
-      const breaking = change.action === "remove" || change.action === "change" || (change.action === "add" && change.required);
+      const typeChanged = existing && change.type !== existing.type;
+      const madeRequired = existing && !existing.required && change.required;
+      if (change.action === "deprecate" && existing
+        && (typeChanged || change.required !== existing.required)) {
+        failures.push(`${proposal.component}.${change.prop} deprecation must preserve its current type and required flag; use change for API changes`);
+      }
+      const breaking = change.action === "remove" || change.action === "change"
+        || (change.action === "add" && change.required) || typeChanged || madeRequired;
       if (breaking && proposal.semverImpact !== "major") {
         failures.push(`${proposal.component}.${change.prop} requires a major semver impact`);
       }

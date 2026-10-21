@@ -12,6 +12,7 @@ interface DiffDrawerProps {
   readonly open: boolean;
   readonly reviewed: boolean;
   readonly review: FigmaSyncReview;
+  readonly errorMessage: string | null;
   readonly onClose: () => void;
   readonly onComplete: () => void;
 }
@@ -25,6 +26,7 @@ export function DiffDrawer({
   open,
   reviewed,
   review,
+  errorMessage,
   onClose,
   onComplete,
 }: DiffDrawerProps) {
@@ -101,6 +103,10 @@ export function DiffDrawer({
             <span>Every old and new alias resolves to a token in the validated W3C DTCG source.</span>
           </div>
         </div>
+
+        {errorMessage ? (
+          <p className="diff-drawer__error" role="alert">{errorMessage}</p>
+        ) : null}
 
         <footer>
           <Button tone="secondary" onClick={onClose}>Cancel</Button>

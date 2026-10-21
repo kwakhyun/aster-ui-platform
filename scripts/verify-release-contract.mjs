@@ -22,6 +22,9 @@ const errors = packageVersions
 const releaseManifest = JSON.parse(
   await readFile(path.join(projectRoot, ".release-please-manifest.json"), "utf8"),
 );
+if (Object.keys(releaseManifest).length !== 1 || !("." in releaseManifest)) {
+  errors.push("Release manifest must track one shared version at the repository root.");
+}
 for (const [packagePath, version] of Object.entries(releaseManifest)) {
   if (version !== rootVersion) errors.push(`${packagePath} release manifest: ${version}`);
 }
@@ -38,14 +41,17 @@ const tokenMatch = tokenSource.match(/tokenVersion\s*=\s*"([^"]+)"/);
 if (tokenMatch?.[1] !== rootVersion) errors.push(`tokenVersion: ${tokenMatch?.[1] ?? "missing"}`);
 
 const deployment = await readFile(path.join(projectRoot, "infra/k8s/aster-ui.yaml"), "utf8");
-if (!deployment.includes(`app.kubernetes.io/version: ${rootVersion}`)) {
+const deploymentVersions = [...deployment.matchAll(/app\.kubernetes\.io\/version:\s*([^\s#]+)/g)];
+if (deploymentVersions.length !== 2 || deploymentVersions.some((match) => match[1] !== rootVersion)) {
   errors.push("Kubernetes version metadata is out of date.");
 }
 if (!deployment.includes("image: __ASTER_UI_IMAGE_DIGEST__")) {
   errors.push("Kubernetes image must be supplied through the immutable digest renderer.");
 }
 const changelog = await readFile(path.join(projectRoot, "CHANGELOG.md"), "utf8");
-if (!changelog.includes(`## ${rootVersion}`)) errors.push("Changelog is missing the current version.");
+const escapedVersion = rootVersion.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const releaseHeading = new RegExp(`^## (?:${escapedVersion}(?:\\s|$)|\\[${escapedVersion}\\]\\()`, "m");
+if (!releaseHeading.test(changelog)) errors.push("Changelog is missing the current version.");
 
 if (errors.length > 0) {
   console.error(`Release contract failed:\n${errors.join("\n")}`);

@@ -1,20 +1,49 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "release-type": "node",
-  "include-component-in-tag": true,
+  "include-component-in-tag": false,
   "packages": {
-    "packages/tokens": {
-      "component": "tokens",
-      "package-name": "@aster-ui/tokens"
-    },
-    "packages/react": {
-      "component": "react",
-      "package-name": "@aster-ui/react"
-    },
-    "packages/figma-bridge": {
-      "component": "figma-bridge",
-      "package-name": "@aster-ui/figma-bridge"
+    ".": {
+      "package-name": "aster-ui-platform",
+      "extra-files": [
+        "apps/studio/package.json",
+        "packages/tokens/package.json",
+        "packages/react/package.json",
+        "packages/figma-bridge/package.json",
+        "packages/react/component-manifest.json",
+        {
+          "type": "generic",
+          "path": "packages/tokens/src/index.ts"
+        },
+        {
+          "type": "generic",
+          "path": "infra/k8s/aster-ui.yaml"
+        },
+        {
+          "type": "generic",
+          "path": "docs/generated/Alert.md"
+        },
+        {
+          "type": "generic",
+          "path": "docs/generated/Badge.md"
+        },
+        {
+          "type": "generic",
+          "path": "docs/generated/Button.md"
+        },
+        {
+          "type": "generic",
+          "path": "docs/generated/Tabs.md"
+        },
+        {
+          "type": "generic",
+          "path": "docs/generated/TextField.md"
+        },
+        {
+          "type": "generic",
+          "path": "docs/generated/TreatmentCard.md"
+        }
+      ]
     }
   }
 }
-

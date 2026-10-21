@@ -99,7 +99,7 @@ export function normalizeFigmaChanges(
       throw new FigmaContractError(`Figma change id must be unique and non-empty: ${change.id}`);
     }
     changeIds.add(change.id);
-    if (typeof change.name !== "string" || !/^[a-z][a-z0-9]*(?:\.[a-z0-9]+)+$/.test(change.name)) {
+    if (typeof change.name !== "string" || !/^[a-z][a-zA-Z0-9]*(?:\.[a-zA-Z0-9]+)+$/.test(change.name)) {
       throw new FigmaContractError(`Figma token name must be a valid dotted path: ${change.id}`);
     }
     if (typeof change.previousAlias !== "string" || typeof change.nextAlias !== "string") {

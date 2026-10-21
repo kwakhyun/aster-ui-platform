@@ -46,8 +46,33 @@ describe("Aster UI component review flow", () => {
     expect(screen.getByRole("textbox", { name: "Search clinics" })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Review changes" }));
     await user.click(screen.getByRole("button", { name: "Complete review" }));
-    expect(screen.getByText("The Figma review could not be saved.")).toBeInTheDocument();
+    const dialog = screen.getByRole("dialog", { name: "Semantic tokens · v12" });
+    expect(within(dialog).getByRole("alert")).toHaveTextContent("The Figma review could not be saved.");
     expect(screen.getByRole("button", { name: "Complete review" })).toBeEnabled();
+    await user.click(within(dialog).getByRole("button", { name: "Close" }));
+    await user.click(screen.getByRole("button", { name: "Review changes" }));
+    expect(within(screen.getByRole("dialog")).queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("shows storage write failures inside the review dialog and allows retry", async () => {
+    const user = userEvent.setup();
+    vi.spyOn(Storage.prototype, "setItem").mockImplementationOnce(() => {
+      throw new DOMException("Storage is full", "QuotaExceededError");
+    });
+    render(<App />);
+    expect(screen.queryByText(/Browser storage is unavailable/)).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Review changes" }));
+    const dialog = screen.getByRole("dialog", { name: "Semantic tokens · v12" });
+    await user.click(within(dialog).getByRole("button", { name: "Complete review" }));
+    const error = within(dialog).getByRole("alert");
+    expect(error).toBeVisible();
+    expect(error).toHaveTextContent("Check browser storage settings and try again.");
+    expect(within(dialog).getByRole("button", { name: "Complete review" })).toBeEnabled();
+
+    await user.click(within(dialog).getByRole("button", { name: "Complete review" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Review completed by Local reviewer.");
   });
 
   it("renders every sidebar entry from the shipped manifest instead of placeholder catalog data", async () => {

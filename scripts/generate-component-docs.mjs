@@ -26,7 +26,7 @@ function renderComponent(component) {
     )
     .join("\n");
 
-  return `# ${component.name}\n\n> \`packages/react/component-manifest.json\`에서 자동 생성된 문서입니다. 직접 수정하지 마세요.\n\n${component.description}\n\n- 패키지: \`${manifest.package}\`\n- 버전: \`${manifest.version}\`\n- 상태: ${component.status}\n- 분류: ${component.category}\n- 지원 플랫폼: ${component.platforms.join(", ")}\n- 토큰 산출물: ${manifest.crossPlatformTokenArtifacts.join(", ")}\n- HTML 속성 계약: \`${component.extendsElementAttributes}\`\n- ref 대상: \`${component.forwardsRef}\`\n\n## 공개 API\n\n| Prop | 타입 | 필수 | 기본값 |\n| --- | --- | --- | --- |\n${rows || "| — | — | — | — |"}\n\n## 필수 검증 명령\n\n${evidenceRows}\n`;
+  return `# ${component.name}\n\n> \`packages/react/component-manifest.json\`에서 자동 생성된 문서입니다. 직접 수정하지 마세요.\n\n${component.description}\n\n- 패키지: \`${manifest.package}\`\n- 버전: \`${manifest.version}\` <!-- x-release-please-version -->\n- 상태: ${component.status}\n- 분류: ${component.category}\n- 지원 플랫폼: ${component.platforms.join(", ")}\n- 토큰 산출물: ${manifest.crossPlatformTokenArtifacts.join(", ")}\n- HTML 속성 계약: \`${component.extendsElementAttributes}\`\n- ref 대상: \`${component.forwardsRef}\`\n\n## 공개 API\n\n| Prop | 타입 | 필수 | 기본값 |\n| --- | --- | --- | --- |\n${rows || "| — | — | — | — |"}\n\n## 필수 검증 명령\n\n${evidenceRows}\n`;
 }
 
 const documents = new Map(

@@ -5,6 +5,7 @@ import { pathToFileURL } from "node:url";
 import {
   inspectReusableSecurityEvidence,
   recordSecurityEvidence,
+  summarizeSecurityAudit,
 } from "./record-security-evidence.mjs";
 
 const transientFailurePatterns = [
@@ -19,7 +20,7 @@ export function isTransientAuditFailure(output) {
 
 function runAuditCommand() {
   const executable = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
-  return spawnSync(executable, ["audit", "--prod", "--audit-level", "high"], {
+  return spawnSync(executable, ["audit", "--prod", "--audit-level", "high", "--json"], {
     encoding: "utf8",
     env: {
       ...process.env,
@@ -55,11 +56,31 @@ export async function runSecurityAudit(options = {}) {
     if (result.stderr) stderr.write(result.stderr);
 
     if (result.status === 0) {
-      await recordEvidence();
+      let summary;
+      try {
+        summary = summarizeSecurityAudit(result.stdout);
+        if (summary.vulnerabilities.high > 0 || summary.vulnerabilities.critical > 0) {
+          throw new Error("Audit output contains high or critical vulnerabilities despite a successful exit code.");
+        }
+      } catch (error) {
+        stderr.write(`Audit evidence rejected: ${error.message}\n`);
+        return 1;
+      }
+      await recordEvidence(summary);
       return 0;
     }
 
-    const diagnostic = [result.stdout, result.stderr, result.error?.message]
+    let registryError;
+    try {
+      const payload = JSON.parse(result.stdout);
+      // A registry result is definitive, even when advisory prose mentions a network error.
+      // Only the CLI's error envelope may use the transient registry fallback.
+      if (!payload?.error || payload.metadata || payload.advisories) return result.status ?? 1;
+      registryError = [payload.error.code, payload.error.message].filter((value) => typeof value === "string").join("\n");
+    } catch {
+      // Unexpected stdout is not evidence of a registry outage. Inspect process diagnostics only.
+    }
+    const diagnostic = [registryError, result.stderr, result.error?.message]
       .filter(Boolean)
       .join("\n");
     const transient = isTransientAuditFailure(diagnostic);

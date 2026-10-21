@@ -5,7 +5,7 @@
 네이티브 버튼 속성을 전달하고 키보드 포커스를 분명하게 표시하는 버튼 컴포넌트입니다.
 
 - 패키지: `@aster-ui/react`
-- 버전: `3.1.0-beta.2`
+- 버전: `3.1.0-beta.2` <!-- x-release-please-version -->
 - 상태: beta
 - 분류: Actions
 - 지원 플랫폼: Web

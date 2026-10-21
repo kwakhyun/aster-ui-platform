@@ -76,6 +76,61 @@
       "outputs": [
         "dist/**"
       ]
+    },
+    "@aster-ui/studio#build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/.dockerignore",
+        "$TURBO_ROOT$/.github/**",
+        "$TURBO_ROOT$/.gitignore",
+        "$TURBO_ROOT$/.npmrc",
+        "$TURBO_ROOT$/.release-please-manifest.json",
+        "$TURBO_ROOT$/CHANGELOG.md",
+        "$TURBO_ROOT$/CLAUDE.md",
+        "$TURBO_ROOT$/CONTRIBUTING.md",
+        "$TURBO_ROOT$/Dockerfile",
+        "$TURBO_ROOT$/LICENSE",
+        "$TURBO_ROOT$/README.md",
+        "$TURBO_ROOT$/ai/**",
+        "$TURBO_ROOT$/apps/**",
+        "$TURBO_ROOT$/design/aster-ui-final-target.png",
+        "$TURBO_ROOT$/design-qa.md",
+        "$TURBO_ROOT$/docs/**",
+        "$TURBO_ROOT$/eslint.config.mjs",
+        "$TURBO_ROOT$/examples/**",
+        "$TURBO_ROOT$/infra/**",
+        "$TURBO_ROOT$/package.json",
+        "$TURBO_ROOT$/packages/**",
+        "$TURBO_ROOT$/playwright.config.ts",
+        "$TURBO_ROOT$/pnpm-lock.yaml",
+        "$TURBO_ROOT$/pnpm-workspace.yaml",
+        "$TURBO_ROOT$/release-please-config.json",
+        "$TURBO_ROOT$/scripts/**",
+        "$TURBO_ROOT$/tests/**",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/turbo.json",
+        "!$TURBO_ROOT$/**/.git/**",
+        "!$TURBO_ROOT$/**/.turbo/**",
+        "!$TURBO_ROOT$/**/audits/**",
+        "!$TURBO_ROOT$/**/coverage/**",
+        "!$TURBO_ROOT$/**/dist/**",
+        "!$TURBO_ROOT$/**/node_modules/**",
+        "!$TURBO_ROOT$/**/reports/**",
+        "!$TURBO_ROOT$/**/test-results/**",
+        "!$TURBO_ROOT$/**/.DS_Store",
+        "!$TURBO_ROOT$/packages/react/component-manifest.json"
+      ],
+      "env": [
+        "ASTER_BASE_PATH",
+        "ASTER_VISUAL_FIXTURE_MODE",
+        "ASTER_VISUAL_FIXTURE_REVISION"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     }
   }
 }

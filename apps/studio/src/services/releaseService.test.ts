@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { tokenVersion } from "@aster-ui/tokens";
 import {
   LocalReleaseRehearsalPublisher,
   type ReleaseContext,
@@ -78,7 +79,7 @@ describe("LocalReleaseRehearsalPublisher", () => {
     expect(receipt).toMatchObject({
       schemaVersion: 3,
       mode: "local-rehearsal",
-      version: "3.1.0-beta.2",
+      version: tokenVersion,
       rehearsedAt: "2026-09-01T01:00:00.000Z",
       reused: false,
       review: { reviewerId: "reviewer-1", changeFingerprint: "fnv1a64:1111111111111111" },

@@ -154,9 +154,21 @@ export function createFigmaVariablesPayload(
 ): FigmaVariablesPayload {
   const previousSnapshot = extractFigmaAliasSnapshot(before, options);
   const nextSnapshot = extractFigmaAliasSnapshot(after, options);
+  const addedNames = Object.keys(nextSnapshot)
+    .filter((name) => !Object.hasOwn(previousSnapshot, name))
+    .sort();
+  const removedNames = Object.keys(previousSnapshot)
+    .filter((name) => !Object.hasOwn(nextSnapshot, name))
+    .sort();
+  if (addedNames.length > 0 || removedNames.length > 0) {
+    throw new FigmaRestError(
+      "Tracked Figma variables changed; only alias updates are supported. "
+      + `Added: ${addedNames.join(", ") || "none"}; removed: ${removedNames.join(", ") || "none"}.`,
+    );
+  }
   const changes = Object.entries(nextSnapshot).flatMap(([name, nextAlias]) => {
-    const previousAlias = previousSnapshot[name];
-    if (!previousAlias || previousAlias === nextAlias) return [];
+    const previousAlias = previousSnapshot[name]!;
+    if (previousAlias === nextAlias) return [];
     return [{
       id: name.replaceAll(".", "-"),
       name,

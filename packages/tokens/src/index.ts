@@ -1,6 +1,6 @@
 import { tokenAliasPaths } from "./generated/token-contract.js";
 
-export const tokenVersion = "3.1.0-beta.2" as const;
+export const tokenVersion = "3.1.0-beta.2" as const; // x-release-please-version
 
 export const themeNames = ["coral", "ocean"] as const;
 export type ThemeName = (typeof themeNames)[number];

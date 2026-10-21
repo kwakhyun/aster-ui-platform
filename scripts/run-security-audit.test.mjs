@@ -1,6 +1,5 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { execFileSync } from "node:child_process";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -8,6 +7,8 @@ import test from "node:test";
 import { computeEvidenceDigest } from "./lib/provenance.mjs";
 import {
   inspectReusableSecurityEvidence,
+  recordSecurityEvidence,
+  summarizeSecurityAudit,
   securityAuditCommand,
   securityAuditMaxAgeMs,
 } from "./record-security-evidence.mjs";
@@ -41,6 +42,21 @@ function auditReport(core, generatedAt, gitCommit = null) {
   };
 }
 
+function auditOutput(counts = {}) {
+  return JSON.stringify({ metadata: { vulnerabilities: { info: 0, low: 0, moderate: 0, high: 0, critical: 0, ...counts } } });
+}
+
+function passingCore(lockfile, counts = {}) {
+  return {
+    schemaVersion: 5,
+    command: securityAuditCommand,
+    scope: "Production dependency graph",
+    dependencySnapshot: dependencySnapshot(lockfile),
+    ...summarizeSecurityAudit(auditOutput(counts)),
+    status: "passed",
+  };
+}
+
 test("classifies registry connectivity failures as transient", () => {
   assert.equal(isTransientAuditFailure("ERR_SOCKET_TIMEOUT while requesting registry.npmjs.org"), true);
   assert.equal(isTransientAuditFailure("503 Service Unavailable"), true);
@@ -53,7 +69,7 @@ test("does not classify a vulnerability result as transient", () => {
 test("retries a transient failure and succeeds", async () => {
   const results = [
     { status: 1, stdout: "", stderr: "ERR_SOCKET_TIMEOUT\n" },
-    { status: 0, stdout: "No known vulnerabilities found\n", stderr: "" },
+    { status: 0, stdout: auditOutput(), stderr: "" },
   ];
   const delays = [];
   let recorded = 0;
@@ -75,7 +91,7 @@ test("retries a transient failure and succeeds", async () => {
   assert.equal(exitCode, 0);
   assert.equal(recorded, 1);
   assert.deepEqual(delays, [5_000]);
-  assert.match(stdout.chunks.join(""), /No known vulnerabilities/);
+  assert.match(stdout.chunks.join(""), /vulnerabilities/);
   assert.match(stderr.chunks.join(""), /attempt 2\/3/);
 });
 
@@ -99,6 +115,63 @@ test("does not retry a vulnerability failure", async () => {
   assert.equal(attempts, 1);
   assert.deepEqual(delays, []);
   assert.doesNotMatch(stderr.chunks.join(""), /retrying/);
+});
+
+test("records actual low and moderate counts when the high threshold passes", async () => {
+  let recorded;
+  const exitCode = await runSecurityAudit({
+    runAudit: () => ({ status: 0, stdout: auditOutput({ low: 2, moderate: 1 }), stderr: "" }),
+    recordEvidence: async (summary) => { recorded = summary; },
+    stdout: outputCollector().stream,
+    stderr: outputCollector().stream,
+  });
+  assert.equal(exitCode, 0);
+  assert.equal(recorded.knownVulnerabilities, 3);
+  assert.deepEqual(recorded.vulnerabilities, { info: 0, low: 2, moderate: 1, high: 0, critical: 0 });
+});
+
+test("never substitutes cached evidence for findings whose advisory mentions a network failure", async () => {
+  const report = JSON.parse(auditOutput({ high: 1 }));
+  report.advisories = { "test-advisory": { severity: "high", overview: "A fetch failed error can expose credentials." } };
+  const exitCode = await runSecurityAudit({
+    maxAttempts: 1,
+    runAudit: () => ({ status: 1, stdout: JSON.stringify(report), stderr: "" }),
+    inspectCachedEvidence: async () => assert.fail("definitive vulnerability findings must never use a cache"),
+    recordEvidence: async () => assert.fail("failed audits must not record passing evidence"),
+    stdout: outputCollector().stream,
+    stderr: outputCollector().stream,
+  });
+  assert.equal(exitCode, 1);
+});
+
+test("recognizes a transient CLI JSON error envelope", async () => {
+  let cacheChecks = 0;
+  const exitCode = await runSecurityAudit({
+    maxAttempts: 1,
+    runAudit: () => ({ status: 1, stdout: JSON.stringify({ error: { code: "ERR_SOCKET_TIMEOUT", message: "Request timed out" } }), stderr: "" }),
+    inspectCachedEvidence: async () => { cacheChecks += 1; return { reusable: true }; },
+    stdout: outputCollector().stream,
+    stderr: outputCollector().stream,
+  });
+  assert.equal(exitCode, 0);
+  assert.equal(cacheChecks, 1);
+});
+
+for (const output of ["not JSON", "{}", JSON.stringify({ metadata: { vulnerabilities: { high: 0 } } }), auditOutput({ moderate: -1 }), auditOutput({ high: 1 }), auditOutput({ critical: 1 })]) {
+  test(`refuses invalid or failing audit data despite exit code zero: ${output}`, async () => {
+    const exitCode = await runSecurityAudit({
+      runAudit: () => ({ status: 0, stdout: output, stderr: "" }),
+      recordEvidence: async () => assert.fail("invalid audit data cannot produce passing evidence"),
+      inspectCachedEvidence: async () => assert.fail("invalid successful data cannot use the transient fallback"),
+      stdout: outputCollector().stream,
+      stderr: outputCollector().stream,
+    });
+    assert.equal(exitCode, 1);
+  });
+}
+
+test("the recorder refuses fabricated success without severity counts", async () => {
+  await assert.rejects(recordSecurityEvidence({ knownVulnerabilities: 0 }), /valid counts/);
 });
 
 test("reuses recent evidence only after all transient attempts fail", async () => {
@@ -148,19 +221,21 @@ test("reuses a recent signed audit only for the same dependency snapshot", async
   const projectRoot = await mkdtemp(path.join(os.tmpdir(), "aster-audit-current-"));
   const lockfile = "lockfileVersion: '9.0'\n";
   const now = Date.parse("2026-09-04T00:00:00.000Z");
-  const core = {
-    schemaVersion: 4,
-    command: securityAuditCommand,
-    scope: "Production dependency graph",
-    dependencySnapshot: dependencySnapshot(lockfile),
-    knownVulnerabilities: 0,
-    status: "passed",
-  };
+  const core = passingCore(lockfile, { moderate: 1 });
   const report = auditReport(core, new Date(now - 60_000).toISOString());
 
   try {
     await writeFile(path.join(projectRoot, "pnpm-lock.yaml"), lockfile);
     assert.equal((await inspectReusableSecurityEvidence({ projectRoot, report, now })).reusable, true);
+
+    for (const invalidCore of [
+      { ...core, knownVulnerabilities: 0 },
+      passingCore(lockfile, { high: 1 }),
+      passingCore(lockfile, { critical: 1 }),
+    ]) {
+      const invalid = auditReport(invalidCore, report.generatedAt);
+      assert.equal((await inspectReusableSecurityEvidence({ projectRoot, report: invalid, now })).reusable, false);
+    }
 
     await writeFile(path.join(projectRoot, "pnpm-lock.yaml"), `${lockfile}changed: true\n`);
     const changed = await inspectReusableSecurityEvidence({ projectRoot, report, now });
@@ -175,14 +250,7 @@ test("rejects valid but expired audit evidence", async () => {
   const projectRoot = await mkdtemp(path.join(os.tmpdir(), "aster-audit-expired-"));
   const lockfile = "lockfileVersion: '9.0'\n";
   const generatedAt = Date.parse("2026-09-01T00:00:00.000Z");
-  const core = {
-    schemaVersion: 4,
-    command: securityAuditCommand,
-    scope: "Production dependency graph",
-    dependencySnapshot: dependencySnapshot(lockfile),
-    knownVulnerabilities: 0,
-    status: "passed",
-  };
+  const core = passingCore(lockfile);
   const report = auditReport(core, new Date(generatedAt).toISOString());
 
   try {
@@ -199,29 +267,13 @@ test("rejects valid but expired audit evidence", async () => {
   }
 });
 
-test("supports the signed legacy report while its committed lockfile is unchanged", async () => {
+test("rejects legacy evidence whose zero count was not derived from audit JSON", async () => {
   const projectRoot = await mkdtemp(path.join(os.tmpdir(), "aster-audit-legacy-"));
   const lockfile = "lockfileVersion: '9.0'\n";
   const generatedAt = "2026-09-04T00:00:00.000Z";
 
   try {
     await writeFile(path.join(projectRoot, "pnpm-lock.yaml"), lockfile);
-    execFileSync("git", ["init", "--quiet"], { cwd: projectRoot });
-    execFileSync("git", ["add", "pnpm-lock.yaml"], { cwd: projectRoot });
-    execFileSync("git", [
-      "-c",
-      "user.name=Audit Test",
-      "-c",
-      "user.email=audit@example.invalid",
-      "commit",
-      "--quiet",
-      "-m",
-      "test fixture",
-    ], { cwd: projectRoot });
-    const gitCommit = execFileSync("git", ["rev-parse", "HEAD"], {
-      cwd: projectRoot,
-      encoding: "utf8",
-    }).trim();
     const core = {
       schemaVersion: 3,
       command: securityAuditCommand,
@@ -229,13 +281,14 @@ test("supports the signed legacy report while its committed lockfile is unchange
       knownVulnerabilities: 0,
       status: "passed",
     };
-    const report = auditReport(core, generatedAt, gitCommit);
+    const report = auditReport(core, generatedAt);
     const result = await inspectReusableSecurityEvidence({
       projectRoot,
       report,
       now: Date.parse(generatedAt) + 60_000,
     });
-    assert.equal(result.reusable, true);
+    assert.equal(result.reusable, false);
+    assert.match(result.reason, /verified severity counts/);
   } finally {
     await rm(projectRoot, { recursive: true, force: true });
   }

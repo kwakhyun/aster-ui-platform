@@ -192,7 +192,7 @@ const markdown = `# 저장소 자동 검증 보고서
 | Figma 검토 테스트 픽스처 | 별칭 ${evidence.figma.changeCount}개 해석, 사람 검토 필수, 검증 단계의 소스 수정 없음 |
 | AI 제안부터 승인까지의 전체 흐름 | 제안 검사 ${evidence.ai.proposalChecks}개, 검증 실패 시 중단하는 조건 ${evidence.ai.failClosedBoundaries}개, AI 제공자 호출 제한 시간과 출력 상한 적용, 검증 단계의 소스 수정 없음 |
 | 브라우저 시각 및 접근성 | 시나리오 ${evidence.visual.passed}개, 기준 이미지 ${evidence.visual.snapshots}개, axe 검사 ${evidence.visual.accessibilityChecks}회 통과 |
-| 프로덕션 의존성 감사 | 알려진 취약점 ${evidence.security.knownVulnerabilities}건 |
+| 프로덕션 의존성 감사 | 알려진 취약점 ${evidence.security.knownVulnerabilities}건 (info ${evidence.security.vulnerabilities.info}, low ${evidence.security.vulnerabilities.low}, moderate ${evidence.security.vulnerabilities.moderate}, high ${evidence.security.vulnerabilities.high}, critical ${evidence.security.vulnerabilities.critical}). high/critical 차단 기준 통과 |
 | 검증 근거 출처 | 리비전, 실행 ID, 소스 기준 커밋, 산출물 해시 확인 |
 
 ## 테스트 커버리지

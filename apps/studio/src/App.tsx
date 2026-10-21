@@ -61,12 +61,14 @@ export function App({
 }: AppProps = {}) {
   const [{ component: selectedComponent, tab: workspaceTab, platform, theme }, navigate] = useWorkspaceLocation();
   const [inspectorTab, setInspectorTab] = useState<InspectorTab>("tokens");
-  const [previewState, setPreviewState] = useState<PreviewStateOption["id"]>("focus");
+  const [treatmentPreviewState, setTreatmentPreviewState] = useState<PreviewStateOption["id"]>("focus");
+  const previewState = selectedComponent === "TreatmentCard" ? treatmentPreviewState : "focus";
   const [saved, setSaved] = useState(false);
   const [storage] = useState(getBrowserStorage);
   const [reviewReceipt, setReviewReceipt] = useState(() =>
     readStoredReviewReceipt(storage, figmaReview)
   );
+  const [reviewError, setReviewError] = useState<string | null>(null);
   const [overlay, setOverlay] = useState<"navigation" | "review" | "release" | "evidence" | null>(null);
   const diffOpen = overlay === "review";
   const releaseOpen = overlay === "release";
@@ -109,14 +111,20 @@ export function App({
     navigate({ tab });
   }, [navigate]);
 
+  const openReview = useCallback(() => {
+    setReviewError(null);
+    setOverlay("review");
+  }, []);
+
   const completeReview = useCallback(() => {
     try {
       const receipt = storeReviewReceipt(storage, figmaReview);
       setReviewReceipt(receipt);
+      setReviewError(null);
       setOverlay(null);
       showToast(`Review completed by ${receipt.reviewer.label}.`, "success");
     } catch {
-      showToast("The Figma review could not be saved.");
+      setReviewError("The Figma review could not be saved. Check browser storage settings and try again.");
     }
   }, [showToast, storage]);
 
@@ -215,7 +223,7 @@ export function App({
             changeCount={figmaReview.validation.changeCount}
             syncedAt={figmaReview.syncedAt}
             sourceTheme={figmaReview.sourceTheme}
-            onReview={() => setOverlay("review")}
+            onReview={openReview}
           />
 
           <Workspace
@@ -230,7 +238,7 @@ export function App({
             onTabChange={handleWorkspaceTab}
             onPlatformChange={(platform) => navigate({ platform })}
             onThemeChange={(theme) => navigate({ theme })}
-            onStateChange={setPreviewState}
+            onStateChange={setTreatmentPreviewState}
             onSavedChange={setSaved}
             onCardSelect={() => showToast("TreatmentCard emitted its selection event.")}
             onCopyUsage={(usage) => void handleCopy(usage, "Usage example")}
@@ -244,7 +252,7 @@ export function App({
           review={figmaReview}
           qualityEvidence={displayedEvidence}
           onTabChange={setInspectorTab}
-          onOpenDiff={() => setOverlay("review")}
+          onOpenDiff={openReview}
           onViewVisualTests={() => setOverlay("evidence")}
         />
       </div>
@@ -253,6 +261,7 @@ export function App({
         open={diffOpen}
         reviewed={reviewed}
         review={figmaReview}
+        errorMessage={reviewError}
         onClose={() => setOverlay(null)}
         onComplete={completeReview}
       />
@@ -266,9 +275,7 @@ export function App({
           errorMessage={release.errorMessage}
           onClose={() => setOverlay(null)}
           onCancel={release.cancel}
-          onReview={() => {
-            setOverlay("review");
-          }}
+          onReview={openReview}
           onInspectQuality={() => {
             setOverlay(null);
             handleWorkspaceTab("quality");

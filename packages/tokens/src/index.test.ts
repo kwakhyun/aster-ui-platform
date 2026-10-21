@@ -58,8 +58,9 @@ function collectDimensions(
 }
 
 describe("design-token artifacts", () => {
-  it("keeps the release version and review payload aligned", () => {
-    expect(tokenVersion).toBe("3.1.0-beta.2");
+  it("keeps the release version and review payload aligned", async () => {
+    const packageJson = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
+    expect(tokenVersion).toBe(packageJson.version);
     expect(themeNames).toEqual(["coral", "ocean"]);
     expect(isThemeName("coral")).toBe(true);
     expect(isThemeName("violet")).toBe(false);

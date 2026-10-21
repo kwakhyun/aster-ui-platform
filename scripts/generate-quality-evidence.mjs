@@ -7,7 +7,7 @@ import {
   getSourceRevision,
   verifyEvidenceReport,
 } from "./lib/provenance.mjs";
-import { inspectReusableSecurityEvidence } from "./record-security-evidence.mjs";
+import { inspectReusableSecurityEvidence, securityAuditCommand } from "./record-security-evidence.mjs";
 
 const projectRoot = process.cwd();
 const outputPath = path.join(projectRoot, "apps/studio/src/generated/quality-evidence.json");
@@ -92,9 +92,9 @@ const checks = [
     label: "Production dependency audit",
     status: securityEvidence.reusable ? "passed" : "attention",
     detail: securityEvidence.reusable
-      ? "The audited production dependency snapshot has no known vulnerabilities."
+      ? `${security.knownVulnerabilities} known vulnerabilities: ${security.vulnerabilities.info} informational, ${security.vulnerabilities.low} low, ${security.vulnerabilities.moderate} moderate, ${security.vulnerabilities.high} high, ${security.vulnerabilities.critical} critical. The high/critical gate passed.`
       : "No recent registry-backed audit is available for the current dependency snapshot.",
-    command: "pnpm audit --prod --audit-level high",
+    command: securityAuditCommand,
     ...evidenceFields(security),
   },
 ];

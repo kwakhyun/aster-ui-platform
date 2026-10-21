@@ -29,3 +29,5 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - Use one active overlay for navigation, token review, release rehearsal, or quality details. Background shortcuts and focus must respect the active modal.
 - Share component, tab, theme, and platform through validated URL parameters. Preserve the hosting base path and unrelated query parameters.
 - Studio metadata uses at least 12px text. Evidence explanations use 13px text with generous line height. Full identifiers and downloadable reports are available in Quality details.
+- TreatmentCard preview state belongs to that component. Other previews retain their initial focus presentation and must remain interactive when navigating directly or through browser history.
+- Show review persistence errors inside the active review dialog, with an accessible alert and a retry path. Do not rely on a background toast for modal failures.

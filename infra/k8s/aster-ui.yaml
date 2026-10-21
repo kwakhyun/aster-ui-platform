@@ -4,7 +4,7 @@ metadata:
   name: aster-ui-studio
   labels:
     app.kubernetes.io/name: aster-ui-studio
-    app.kubernetes.io/version: 3.1.0-beta.2
+    app.kubernetes.io/version: 3.1.0-beta.2 # x-release-please-version
 spec:
   replicas: 2
   selector:
@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: aster-ui-studio
-        app.kubernetes.io/version: 3.1.0-beta.2
+        app.kubernetes.io/version: 3.1.0-beta.2 # x-release-please-version
     spec:
       automountServiceAccountToken: false
       securityContext:

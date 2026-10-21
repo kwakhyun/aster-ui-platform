@@ -570,6 +570,7 @@ button:focus-visible, input:focus-visible, a:focus-visible, [tabindex]:focus-vis
 .diff-drawer__evidence div { display: flex; flex-direction: column; gap: 3px; }
 .diff-drawer__evidence strong { font-size: 11px; }
 .diff-drawer__evidence span { font-size: var(--studio-text-small); line-height: 1.45; }
+.diff-drawer__error { margin: 16px 0; border-radius: 9px; background: #fef3f2; color: #b42318; padding: 12px; font-size: var(--studio-text-body); line-height: 1.6; }
 .diff-drawer footer, .release-dialog footer { @apply flex items-center justify-end; gap: 10px; margin-top: auto; border-top: 1px solid #e6e7e9; padding-top: 20px; }
 .release-dialog { position: relative; width: min(510px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); overflow: auto; border-radius: 14px; background: #fff; box-shadow: 0 26px 80px rgb(17 18 20 / 27%); padding: 28px; }
 .release-dialog__icon { @apply flex items-center justify-center; width: 42px; height: 42px; border-radius: 10px; background: #fff0ee; color: #e7473e; }

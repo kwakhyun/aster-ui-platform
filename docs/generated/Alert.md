@@ -5,7 +5,7 @@
 중요도에 맞는 라이브 리전을 사용하며 필요할 때 닫기 동작을 제공하는 알림 컴포넌트입니다.
 
 - 패키지: `@aster-ui/react`
-- 버전: `3.1.0-beta.2`
+- 버전: `3.1.0-beta.2` <!-- x-release-please-version -->
 - 상태: beta
 - 분류: Feedback
 - 지원 플랫폼: Web

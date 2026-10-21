@@ -6,6 +6,31 @@ import { App } from "./App";
 afterEach(() => { cleanup(); window.history.replaceState(null, "", "/"); });
 
 describe("workspace navigation and overlays", () => {
+  it("keeps TreatmentCard preview state isolated across component selection and history navigation", async () => {
+    window.history.replaceState(null, "", "/?component=TextField");
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "TreatmentCard" }));
+    await user.click(screen.getByRole("button", { name: "Preview disabled state" }));
+    expect(screen.getByRole("button", { name: "View details for Laser toning" })).toBeDisabled();
+
+    window.history.back();
+    await waitFor(() => expect(screen.getByRole("textbox", { name: "Search clinics" })).toBeEnabled());
+    await user.type(screen.getByRole("textbox", { name: "Search clinics" }), "Gangnam");
+    expect(screen.getByRole("textbox", { name: "Search clinics" })).toHaveValue("Gangnam");
+
+    window.history.forward();
+    await waitFor(() => expect(screen.getByRole("button", { name: "Preview disabled state" })).toHaveAttribute("aria-pressed", "true"));
+    expect(screen.getByRole("button", { name: "View details for Laser toning" })).toBeDisabled();
+
+    await user.click(screen.getByRole("button", { name: "Button" }));
+    const preview = screen.getByRole("tabpanel", { name: "Web" });
+    expect(within(preview).getByRole("button", { name: "Review changes" })).toBeEnabled();
+    await user.click(screen.getByRole("button", { name: "TextField" }));
+    expect(screen.getByRole("textbox", { name: "Search clinics" })).toBeEnabled();
+  });
+
   it("restores a deep link, preserves unrelated URL values and reacts to history navigation", async () => {
     window.history.replaceState(null, "", "/?component=Button&tab=tokens&theme=ocean&platform=ios&source=portfolio#main-workspace");
     const user = userEvent.setup();

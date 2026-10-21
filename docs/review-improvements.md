@@ -1,5 +1,17 @@
 # 프로젝트 검토 후 개선 사항
 
+## 검증 계약과 오류 처리 보완
+
+- 보안 감사는 JSON의 심각도별 실제 건수를 기록합니다. high/critical 차단 기준 통과와 전체 취약점 0건을 구분하며, 건수 근거가 없는 과거 기록은 재사용하지 않습니다.
+- 전체 검증에서 발견한 `brace-expansion`의 high 등급 2건과 moderate 등급 1건은 영향받는 버전에 `5.0.12` 보안 패치를 적용해 해결합니다.
+- Studio 빌드 캐시는 번들에 포함하는 소스 리비전의 전체 입력을 반영합니다. 문서 수정과 신규 스크립트 추가도 캐시를 무효화하며 빌드 산출물은 제외합니다.
+- Figma의 camelCase 경로를 허용합니다. 기존 경로의 별칭 변경과 함께 추가, 삭제, 이름 변경이 있으면 구조 변경을 명시하고 검토 생성을 중단합니다.
+- AI 제안의 `deprecate`는 기존 prop의 타입과 필수 여부를 유지해야 합니다. 실제 API 변경은 `change`와 메이저 변경으로 분류해야 합니다.
+- release-please는 루트의 단일 버전 정책을 따르며 패키지, Studio, 토큰 상수, 생성 문서와 배포 메타데이터를 함께 갱신합니다.
+- TreatmentCard의 상태는 다른 컴포넌트 미리보기에 전달하지 않습니다. URL 뒤로가기와 앞으로가기에서도 같은 규칙을 적용합니다.
+- 검토 저장 오류는 열린 대화상자의 접근 가능한 오류 영역에서 표시합니다. 저장 공간 오류 후 같은 창에서 재시도하고 새로고침 뒤 완료 기록이 유지되는지 브라우저 검사에 포함합니다.
+- 전체 커버리지 검사는 패키지별로 순차 실행해 jsdom 프로세스 간 자원 경합을 줄입니다. 테스트 제한 시간과 커버리지 기준은 유지합니다.
+
 ## 토큰 변경의 시각적 정확성
 
 Inspector와 Figma 검토 창이 목록 순서에 따라 같은 색을 표시하던 문제를 수정했습니다. 공통 `TokenSwatch`가 `@aster-ui/tokens/json/coral`과 `json/ocean`의 빌드 산출물에서 별칭을 해석합니다. 해석할 수 없으면 임의의 색 대신 `Color unavailable`을 표시합니다.
@@ -27,12 +39,12 @@ Inspector와 Figma 검토 창이 목록 순서에 따라 같은 색을 표시하
 | 실행 | 새 브라우저 컨텍스트 3개, HTTP 캐시 비활성화 |
 | CPU | DevTools Protocol 기준 4배 감속 |
 | 네트워크 | 다운로드 10 Mbps, 업로드 5 Mbps, 지연 40 ms |
-| 관찰 | 글꼴과 이미지 로드 완료 후 1초까지, 사용자 입력 없음 |
+| 관찰 | 활성 탭에서 글꼴과 이미지 로드 및 FCP/LCP 수집 후 1초까지, 사용자 입력 없음 |
 | FCP 예산 | 세 실행의 중앙값 3,000 ms 이하 |
 | LCP 예산 | 세 실행의 중앙값 4,000 ms 이하 |
 | CLS 예산 | 세 실행의 최대 세션 값 0.1 이하 |
 
-`PerformanceObserver`가 지표를 제공하지 않거나 FCP/LCP가 누락되면 검사를 실패시킵니다. CLS는 최근 입력에 따른 이동을 제외하고, 이동 간격이 1초 미만이며 길이가 5초 미만인 세션의 최댓값을 계산합니다. 계산 기준은 [Chrome 팀의 CLS 설명](https://web.dev/articles/cls)을 따릅니다. CPU 감속은 [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setCPUThrottlingRate)을 사용합니다.
+`PerformanceObserver`가 지표를 제공하지 않거나 최대 5초 대기 후에도 FCP/LCP가 누락되면 검사를 실패시킵니다. 이 대기는 실제 측정 시각이나 성능 예산을 변경하지 않습니다. CLS는 최근 입력에 따른 이동을 제외하고, 이동 간격이 1초 미만이며 길이가 5초 미만인 세션의 최댓값을 계산합니다. 계산 기준은 [Chrome 팀의 CLS 설명](https://web.dev/articles/cls)을 따릅니다. CPU 감속은 [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setCPUThrottlingRate)을 사용합니다.
 
 원시 표본, 실행 조건, 브라우저 버전, 플랫폼과 결과는 `reports/visual-regression.json`의 `browserPerformance`에 기록합니다. 요약은 Studio Quality와 자동 생성 검증 보고서에 반영합니다.
 

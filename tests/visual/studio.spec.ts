@@ -140,10 +140,68 @@ test("keeps component browsing available when browser storage access is denied",
   await expect(page.getByRole("textbox", { name: "Search clinics" })).toBeVisible();
   await page.getByRole("button", { name: "Review changes", exact: true }).click();
   await page.getByRole("button", { name: "Complete review" }).click();
-  await expect(page.getByText("The Figma review could not be saved.")).toBeVisible();
-  await expect(page.getByRole("dialog", { name: "Semantic tokens · v12" })).toBeVisible();
+  const dialog = page.getByRole("dialog", { name: "Semantic tokens · v12" });
+  await expect(dialog.getByRole("alert")).toContainText("The Figma review could not be saved.");
+  await expect(dialog.getByRole("alert")).toBeInViewport();
   await assertBrowserAxe(page, testInfo);
 });
+
+test("keeps other previews interactive after disabling TreatmentCard and navigating history", async ({ page }) => {
+  await page.getByRole("button", { name: "Preview disabled state" }).click();
+  const componentBrowser = page.getByRole("complementary", { name: "Component browser" });
+  await componentBrowser.getByRole("button", { name: "TextField", exact: true }).click();
+  const input = page.getByRole("textbox", { name: "Search clinics" });
+  await expect(input).toBeEnabled();
+  await input.fill("Gangnam");
+  await expect(input).toHaveValue("Gangnam");
+  await componentBrowser.getByRole("button", { name: "Button", exact: true }).click();
+  await expect(page.locator(".component-showcase").getByRole("button", { name: "Review changes" })).toBeEnabled();
+  await page.goBack();
+  await expect(input).toBeEnabled();
+  await page.goBack();
+  await expect(page.getByRole("button", { name: "Preview disabled state" })).toHaveAttribute("aria-pressed", "true");
+  await page.goForward();
+  await expect(input).toBeEnabled();
+});
+
+for (const width of [390, 1440]) {
+  test(`shows storage write failures inside the review dialog and allows retry at ${width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 1024 });
+    await page.addInitScript(() => {
+      const originalSetItem = Storage.prototype.setItem;
+      let denied = false;
+      Storage.prototype.setItem = function (key: string, value: string) {
+        if (!denied && key === "aster-ui:figma-review:v1") {
+          denied = true;
+          throw new DOMException("Storage quota exceeded", "QuotaExceededError");
+        }
+        return originalSetItem.call(this, key, value);
+      };
+    });
+    await page.reload();
+    await page.getByRole("button", { name: "Review changes", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: "Semantic tokens · v12" });
+    await dialog.getByRole("button", { name: "Complete review" }).click();
+    const error = dialog.getByRole("alert");
+    await expect(error).toContainText("The Figma review could not be saved.");
+    await error.scrollIntoViewIfNeeded();
+    await expect(error).toBeInViewport();
+    // Visibility alone does not detect an element covered by another layer.
+    expect(await error.evaluate((element) => {
+      const bounds = element.getBoundingClientRect();
+      const top = document.elementFromPoint(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+      return top !== null && element.contains(top);
+    })).toBe(true);
+    await assertBrowserAxe(page, testInfo);
+    await dialog.getByRole("button", { name: "Complete review" }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(page.getByText("Review completed by Local reviewer.")).toBeVisible();
+    await page.reload();
+    await page.getByRole("button", { name: "Review changes", exact: true }).click();
+    await expect(dialog.getByRole("alert")).toHaveCount(0);
+    await expect(dialog.getByRole("button", { name: "Review completed" })).toBeDisabled();
+  });
+}
 
 test("renders the ocean theme from the same semantic contract", async ({ page }, testInfo) => {
   await page.getByRole("combobox", { name: "Preview theme" }).selectOption("ocean");

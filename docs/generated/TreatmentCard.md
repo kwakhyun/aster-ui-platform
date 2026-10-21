@@ -5,7 +5,7 @@
 시술명, 가격, 회복 기간을 article 요소로 묶어 제공하는 의료미용 카드 컴포넌트입니다.
 
 - 패키지: `@aster-ui/react`
-- 버전: `3.1.0-beta.2`
+- 버전: `3.1.0-beta.2` <!-- x-release-please-version -->
 - 상태: beta
 - 분류: Treatment
 - 지원 플랫폼: Web

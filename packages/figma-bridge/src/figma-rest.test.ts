@@ -36,6 +36,98 @@ describe("Figma Variables REST adapter", () => {
       .toBe(3);
   });
 
+  it.each([
+    "color.action.primaryHover",
+    "color.action.primarySubtle",
+    "color.status.successSurface",
+  ])("preserves the existing camelCase token path %s through review creation", (tokenPath) => {
+    const renameTrackedVariable = (response: FigmaLocalVariablesResponse): FigmaLocalVariablesResponse => ({
+      ...response,
+      meta: {
+        ...response.meta,
+        variables: {
+          ...response.meta.variables,
+          "VariableID:action-primary": {
+            ...response.meta.variables["VariableID:action-primary"]!,
+            name: `semantic/${tokenPath.replaceAll(".", "/")}`,
+          },
+        },
+      },
+    });
+    const payload = createFigmaVariablesPayload(
+      renameTrackedVariable(before),
+      renameTrackedVariable(after),
+      options,
+    );
+
+    expect(normalizeFigmaChanges(payload, "2026-09-01T09:51:00+09:00").changes)
+      .toContainEqual({
+        id: tokenPath.replaceAll(".", "-"),
+        token: tokenPath,
+        before: "{color.coral.500}",
+        after: "{color.coral.700}",
+        impact: ["web", "ios", "android"],
+      });
+  });
+
+  it.each([
+    {
+      operation: "addition",
+      added: "color.focus.surface",
+      removed: "none",
+    },
+    {
+      operation: "deletion",
+      added: "none",
+      removed: "color.focus.ring",
+    },
+    {
+      operation: "rename",
+      added: "color.focus.surface",
+      removed: "color.focus.ring",
+    },
+  ])("rejects a tracked variable $operation even alongside valid alias changes", ({ operation, added, removed }) => {
+    const variableId = "VariableID:focus-ring";
+    const collectionId = "VariableCollectionId:1:1";
+    const variables = { ...after.meta.variables };
+    const collection = after.meta.variableCollections[collectionId]!;
+    const variableIds = [...collection.variableIds];
+    if (operation === "addition") {
+      const addedId = "VariableID:focus-surface";
+      variables[addedId] = {
+        ...variables[variableId]!,
+        id: addedId,
+        key: "semantic-color-focus-surface",
+        name: "semantic/color/focus/surface",
+      };
+      variableIds.push(addedId);
+    } else if (operation === "deletion") {
+      delete variables[variableId];
+      variableIds.splice(variableIds.indexOf(variableId), 1);
+    } else {
+      variables[variableId] = {
+        ...variables[variableId]!,
+        name: "semantic/color/focus/surface",
+      };
+    }
+    const structuralChange: FigmaLocalVariablesResponse = {
+      ...after,
+      meta: {
+        variables,
+        variableCollections: {
+          ...after.meta.variableCollections,
+          [collectionId]: { ...collection, variableIds },
+        },
+      },
+    };
+
+    expect(() => createFigmaVariablesPayload(before, structuralChange, options))
+      .toThrow(new FigmaRestError(
+        "Tracked Figma variables changed; only alias updates are supported. "
+        + `Added: ${added}; removed: ${removed}.`,
+      ));
+  });
+
   it("uses X-Figma-Token authentication without exposing it in the request URL", async () => {
     const fetchImplementation = vi.fn<typeof fetch>().mockResolvedValue(
       new Response(JSON.stringify(after), {

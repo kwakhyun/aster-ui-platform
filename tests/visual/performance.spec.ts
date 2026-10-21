@@ -17,6 +17,7 @@ test("measures cold-load rendering under a fixed desktop profile", async ({ brow
     uploadBytesPerSecond: 625_000,
     cache: "disabled",
     samples: 3,
+    paintWaitTimeoutMs: 5_000,
     observationAfterAssetsMs: 1_000,
   };
   const budgets = { medianFcpMs: 3_000, medianLcpMs: 4_000, maxCls: 0.1 };
@@ -30,6 +31,8 @@ test("measures cold-load rendering under a fixed desktop profile", async ({ brow
     });
     try {
       const page = await context.newPage();
+      await page.bringToFront();
+      expect(await page.evaluate(() => document.visibilityState)).toBe("visible");
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
       page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
@@ -83,7 +86,14 @@ test("measures cold-load rendering under a fixed desktop profile", async ({ brow
         await document.fonts.ready;
         await Promise.all([...document.images].map((img) => img.decode()));
       });
-      // A defined observation window captures paint and late layout shifts after assets settle.
+      // DOM visibility and decoded assets do not guarantee that a frame has been painted.
+      // Wait for observer entries without changing their navigation-relative times.
+      await page.waitForFunction(() => {
+        const metrics = (window as unknown as { __asterLoadMetrics: Sample }).__asterLoadMetrics;
+        return metrics.fcpMs !== null && metrics.lcpMs !== null;
+      }, undefined, { timeout: profile.paintWaitTimeoutMs });
+      expect(await page.evaluate(() => document.visibilityState)).toBe("visible");
+      // Keep the observation window for late layout shifts after assets and paint settle.
       await page.waitForTimeout(profile.observationAfterAssetsMs);
       const sample = await page.evaluate(() => (
         window as unknown as { __asterLoadMetrics: Sample }

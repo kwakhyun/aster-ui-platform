@@ -5,7 +5,7 @@
 ARIA 탭 패턴과 가로·세로 키보드 탐색을 지원하는 제어형 및 비제어형 컴포넌트입니다.
 
 - 패키지: `@aster-ui/react`
-- 버전: `3.1.0-beta.2`
+- 버전: `3.1.0-beta.2` <!-- x-release-please-version -->
 - 상태: beta
 - 분류: Navigation
 - 지원 플랫폼: Web
