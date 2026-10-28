@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@aster-ui/react": "workspace:*",
-    "react": "19.2.0"
+    "react": "19.3.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "7.0.1",
@@ -21,7 +21,7 @@
     "@vitest/coverage-v8": "4.1.11",
     "axe-core": "4.13.0",
     "jsdom": "30.0.1",
-    "react-dom": "19.2.0",
+    "react-dom": "19.3.1",
     "vitest": "4.1.11"
   }
 }
